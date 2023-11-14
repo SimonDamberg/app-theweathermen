@@ -1,9 +1,9 @@
-import { Schema, model, InferSchemaType } from 'mongoose';
+import { Schema, model, InferSchemaType } from "mongoose";
 
 // Create a Schema corresponding to the document interface.
 export const smhiTSSchema = new Schema(
   {
-    locationId: {type: String, required: true},
+    locationId: { type: String, required: true },
     timeStamp: { type: Date, required: true },
     lastUpdated: { type: Date, required: true },
     airPressure: { type: Number, required: true },
@@ -19,14 +19,19 @@ export const smhiTSSchema = new Schema(
     meanPrecipitationIntensity: { type: Number, required: true },
     maxPrecipitationIntensity: { type: Number, required: true },
     precipitationCategory: { type: Number, required: true, min: 0, max: 6 },
-    frozenPrecipitationFraction: { type: Number, required: true, min: -9, max: 100 },
-    weatherSymbol: { type: Number, required: true, min: 1, max: 27 },
-  }, 
+    frozenPrecipitationFraction: {
+      type: Number,
+      required: true,
+      min: -9,
+      max: 100,
+    },
+    weatherSymbol: { type: Number, required: true, min: 0, max: 19 },
+  },
   {
     timeseries: {
-      timeField: 'timeStamp',
-      metaField: 'locationId', // label, i.e. ID, name, coords, or metadata dictfield
-      granularity: 'hours',
+      timeField: "timeStamp",
+      metaField: "locationId", // label, i.e. ID, name, coords, or metadata dictfield
+      granularity: "hours",
     },
   }
 );
@@ -34,4 +39,4 @@ export const smhiTSSchema = new Schema(
 export type smhiTSType = InferSchemaType<typeof smhiTSSchema>;
 
 // Create a Model.
-export const smhiTS = model<smhiTSType>('smhiTimeSeries', smhiTSSchema);
+export const smhiTS = model<smhiTSType>("smhiTimeSeries", smhiTSSchema);

@@ -1,9 +1,9 @@
-import { Schema, model, InferSchemaType } from 'mongoose';
+import { Schema, model, InferSchemaType } from "mongoose";
 
 // Create a Schema corresponding to the document interface.
 export const owmTSSchema = new Schema(
   {
-    locationId: {type: String, required: true},
+    locationId: { type: String, required: true },
     timeStamp: { type: Date, required: true },
     lastUpdated: { type: Date, required: true },
     airPressure: { type: Number, required: true },
@@ -14,16 +14,16 @@ export const owmTSSchema = new Schema(
     windGustSpeed: { type: Number, required: true },
     relativeHumidity: { type: Number, required: true, min: 0, max: 100 },
     totalCloudCover: { type: Number, required: true },
-    meanPrecipitationIntensity: { type: Number},
-    weatherSymbol: { type: Number, required: true },
+    meanPrecipitationIntensity: { type: Number },
+    weatherSymbol: { type: Number, required: true, min: 0, max: 19 },
     sunrise: { type: Date, required: true },
     sunset: { type: Date, required: true },
-  }, 
+  },
   {
     timeseries: {
-      timeField: 'timeStamp',
-      metaField: 'locationId', // label, i.e. ID, name, coords, or metadata dictfield
-      granularity: 'hours',
+      timeField: "timeStamp",
+      metaField: "locationId", // label, i.e. ID, name, coords, or metadata dictfield
+      granularity: "hours",
     },
   }
 );
@@ -31,4 +31,4 @@ export const owmTSSchema = new Schema(
 export type owmTSType = InferSchemaType<typeof owmTSSchema>;
 
 // Create a Model.
-export const owmTS = model<owmTSType>('owmTimeSeries', owmTSSchema);
+export const owmTS = model<owmTSType>("owmTimeSeries", owmTSSchema);

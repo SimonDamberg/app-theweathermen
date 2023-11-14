@@ -1,9 +1,9 @@
-import { Schema, model, InferSchemaType } from 'mongoose';
+import { Schema, model, InferSchemaType } from "mongoose";
 
 // Create a Schema corresponding to the document interface.
 export const waTSSchema = new Schema(
   {
-    locationId: {type: String, required: true},
+    locationId: { type: String, required: true },
     timeStamp: { type: Date, required: true },
     lastUpdated: { type: Date, required: true },
     airPressure: { type: Number, required: true },
@@ -15,15 +15,15 @@ export const waTSSchema = new Schema(
     relativeHumidity: { type: Number, required: true, min: 0, max: 100 },
     totalCloudCover: { type: Number, required: true, min: 0, max: 100 },
     meanPrecipitationIntensity: { type: Number, required: true },
-    weatherSymbol: { type: Number, required: true },
+    weatherSymbol: { type: Number, required: true, min: 0, max: 19 },
     //sunrise: { type: Date, required: true },
     //sunset: { type: Date, required: true },
-  }, 
+  },
   {
     timeseries: {
-      timeField: 'timeStamp',
-      metaField: 'locationId', // label, i.e. ID, name, coords, or metadata dictfield
-      granularity: 'hours',
+      timeField: "timeStamp",
+      metaField: "locationId", // label, i.e. ID, name, coords, or metadata dictfield
+      granularity: "hours",
     },
   }
 );
@@ -31,4 +31,4 @@ export const waTSSchema = new Schema(
 export type waTSType = InferSchemaType<typeof waTSSchema>;
 
 // Create a Model.
-export const waTS = model<waTSType>('waTimeSeries', waTSSchema);
+export const waTS = model<waTSType>("waTimeSeries", waTSSchema);
