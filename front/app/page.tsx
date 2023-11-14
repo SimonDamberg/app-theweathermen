@@ -1,23 +1,22 @@
-'use client';
+"use client";
 
-import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import CircleButtonComponent from "./components/CircleButtonComponent";
+import { faPlus, faPen } from "@fortawesome/free-solid-svg-icons";
+
+// import Image from "next/image";
+// import { useEffect, useState } from "react";
+
+// Logic and styling for main page
 
 export default function Home() {
-
-  const [isHealthy, setIsHealthy] = useState(false)
-
-  // Do health check at localhost/8000 and set isHealthy to true if it succeeds
-  useEffect(() => {
-    fetch('http://localhost:8000/health')
-      .then(res => res.json())
-      .then((res) => {
-        if (res.status === 'OK') {
-          setIsHealthy(true)
-        }
-      })
-  }, [])
-
-  if (isHealthy) return <p>API connected!</p>
-  return <p>API not connected!</p>
+  return (
+    <>
+      <div className="absolute right-0 bottom-0 flex flex-row">
+        <div className="-mr-8">
+          <CircleButtonComponent icon={faPen} onClick={() => null} />
+        </div>
+        <CircleButtonComponent icon={faPlus} onClick={() => null} />
+      </div>
+    </>
+  );
 }
