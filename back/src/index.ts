@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from 'express';
-import smhiRouter from './routes/smhi';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import locRouter from './routes/location';
 
 dotenv.config();
 
@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cors())
 const port = process.env.PORT;
 
-const mongoString = process.env.DATABASE_URL;
+const mongoString = process.env.LOCAL_DATABASE_URL; // PROD_DATABASE_URL
 mongoose.set('strictQuery', false);
 mongoString && mongoose.connect(mongoString);
 const database = mongoose.connection;
@@ -24,7 +24,7 @@ database.once('connected', () => {
     console.log('Database Connected');
 })
 
-app.use('/smhi', smhiRouter);
+app.use('/location', locRouter);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server!');
