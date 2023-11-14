@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cors())
 const port = process.env.PORT;
 
-const mongoString = process.env.LOCAL_DATABASE_URL; // PROD_DATABASE_URL
+const mongoString = process.env.PROD_DATABASE_URL; // LOCAL_DATABASE_URL
 mongoose.set('strictQuery', false);
 mongoString && mongoose.connect(mongoString);
 const database = mongoose.connection;
