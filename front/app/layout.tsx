@@ -25,7 +25,7 @@ export default function RootLayout({
           <div className="row-span-3">
             <LocationComponent name="Uppsala" />
           </div>
-          <LocationComponent name="Pling Plong" />
+          <LocationComponent name="Hanoi" />
           <LocationComponent name="Kista" />
           <LocationComponent name="Las Vegas" />
         </div>
