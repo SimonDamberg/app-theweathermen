@@ -14,7 +14,7 @@ export const smhiTSSchema = new Schema(
     windGustSpeed: { type: Number, required: true },
     relativeHumidity: { type: Number, required: true, min: 0, max: 100 },
     thunderProbability: { type: Number, required: true, min: 0, max: 100 },
-    totalCloudCover: { type: Number, required: true, min: 0, max: 8 },
+    totalCloudCover: { type: Number, required: true, min: 0, max: 100 },
     minPrecipitationIntensity: { type: Number, required: true },
     meanPrecipitationIntensity: { type: Number, required: true },
     maxPrecipitationIntensity: { type: Number, required: true },

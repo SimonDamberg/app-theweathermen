@@ -15,6 +15,7 @@ export const owmTSSchema = new Schema(
     relativeHumidity: { type: Number, required: true, min: 0, max: 100 },
     totalCloudCover: { type: Number, required: true },
     meanPrecipitationIntensity: { type: Number },
+    precipitationCategory: { type: Number, min: 0, max: 6 },
     weatherSymbol: { type: Number, required: true, min: 0, max: 19 },
     sunrise: { type: Date, required: true },
     sunset: { type: Date, required: true },

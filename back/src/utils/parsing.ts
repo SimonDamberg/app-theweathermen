@@ -197,6 +197,21 @@ const parseWaWeatherSymbol = (code: number): number => {
   return 0;
 };
 
+const parseWaSunriseSunset = (time: string): Date => {
+  const hour = parseInt(time.substring(0, 2));
+  const minute = parseInt(time.substring(3, 5));
+  const ampm = time.substring(6, 8);
+  const date = new Date();
+  if (ampm === "AM") {
+    date.setHours(hour);
+  } else {
+    date.setHours(hour + 12);
+  }
+  date.setMinutes(minute);
+  date.setSeconds(0);
+  return date;
+};
+
 const parseWAToTS = (data: IWAResponse, locID: string): waTSType[] => {
   // For each forecastday, loop through each hour
   const parsed: waTSType[] = data.forecast.forecastday
@@ -210,14 +225,17 @@ const parseWAToTS = (data: IWAResponse, locID: string): waTSType[] => {
           airTemperature: hour.temp_c,
           horizontalVisibility: hour.vis_km,
           windDirection: hour.wind_degree,
-          windSpeed: hour.wind_kph,
-          windGustSpeed: hour.gust_kph,
+          windSpeed: hour.wind_kph / 3.6, // Convert from km/h to m/s
+          windGustSpeed: hour.gust_kph / 3.6, // Convert from km/h to m/s
           relativeHumidity: hour.humidity,
           totalCloudCover: hour.cloud,
           meanPrecipitationIntensity: hour.precip_mm,
+          precipitationCategory: parseWAPrecipitationCategory(
+            hour.condition.code
+          ),
           weatherSymbol: parseWaWeatherSymbol(hour.condition.code),
-          //sunrise: new Date(day.astro.sunrise), is in local time of location (not UTC) in format 07:43 AM
-          //sunset: new Date(day.astro.sunset),
+          sunrise: parseWaSunriseSunset(day.astro.sunrise),
+          sunset: parseWaSunriseSunset(day.astro.sunset),
         };
         return parsedHour;
       });
@@ -289,6 +307,81 @@ const parseOwmWeatherSymbol = (code: number): number => {
   return 0;
 };
 
+const parseOWMPrecipitationCategory = (code: number): number => {
+  if (
+    code == 600 ||
+    code == 601 ||
+    code == 602 ||
+    code == 620 ||
+    code == 621 ||
+    code == 622
+  )
+    return 1;
+  if (code == 611 || code == 612 || code == 613 || code == 615 || code == 616)
+    return 2;
+  if (
+    code == 200 ||
+    code == 201 ||
+    code == 202 ||
+    (("" + code)[0] == "5" && code != 511)
+  )
+    return 3;
+  if (("" + code)[0] == "3" || code == 230 || code == 231 || code == 232)
+    return 4;
+  if (code == 511) return 5;
+  // No 6
+  return 0;
+};
+
+const parseWAPrecipitationCategory = (code: number): number => {
+  if (
+    code == 1066 ||
+    code == 1114 ||
+    code == 1117 ||
+    code == 1210 ||
+    code == 1213 ||
+    code == 1216 ||
+    code == 1219 ||
+    code == 1222 ||
+    code == 1225 ||
+    code == 1237 ||
+    code == 1255 ||
+    code == 1258 ||
+    code == 1261 ||
+    code == 1264 ||
+    code == 1279 ||
+    code == 1282
+  )
+    return 1;
+  if (
+    code == 1069 ||
+    code == 1204 ||
+    code == 1207 ||
+    code == 1249 ||
+    code == 1252
+  )
+    return 2;
+  if (
+    code == 1063 ||
+    code == 1180 ||
+    code == 1183 ||
+    code == 1186 ||
+    code == 1189 ||
+    code == 1192 ||
+    code == 1195 ||
+    code == 1240 ||
+    code == 1243 ||
+    code == 1246 ||
+    code == 1273 ||
+    code == 1276
+  )
+    return 3;
+  if (code == 1150 || code == 1153) return 4;
+  if (code == 1198 || code == 1201) return 5;
+  if (code == 1072 || code == 1168 || code == 1171) return 6;
+  return 0;
+};
+
 // Parse OWM request to OWMTimeSeries object
 const parseOWMToTS = (data: IOWMResponse, locID: string): owmTSType[] => {
   const parsed: owmTSType[] = data.list.map((ts) => {
@@ -310,8 +403,9 @@ const parseOWMToTS = (data: IOWMResponse, locID: string): owmTSType[] => {
         : ts.snow
         ? ts.snow["3h"]
         : 0,
-      sunrise: new Date(data.city.sunrise * 1000),
-      sunset: new Date(data.city.sunset * 1000),
+      precipitationCategory: parseOWMPrecipitationCategory(ts.weather[0].id),
+      sunrise: new Date((data.city.sunrise + data.city.timezone) * 1000), // In local time
+      sunset: new Date((data.city.sunset + data.city.timezone) * 1000), // In local time
     };
     return parsedTS;
   });
@@ -395,7 +489,7 @@ const parseSMHIToTS = (data: ISMHIResponse, locID: string): smhiTSType[] => {
           parsedTS.thunderProbability = param.values[0];
           break;
         case "tcc_mean":
-          parsedTS.totalCloudCover = param.values[0];
+          parsedTS.totalCloudCover = param.values[0] * 12.5; // Convert from okta to % cloud cover
           break;
         case "pmin":
           parsedTS.minPrecipitationIntensity = param.values[0];
