@@ -70,13 +70,13 @@ locRouter.get(
       return res.status(404).send("Location not found");
     }
 
+    await tsModel.deleteMany({ locationId: loc._id });
+
     // Fetch data from SMHI API
     console.log("Fetching data from SMHI API");
     const smhiURL = `https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/${loc.lon}/lat/${loc.lat}/data.json`;
     const smhiResp = await fetch(smhiURL);
     const smhiData = await smhiResp.json();
-    // Remove all old smhiTS objects with locationId = loc._id
-    await tsModel.deleteMany({ locationId: loc._id, source: "smhi" });
     // Parse data from SMHI API
     const parsedSMHI: tsType[] = parseSMHIToTS(smhiData, loc._id);
     parsedSMHI.forEach(async (data) => {
@@ -89,8 +89,6 @@ locRouter.get(
     const owmURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${loc.lat}&lon=${loc.lon}&&units=metric&appid=${process.env.OPENWEATHERMAP_API_KEY}`;
     const owmResp = await fetch(owmURL);
     const owmData = await owmResp.json();
-    // Remove all old owmTS objects with locationId = loc._id
-    await tsModel.deleteMany({ locationId: loc._id, source: "owm" });
     // Parse data from OpenWeatherMap API
     const parsedOWM: tsType[] = parseOWMToTS(owmData, loc._id);
     parsedOWM.forEach(async (data) => {
@@ -103,8 +101,6 @@ locRouter.get(
     const waURL = `https://api.weatherapi.com/v1/forecast.json?q=${loc.lat},${loc.lon}&days=14&key=${process.env.WEATHERAPI_API_KEY}`;
     const waResp = await fetch(waURL);
     const waData = await waResp.json();
-    // Remove all old waTS objects with locationId = loc._id
-    await tsModel.deleteMany({ locationId: loc._id, source: "wa" });
     // Parse data from WeatherAPI
     const parsedWA: tsType[] = parseWAToTS(waData, loc._id);
     parsedWA.forEach(async (data) => {
