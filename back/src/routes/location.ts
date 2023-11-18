@@ -38,15 +38,13 @@ locRouter.get("/:name", async (req: Request, res: Response, next: NextFunction) 
   const owm = await owmTS.find({ locationId: loc._id });
   const wa = await waTS.find({ locationId: loc._id });
 
-  // Create a new object with the location and the smhiTS
-  const locWeather: ILocationWeather = {
-    ...loc.toObject(),
-    smhiTS: smhi,
-    owmTS: owm,
-    waTS: wa,
-  };
-
-  res.send(locWeather);
+  const locationWeather: ILocationWeather = loc.toObject();
+  // Update name to capitalized
+  locationWeather.name = loc.name.charAt(0).toUpperCase() + loc.name.slice(1);
+  locationWeather.smhiTS = smhi;
+  locationWeather.owmTS = owm;
+  locationWeather.waTS = wa;
+  res.send(locationWeather);
 });
 
 locRouter.post("/new", async (req: Request, res: Response, next: NextFunction) => {

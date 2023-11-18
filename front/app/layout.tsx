@@ -21,14 +21,6 @@ export default function RootLayout({
       <body className={`bg-sky-950 ${lexend.className}`}>
         <NavbarComponent />
         {children}
-        <div className="grid grid-rows-2 grid-flow-col gap-8 m-16">
-          <div className="row-span-3">
-            <LocationComponent name="Uppsala" />
-          </div>
-          <LocationComponent name="Hanoi" />
-          <LocationComponent name="Kista" />
-          <LocationComponent name="Las Vegas" />
-        </div>
       </body>
     </html>
   );
