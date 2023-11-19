@@ -27,30 +27,20 @@ export default function ProfileMenu() {
   };
   return (
     <>
-      <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-        <p>Johnny Silverhand</p>
-        <Tooltip title="Account settings">
-          <IconButton
-            onClick={handleClick}
-            size="small"
-            sx={{ ml: 2 }}
-            aria-controls={open ? "account-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}>
-            <Avatar
-              src={`/images/avatar/1.jpg`}
-              alt="Johnny Silverhand"
-              className="w-14 h-14"
-            />
-          </IconButton>
-        </Tooltip>
-      </Box>
+      <Tooltip title="Profile">
+        <IconButton onClick={handleClick}>
+          <Avatar
+            src={`/images/avatar/1.jpg`}
+            alt="Johnny Silverhand"
+            className="w-16 h-16"
+          />
+        </IconButton>
+      </Tooltip>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
         open={open}
         onClose={handleClose}
-        onClick={handleClose}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         sx={{
