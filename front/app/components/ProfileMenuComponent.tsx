@@ -32,7 +32,7 @@ export default function ProfileMenu() {
           <Avatar
             src={`/images/avatar/1.jpg`}
             alt="Johnny Silverhand"
-            className="w-16 h-16"
+            className="w-16 h-16 ring-4 ring-sky-400 transform hover:scale-110 transition-all duration-200"
           />
         </IconButton>
       </Tooltip>
