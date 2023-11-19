@@ -1,6 +1,4 @@
-import { owmTSType } from "../schemas/owmTimeSeries";
-import { smhiTSType } from "../schemas/smhiTimeSeries";
-import { waTSType } from "../schemas/waTimeSeries";
+import { tsType } from "../schemas/timeSeries";
 
 export interface ISMHIResponse {
   approvedTime: string;
@@ -212,12 +210,12 @@ const parseWaSunriseSunset = (time: string): Date => {
   return date;
 };
 
-const parseWAToTS = (data: IWAResponse, locID: string): waTSType[] => {
+const parseWAToTS = (data: IWAResponse, locID: string): tsType[] => {
   // For each forecastday, loop through each hour
-  const parsed: waTSType[] = data.forecast.forecastday
+  const parsed: tsType[] = data.forecast.forecastday
     .map((day) => {
-      const parsedDay: waTSType[] = day.hour.map((hour) => {
-        const parsedHour: waTSType = {
+      const parsedDay: tsType[] = day.hour.map((hour) => {
+        const parsedHour: tsType = {
           locationId: locID,
           timeStamp: new Date(hour.time_epoch * 1000),
           lastUpdated: new Date(),
@@ -236,6 +234,7 @@ const parseWAToTS = (data: IWAResponse, locID: string): waTSType[] => {
           weatherSymbol: parseWaWeatherSymbol(hour.condition.code),
           sunrise: parseWaSunriseSunset(day.astro.sunrise),
           sunset: parseWaSunriseSunset(day.astro.sunset),
+          source: "wa",
         };
         return parsedHour;
       });
@@ -383,9 +382,9 @@ const parseWAPrecipitationCategory = (code: number): number => {
 };
 
 // Parse OWM request to OWMTimeSeries object
-const parseOWMToTS = (data: IOWMResponse, locID: string): owmTSType[] => {
-  const parsed: owmTSType[] = data.list.map((ts) => {
-    const parsedTS: owmTSType = {
+const parseOWMToTS = (data: IOWMResponse, locID: string): tsType[] => {
+  const parsed: tsType[] = data.list.map((ts) => {
+    const parsedTS: tsType = {
       locationId: locID,
       timeStamp: new Date(ts.dt_txt),
       lastUpdated: new Date(),
@@ -406,6 +405,7 @@ const parseOWMToTS = (data: IOWMResponse, locID: string): owmTSType[] => {
       precipitationCategory: parseOWMPrecipitationCategory(ts.weather[0].id),
       sunrise: new Date((data.city.sunrise + data.city.timezone) * 1000), // In local time
       sunset: new Date((data.city.sunset + data.city.timezone) * 1000), // In local time
+      source: "owm",
     };
     return parsedTS;
   });
@@ -436,11 +436,11 @@ const parseSmhiWeatherSymbol = (code: number): number => {
 };
 
 // Parse SMHI request to SMHITimeSeries object
-const parseSMHIToTS = (data: ISMHIResponse, locID: string): smhiTSType[] => {
+const parseSMHIToTS = (data: ISMHIResponse, locID: string): tsType[] => {
   // For each timeSeries in data.timeSeries, create a new smhiType object
-  const parsed: smhiTSType[] = data.timeSeries.map((ts) => {
+  const parsed: tsType[] = data.timeSeries.map((ts) => {
     // Create a new smhiType object
-    const parsedTS: smhiTSType = {
+    const parsedTS: tsType = {
       locationId: locID,
       timeStamp: new Date(ts.validTime),
       lastUpdated: new Date(data.referenceTime),
@@ -459,6 +459,7 @@ const parseSMHIToTS = (data: ISMHIResponse, locID: string): smhiTSType[] => {
       precipitationCategory: 0,
       frozenPrecipitationFraction: 0,
       weatherSymbol: 0,
+      source: "smhi",
     };
 
     // For each parameter in ts.parameters, add the value to the parsedTS object
