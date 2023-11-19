@@ -34,7 +34,7 @@ const LocationComponent = (props: ILocationProps) => {
                 {Object.keys(providerToTS).map((provider) => (
                   <div
                     key={provider}
-                    className={`rounded-xl ${enabledProviders.includes(provider) ? 'opacity-100' : 'opacity-40'} p-4 m-2 justify-center text-center text-sky-100 ${providerToBgColor[provider.toLowerCase()]} hover:opacity-70 transition-all ease-in-out duration-200`}
+                    className={`rounded-xl ${enabledProviders.includes(provider) ? 'opacity-100' : 'opacity-40'} p-4 m-2 cursor-pointer justify-center text-center text-sky-100 ${providerToBgColor[provider.toLowerCase()]} hover:opacity-70 transition-all ease-in-out duration-200`}
                     onClick={() => {
                       if (enabledProviders.includes(provider)) {
                         setEnabledProviders(enabledProviders.filter((p) => p !== provider));
