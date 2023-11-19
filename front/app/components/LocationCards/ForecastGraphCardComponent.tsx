@@ -28,12 +28,13 @@ interface IForecastGraphCardComponentProps {
   name: string;
   suffix?: string;
   prefix?: string;
+  enabledProviders: string[];
 }
 
 const ForecastGraphCardComponent = (
   props: IForecastGraphCardComponentProps
 ) => {
-  const { data, numForecastDays, dataField, name, suffix, prefix } = props;
+  const { data, numForecastDays, dataField, name, suffix, prefix, enabledProviders } = props;
 
   // Create timestamp labels with each full hour for next 14 days
   const labels = Array.from(Array(numForecastDays * 24).keys()).map(
@@ -149,25 +150,25 @@ const ForecastGraphCardComponent = (
       datasets: [
         {
           label: "SMHI",
-          data: chartData.map((forecast: any) => {
+          data: enabledProviders.includes("SMHI") ? chartData.map((forecast: any) => {
             return forecast.smhi;
-          }),
+          }) : [],
           borderColor: apiToColor["smhi"],
           backgroundColor: apiToColor["smhi"],
         },
         {
           label: "WA",
-          data: chartData.map((forecast: any) => {
+          data: enabledProviders.includes("WeatherAPI") ? chartData.map((forecast: any) => {
             return forecast.wa;
-          }),
+          }) : [],
           borderColor: apiToColor["wa"],
           backgroundColor: apiToColor["wa"],
         },
         {
           label: "OWM",
-          data: chartData.map((forecast: any) => {
+          data: enabledProviders.includes("OpenWeatherMap") ? chartData.map((forecast: any) => {
             return forecast.owm;
-          }),
+          }) : [],
           borderColor: apiToColor["owm"],
           backgroundColor: apiToColor["owm"],
         },
