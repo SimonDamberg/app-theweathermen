@@ -44,8 +44,12 @@ locRouter.get(
       locationWeather.smhiTS = smhi.sort((a, b) => {
         return a.timeStamp.getTime() - b.timeStamp.getTime();
       });
-      locationWeather.owmTS = owm;
-      locationWeather.waTS = wa;
+      locationWeather.owmTS = owm.sort((a, b) => {
+        return a.timeStamp.getTime() - b.timeStamp.getTime();
+      });
+      locationWeather.waTS = wa.sort((a, b) => {
+        return a.timeStamp.getTime() - b.timeStamp.getTime();
+      });
       locsWeather.push(locationWeather);
       numFetchedLocs++;
 

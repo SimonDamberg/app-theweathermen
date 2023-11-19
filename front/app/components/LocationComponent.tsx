@@ -1,6 +1,6 @@
 import React from "react";
-import CurrentWeatherCard from "./LocationCard/CurrentWeatherCard";
-import ForecastGraphCard from "./LocationCard/ForecastGraphCard";
+import CurrentWeatherCardComponent from "./LocationCard/CurrentWeatherCardComponent";
+import ForecastGraphCardComponent from "./LocationCard/ForecastGraphCardComponent";
 
 interface ILocationProps {
   data?: any;
@@ -18,24 +18,24 @@ const LocationComponent = (props: ILocationProps) => {
           <p className="text-4xl text-sky-100">{data.name}</p>
           <div className="flex flex-col">
             <div className="flex flex-row p-4 justify-center">
-              <CurrentWeatherCard
+              <CurrentWeatherCardComponent
                 airTemperature={data.smhiTS[0].airTemperature}
                 symbol={data.smhiTS[0].weatherSymbol}
                 provider="SMHI"
               />
-              <CurrentWeatherCard
+              <CurrentWeatherCardComponent
                 airTemperature={data.waTS[0].airTemperature}
                 symbol={data.waTS[0].weatherSymbol}
                 provider="WeatherAPI"
               />
-              <CurrentWeatherCard
+              <CurrentWeatherCardComponent
                 airTemperature={data.owmTS[0].airTemperature}
                 symbol={data.owmTS[0].weatherSymbol}
                 provider="OpenWeatherMap"
               />
             </div>
             <div className="flex justify-center">
-              <ForecastGraphCard
+              <ForecastGraphCardComponent
                 data={data}
                 numForecastDays={numForecastDays}
               />
