@@ -2,6 +2,7 @@ import express, { Router, Request, Response, NextFunction } from "express";
 import { Location, LocationType } from "../schemas/location";
 import { parseSMHIToTS, parseOWMToTS, parseWAToTS } from "../utils/parsing";
 import { tsModel, tsType } from "../schemas/timeSeries";
+import { getDailyStats, IDailyStats } from "../utils/stats";
 
 const locRouter: Router = express.Router();
 
@@ -9,6 +10,13 @@ interface ILocationWeather extends LocationType {
   smhiTS: tsType[];
   owmTS: tsType[];
   waTS: tsType[];
+}
+
+interface IDailyLocationStats {
+  date: Date;
+  smhi: IDailyStats | null;
+  owm: IDailyStats | null;
+  wa: IDailyStats | null;
 }
 
 // ======= serve data from database =======
@@ -21,14 +29,13 @@ locRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
 });
 
 /**
- * GET /location/locations/:list
+ * GET /location/weather
  */
 locRouter.get(
   "/weather",
   async (req: Request, res: Response, next: NextFunction) => {
     const locsWeather: ILocationWeather[] = [];
     const locs = await Location.find();
-    console.log(locs);
     let numFetchedLocs = 0;
     locs.forEach(async (loc) => {
       if (!loc) {
@@ -57,6 +64,93 @@ locRouter.get(
         res.send(locsWeather);
       }
     });
+  }
+);
+
+/**
+ * GET /location/daily/:name+numForecastDays
+ *
+ */
+locRouter.get(
+  "/daily/:namePlusNumForecastDays",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const nameAndNumForecastDays =
+      req.params.namePlusNumForecastDays.split("+");
+    const loc = await Location.findOne({
+      name: nameAndNumForecastDays[0].toLowerCase(),
+    });
+
+    if (!loc) {
+      return res.status(404).send("Location not found");
+    }
+
+    const dailyStatsList: IDailyLocationStats[] = [];
+
+    const smhi = await tsModel.find({ locationId: loc._id, source: "smhi" });
+    const owm = await tsModel.find({ locationId: loc._id, source: "owm" });
+    const wa = await tsModel.find({ locationId: loc._id, source: "wa" });
+
+    const waDateDict: any[][] = [];
+    wa.forEach((element: any) => {
+      const date = new Date(element.timeStamp).getDate();
+      if (date in waDateDict) {
+        waDateDict[date].push(element);
+      } else {
+        waDateDict[date] = [element];
+      }
+    });
+    const smhiDateDict: any[][] = [];
+    smhi.forEach((element: any) => {
+      const date = new Date(element.timeStamp).getDate();
+      if (date in smhiDateDict) {
+        smhiDateDict[date].push(element);
+      } else {
+        smhiDateDict[date] = [element];
+      }
+    });
+    const owmDateDict: any[][] = [];
+    owm.forEach((element: any) => {
+      const date = new Date(element.timeStamp).getDate();
+      if (date in owmDateDict) {
+        owmDateDict[date].push(element);
+      } else {
+        owmDateDict[date] = [element];
+      }
+    });
+
+    const firstDate = new Date(wa[0].timeStamp).getDate();
+    for (
+      let i = firstDate;
+      i < firstDate + Number(nameAndNumForecastDays[1]);
+      i++
+    ) {
+      let waStats: IDailyStats | null = null;
+      if (i in waDateDict) {
+        waStats = getDailyStats(waDateDict[i]);
+      }
+      let smhiStats: IDailyStats | null = null;
+      if (i in smhiDateDict) {
+        smhiStats = getDailyStats(smhiDateDict[i]);
+      }
+      let owmStats: IDailyStats | null = null;
+      if (i in owmDateDict) {
+        owmStats = getDailyStats(owmDateDict[i]);
+      }
+      const dailyDate = new Date(wa[0].timeStamp);
+      dailyDate.setDate(i + 1);
+      dailyDate.setHours(0);
+      dailyDate.setMinutes(0);
+      dailyDate.setSeconds(0);
+
+      const dailyStats: IDailyLocationStats = {
+        date: dailyDate,
+        smhi: smhiStats,
+        owm: owmStats,
+        wa: waStats,
+      };
+      dailyStatsList.push(dailyStats);
+    }
+    res.send(dailyStatsList);
   }
 );
 

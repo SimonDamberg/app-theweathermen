@@ -2,7 +2,7 @@ import React from "react";
 import CurrentWeatherCardComponent from "./LocationCards/CurrentWeatherCardComponent";
 import ForecastGraphCardComponent from "./LocationCards/ForecastGraphCardComponent";
 import WindCardComponent from "./LocationCards/WindCardComponent";
-//import XDaysForecastComponent from "./LocationCards/XDaysForecastComponent";
+import XDaysForecastComponent from "./LocationCards/XDaysForecastComponent/XDaysForecastComponent";
 
 interface ILocationProps {
   data?: any;
@@ -93,10 +93,10 @@ const LocationComponent = (props: ILocationProps) => {
               />
             </div>
             <div className="flex justify-center my-4">
-              {/* <XDaysForecastComponent
-                location={data.name}
+              <XDaysForecastComponent
+                name={data.name}
                 numForecastDays={numForecastDays}
-              /> */}
+              />
             </div>
           </div>
         </>
