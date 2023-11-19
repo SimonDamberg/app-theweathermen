@@ -21,6 +21,42 @@ locRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
 });
 
 /**
+ * GET /location/locations/:list
+ */
+locRouter.get(
+  "/weather",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const locsWeather: ILocationWeather[] = [];
+    const locs = await Location.find();
+    console.log(locs);
+    let numFetchedLocs = 0;
+    locs.forEach(async (loc) => {
+      if (!loc) {
+        return res.status(404).send("Location not found");
+      }
+      const smhi = await tsModel.find({ locationId: loc._id, source: "smhi" });
+      const owm = await tsModel.find({ locationId: loc._id, source: "owm" });
+      const wa = await tsModel.find({ locationId: loc._id, source: "wa" });
+      const locationWeather: ILocationWeather = loc.toObject();
+
+      locationWeather.name =
+        loc.name.charAt(0).toUpperCase() + loc.name.slice(1);
+      locationWeather.smhiTS = smhi.sort((a, b) => {
+        return a.timeStamp.getTime() - b.timeStamp.getTime();
+      });
+      locationWeather.owmTS = owm;
+      locationWeather.waTS = wa;
+      locsWeather.push(locationWeather);
+      numFetchedLocs++;
+
+      if (numFetchedLocs == locs.length) {
+        res.send(locsWeather);
+      }
+    });
+  }
+);
+
+/**
  * GET /location/:name
  * TODO
  */
