@@ -1,4 +1,3 @@
-import apiToColor from "@/app/utils/colors";
 import React from "react";
 import {
   Chart as ChartJS,
@@ -11,6 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
+import { apiToColor } from "@/app/utils/colors";
 
 ChartJS.register(
   CategoryScale,
@@ -24,12 +24,16 @@ ChartJS.register(
 interface IForecastGraphCardComponentProps {
   data: any;
   numForecastDays: number;
+  dataField: string;
+  name: string;
+  suffix?: string;
+  prefix?: string;
 }
 
 const ForecastGraphCardComponent = (
   props: IForecastGraphCardComponentProps
 ) => {
-  const { data, numForecastDays } = props;
+  const { data, numForecastDays, dataField, name, suffix, prefix } = props;
 
   // Create timestamp labels with each full hour for next 14 days
   const labels = Array.from(Array(numForecastDays * 24).keys()).map(
@@ -57,6 +61,14 @@ const ForecastGraphCardComponent = (
       y: {
         ticks: {
           color: "#f0f9ff",
+          // insert suffix and prefix
+          callback: function (val: any, index: number) {
+            if (suffix) {
+              return `${prefix ? prefix : ""} ${val.toFixed(1)} ${suffix}`;
+            } else {
+              return `${prefix ? prefix : ""} ${val.toFixed(1)} `;
+            }
+          },
         },
         grid: {
           color: "#f0f9ff",
@@ -124,9 +136,9 @@ const ForecastGraphCardComponent = (
       });
       return {
         label: label,
-        smhi: smhi ? smhi.airTemperature : null,
-        owm: owm ? owm.airTemperature : null,
-        wa: wa ? wa.airTemperature : null,
+        smhi: smhi ? smhi[dataField] : null,
+        owm: owm ? owm[dataField] : null,
+        wa: wa ? wa[dataField] : null,
       };
     });
 
@@ -165,7 +177,7 @@ const ForecastGraphCardComponent = (
 
   return (
     <div className="bg-sky-800 w-10/12 h-full rounded-xl p-4 content-center">
-      <p className="text-sky-100 text-2xl">Forecast</p>
+      <p className="text-sky-100 text-2xl">{name}</p>
       <Chart type="line" data={getChartData()} options={options} />
     </div>
   );
