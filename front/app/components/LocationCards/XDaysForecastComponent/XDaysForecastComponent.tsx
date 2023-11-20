@@ -49,9 +49,9 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
             </tr>
           </thead>
           <tbody>
-            {dailyStats.map((row) => {
+            {dailyStats.map((row, idx) => {
               return (
-                <tr className="bg-sky-900">
+                <tr className="bg-sky-900" key={idx}>
                   <td>
                     <p className="m-2 mr-4">
                       {new Date(row.date).toLocaleDateString("en-EN", {
