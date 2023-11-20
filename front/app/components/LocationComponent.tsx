@@ -132,6 +132,7 @@ const LocationComponent = (props: ILocationProps) => {
             <div className="flex justify-center my-4">
               <XDaysForecastComponent
                 name={data.name}
+                enabledProviders={enabledProviders}
                 numForecastDays={numForecastDays}
               />
             </div>
