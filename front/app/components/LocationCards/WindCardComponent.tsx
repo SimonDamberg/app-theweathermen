@@ -13,7 +13,6 @@ interface IWindCardComponentProps {
 
 const WindCardComponent = (props: IWindCardComponentProps) => {
   const { windDirection, windSpeed, windGustSpeed, provider } = props;
-  console.log(provider.toLowerCase());
   return (
     <div
       className={`flex flex-col bg-sky-800 rounded-xl p-4 mx-4 border-2 ${
