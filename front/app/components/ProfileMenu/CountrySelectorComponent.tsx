@@ -27,7 +27,12 @@ export default function CountrySelector() {
             className={`dot absolute ${
               i18n.language === "sv" ? "left-0 ml-0.5" : "translate-x-8"
             } top-0.5 w-7 h-7 rounded-full transition-transform duration-500 ease-in-out`}>
-            <Image alt="" src={`/images/flags/${i18n.language}.png`} />
+            <Image
+              alt=""
+              src={`/images/flags/${i18n.language}.png`}
+              width={64}
+              height={64}
+            />
           </div>
         </div>
       </label>
