@@ -72,7 +72,9 @@ export default function Home() {
             fill="currentFill"
           />
         </svg>
-        <span className="sr-only">{t("loading")}...</span>
+        <span className="sr-only " suppressHydrationWarning>
+          {t("loading")}...
+        </span>
       </div>
     );
   } else {

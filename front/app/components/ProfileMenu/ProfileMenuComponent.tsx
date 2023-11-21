@@ -32,7 +32,7 @@ export default function ProfileMenu() {
   };
   return (
     <>
-      <Tooltip title={t("profile")}>
+      <Tooltip title={t("profile")} suppressHydrationWarning>
         <IconButton onClick={handleClick}>
           <Avatar
             src={`/images/avatar/1.jpg`}
