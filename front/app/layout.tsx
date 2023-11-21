@@ -3,6 +3,8 @@ import { Lexend } from "next/font/google";
 import "./globals.css";
 import NavbarComponent from "./components/NavbarComponent";
 import React from "react";
+import "./i18n";
+import i18next from "i18next";
 
 const lexend = Lexend({ subsets: ["latin"] });
 

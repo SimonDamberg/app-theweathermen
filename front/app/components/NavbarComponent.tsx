@@ -1,5 +1,5 @@
 import React from "react";
-import ProfileMenu from "./ProfileMenuComponent";
+import ProfileMenu from "./ProfileMenu/ProfileMenuComponent";
 
 const NavbarComponent = () => {
   return (

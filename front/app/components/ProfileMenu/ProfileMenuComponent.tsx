@@ -1,13 +1,11 @@
 "use client";
 import {
   faArrowRightFromBracket,
-  faGear,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Avatar,
-  Box,
   Divider,
   IconButton,
   Menu,
@@ -15,9 +13,16 @@ import {
   Tooltip,
 } from "@mui/material";
 import React from "react";
+import CountrySelector from "./CountrySelectorComponent";
+import { Lexend } from "next/font/google";
+import { useTranslation } from "react-i18next";
+
+const lexend = Lexend({ subsets: ["latin"] });
 
 export default function ProfileMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const { t, i18n } = useTranslation();
+
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -27,7 +32,7 @@ export default function ProfileMenu() {
   };
   return (
     <>
-      <Tooltip title="Profile">
+      <Tooltip title={t("profile")}>
         <IconButton onClick={handleClick}>
           <Avatar
             src={`/images/avatar/1.jpg`}
@@ -57,28 +62,27 @@ export default function ProfileMenu() {
               className="
           bg-sky-600 w-14 h-14 mr-4"
             />
-            <p className=" text-white">
+            <p className={`text-sky-100 ${lexend.className}`}>
               Johnny <br />
               Silverhand
             </p>
           </div>
         </MenuItem>
-        <Divider className="bg-white mx-3" />
+        <Divider className="bg-sky-100 mx-3" />
         <MenuItem className="flex items-center gap-2 my-2">
           <FontAwesomeIcon icon={faUser} style={{ color: "#90A4AE" }} />
-          <p className="text-white">My Profile</p>
+          <p className={`text-sky-100 ${lexend.className}`}>{t("myProfile")}</p>
         </MenuItem>
         <MenuItem className="flex items-center gap-2 my-2">
-          <FontAwesomeIcon icon={faGear} style={{ color: "#90A4AE" }} />
-          <p className="font-medium text-white">Settings</p>
+          <CountrySelector />
         </MenuItem>
-        <Divider className="bg-white mx-3" />
+        <Divider className="bg-sky-100 mx-3" />
         <MenuItem className="flex items-center gap-2 my-2">
           <FontAwesomeIcon
             icon={faArrowRightFromBracket}
             style={{ color: "#90A4AE" }}
           />
-          <p className="font-medium text-white">Log Out</p>
+          <p className={`text-sky-100 ${lexend.className}`}>{t("logOut")}</p>
         </MenuItem>
       </Menu>
     </>

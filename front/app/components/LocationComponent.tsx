@@ -4,6 +4,7 @@ import ForecastGraphCardComponent from "./LocationCards/ForecastGraphCardCompone
 import WindCardComponent from "./LocationCards/WindCardComponent";
 import XDaysForecastComponent from "./LocationCards/XDaysForecastComponent/XDaysForecastComponent";
 import { providerToBgColor } from "../utils/colors";
+import { useTranslation } from "react-i18next";
 
 interface ILocationProps {
   data?: any;
@@ -18,12 +19,14 @@ const providerToTS: { [key: string]: string } = {
 const LocationComponent = (props: ILocationProps) => {
   const { data } = props;
 
+  const { t, i18n } = useTranslation();
+
   const [enabledProviders, setEnabledProviders] = React.useState([
     "SMHI",
     "WeatherAPI",
     "OpenWeatherMap",
   ]);
-  const numForecastDays = 5;
+  const numForecastDays = 10;
 
   return (
     <div className="w-300 h-full p-10 rounded-xl bg-sky-700 shadow-sm hover:shadow-lg shadow-sky-600 hover:shadow-sky-600 transition-all ease-in-out duration-300">
@@ -93,8 +96,8 @@ const LocationComponent = (props: ILocationProps) => {
               <ForecastGraphCardComponent
                 data={data}
                 dataField={"windSpeed"}
-                suffix={"m/s"}
-                name={"Wind Speed"}
+                suffix={t("meterPerSecond")}
+                name={t("windSpeed")}
                 numForecastDays={numForecastDays}
                 enabledProviders={enabledProviders}
               />
@@ -103,7 +106,7 @@ const LocationComponent = (props: ILocationProps) => {
               <ForecastGraphCardComponent
                 data={data}
                 dataField={"airTemperature"}
-                name={"Air Temperature"}
+                name={t("airTemperature")}
                 suffix={"°C"}
                 numForecastDays={numForecastDays}
                 enabledProviders={enabledProviders}
@@ -114,7 +117,7 @@ const LocationComponent = (props: ILocationProps) => {
                 data={data}
                 dataField={"meanPrecipitationIntensity"}
                 suffix={"mm"}
-                name={"Precipitation"}
+                name={t("precipitation")}
                 numForecastDays={numForecastDays}
                 enabledProviders={enabledProviders}
               />
@@ -124,7 +127,7 @@ const LocationComponent = (props: ILocationProps) => {
                 data={data}
                 dataField={"airPressure"}
                 suffix={"hPa"}
-                name={"Air Pressure"}
+                name={t("airPressure")}
                 numForecastDays={numForecastDays}
                 enabledProviders={enabledProviders}
               />

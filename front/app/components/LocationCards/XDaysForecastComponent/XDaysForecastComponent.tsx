@@ -1,5 +1,6 @@
 import React, { use, useEffect, useState } from "react";
 import ApiCellComponent, { IDailyStats } from "./ApiCellComponent";
+import { useTranslation } from "react-i18next";
 
 interface IXDaysForecastComponentProps {
   enabledProviders: string[];
@@ -16,6 +17,8 @@ interface IDailyLocationStats {
 
 const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
   const { name, enabledProviders, numForecastDays } = props;
+  const { t, i18n } = useTranslation();
+
   const callString = name + "+" + numForecastDays;
   const [dailyStats, setDailyStats] = useState<IDailyLocationStats[]>([]);
   const [loading, setLoading] = useState<Boolean>(true);
@@ -33,7 +36,7 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
   if (loading) {
     return (
       <>
-        <p>Loading...</p>
+        <p>{t("loading")}...</p>
       </>
     );
   } else if (enabledProviders.length > 0) {
@@ -42,10 +45,12 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
         <table className="table-auto border-separate border-spacing-y-4">
           <thead>
             <tr>
-              <th>Date</th>
+              <th>{t("date")}</th>
               {enabledProviders.includes("SMHI") && <th>SMHI</th>}
-              {enabledProviders.includes("WeatherAPI") && <th>WA</th>}
-              {enabledProviders.includes("OpenWeatherMap") && <th>OWM</th>}
+              {enabledProviders.includes("WeatherAPI") && <th>WeatherAPI</th>}
+              {enabledProviders.includes("OpenWeatherMap") && (
+                <th>OpenWeatherMap</th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -55,7 +60,7 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
                   <tr className="bg-sky-900" key={idx}>
                     <td>
                       <p className="m-2 mr-4">
-                        {new Date(row.date).toLocaleDateString("en-EN", {
+                        {new Date(row.date).toLocaleDateString(i18n.language, {
                           weekday: "short",
                           month: "short",
                           day: "numeric",
@@ -94,7 +99,7 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
   } else {
     return (
       <>
-        <p>No providers selected</p>
+        <p>{t("noProvidersSelected")}</p>
       </>
     );
   }

@@ -1,5 +1,6 @@
 import { providerToBorderColor } from "@/app/utils/colors";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 export interface IDailyStats {
   minTemp: number;
@@ -15,6 +16,8 @@ interface IApiCellComponentProps {
 
 const ApiCellComponent = (props: IApiCellComponentProps) => {
   const { stats, provider } = props;
+  const { t, i18n } = useTranslation();
+
   if (stats) {
     return (
       <div
@@ -23,11 +26,11 @@ const ApiCellComponent = (props: IApiCellComponentProps) => {
         }`}>
         <div className="flex flex-row">
           <div className="flex flex-col items-center mr-4">
-            <p>L</p>
+            <p>{t("lowShort").toUpperCase()}</p>
             <p>{stats?.minTemp.toFixed(1)}°C</p>
           </div>
           <div className="flex flex-col items-center">
-            <p>H</p>
+            <p>{t("highShort").toUpperCase()}</p>
             <p>{stats?.maxTemp.toFixed(1)}°C</p>
           </div>
         </div>
@@ -50,7 +53,7 @@ const ApiCellComponent = (props: IApiCellComponentProps) => {
         className={`flex flex-col rounded-xl p-2 mx-4 border-2 ${
           providerToBorderColor[provider.toLowerCase()]
         }`}>
-        <p>No data</p>
+        <p>{t("noData")}</p>
       </div>
     );
   }

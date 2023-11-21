@@ -11,6 +11,7 @@ import {
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { apiToColor } from "@/app/utils/colors";
+import { useTranslation } from "react-i18next";
 
 ChartJS.register(
   CategoryScale,
@@ -34,7 +35,17 @@ interface IForecastGraphCardComponentProps {
 const ForecastGraphCardComponent = (
   props: IForecastGraphCardComponentProps
 ) => {
-  const { data, numForecastDays, dataField, name, suffix, prefix, enabledProviders } = props;
+  const {
+    data,
+    numForecastDays,
+    dataField,
+    name,
+    suffix,
+    prefix,
+    enabledProviders,
+  } = props;
+
+  const { t, i18n } = useTranslation();
 
   // Create timestamp labels with each full hour for next 14 days
   const labels = Array.from(Array(numForecastDays * 24).keys()).map(
@@ -81,7 +92,7 @@ const ForecastGraphCardComponent = (
           callback: function (val: any, index: number) {
             // if first value OR first occurence of new day
             if (index == 0 || index % 24 == 0) {
-              return labels[index].toLocaleDateString("en-EN", {
+              return labels[index].toLocaleDateString(i18n.language, {
                 weekday: "short",
                 day: "numeric",
                 month: "numeric",
@@ -150,25 +161,31 @@ const ForecastGraphCardComponent = (
       datasets: [
         {
           label: "SMHI",
-          data: enabledProviders.includes("SMHI") ? chartData.map((forecast: any) => {
-            return forecast.smhi;
-          }) : [],
+          data: enabledProviders.includes("SMHI")
+            ? chartData.map((forecast: any) => {
+                return forecast.smhi;
+              })
+            : [],
           borderColor: apiToColor["smhi"],
           backgroundColor: apiToColor["smhi"],
         },
         {
           label: "WA",
-          data: enabledProviders.includes("WeatherAPI") ? chartData.map((forecast: any) => {
-            return forecast.wa;
-          }) : [],
+          data: enabledProviders.includes("WeatherAPI")
+            ? chartData.map((forecast: any) => {
+                return forecast.wa;
+              })
+            : [],
           borderColor: apiToColor["wa"],
           backgroundColor: apiToColor["wa"],
         },
         {
           label: "OWM",
-          data: enabledProviders.includes("OpenWeatherMap") ? chartData.map((forecast: any) => {
-            return forecast.owm;
-          }) : [],
+          data: enabledProviders.includes("OpenWeatherMap")
+            ? chartData.map((forecast: any) => {
+                return forecast.owm;
+              })
+            : [],
           borderColor: apiToColor["owm"],
           backgroundColor: apiToColor["owm"],
         },
