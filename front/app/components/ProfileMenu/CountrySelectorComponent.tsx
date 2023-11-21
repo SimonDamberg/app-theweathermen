@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import Image from "next/image";
 
 export default function CountrySelector() {
   const { i18n } = useTranslation();
@@ -26,7 +27,7 @@ export default function CountrySelector() {
             className={`dot absolute ${
               i18n.language === "sv" ? "left-0 ml-0.5" : "translate-x-8"
             } top-0.5 w-7 h-7 rounded-full transition-transform duration-500 ease-in-out`}>
-            <img src={`/images/flags/${i18n.language}.png`} />
+            <Image alt="" src={`/images/flags/${i18n.language}.png`} />
           </div>
         </div>
       </label>
