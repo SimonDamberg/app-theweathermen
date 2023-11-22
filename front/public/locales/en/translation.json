@@ -20,5 +20,8 @@
   "loading": "Loading",
   "profile": "Profile",
   "myProfile": "My Profile",
-  "logOut": "Log Out"
+  "logOut": "Log Out",
+  "editDialogTitle": "Edit data for {{location}}",
+  "back": "Back",
+  "reset": "Reset"
 }

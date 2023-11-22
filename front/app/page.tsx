@@ -2,7 +2,7 @@
 
 import CircleButtonComponent from "./components/CircleButtonComponent";
 import { faPlus, faPen } from "@fortawesome/free-solid-svg-icons";
-import LocationComponent from "./components/LocationComponent";
+import LocationCard from "./components/LocationCard/LocationCard";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -82,16 +82,24 @@ export default function Home() {
       <>
         <div className="grid grid-rows-2 grid-flow-col gap-16 m-16">
           <div className="row-span-1">
-            <LocationComponent data={locationData[0]} />
+            <LocationCard data={locationData[0]} />
           </div>
-          <LocationComponent data={locationData[1]} />
-          <LocationComponent data={locationData[2]} />
+          <LocationCard data={locationData[1]} />
+          <LocationCard data={locationData[2]} />
         </div>
         <div className="fixed right-0 bottom-0 flex flex-row">
           <div className="-mr-8">
-            <CircleButtonComponent icon={faPen} onClick={() => null} />
+            <CircleButtonComponent
+              className={"bg-sky-600 w-16 h-16 "}
+              icon={faPen}
+              onClick={() => null}
+            />
           </div>
-          <CircleButtonComponent icon={faPlus} onClick={() => null} />
+          <CircleButtonComponent
+            className={"bg-sky-600 w-16 h-16 "}
+            icon={faPlus}
+            onClick={() => null}
+          />
         </div>
       </>
     );

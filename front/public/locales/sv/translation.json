@@ -20,5 +20,8 @@
   "loading": "Laddar",
   "profile": "Profil",
   "myProfile": "Min profil",
-  "logOut": "Logga ut"
+  "logOut": "Logga ut",
+  "editDialogTitle": "Redigera data för {{location}}",
+  "back": "Tillbaka",
+  "reset": "Återställ"
 }

@@ -4,18 +4,26 @@ import React from "react";
 
 interface ICircleButtonProps {
   icon?: IconDefinition;
+  iconClassName?: string;
   onClick: () => void;
+  className: string;
 }
 
 const CircleButtonComponent = (props: ICircleButtonProps) => {
   return (
     <div
-      className="bg-sky-700 rounded-full w-16 h-16 flex justify-center m-6 cursor-pointer hover:bg-sky-800 transition-all	ease-in-out duration-300"
+      className={[
+        "rounded-full flex justify-center m-6 cursor-pointer hover:opacity-70 transition-all ease-in-out duration-300",
+        props.className,
+      ].join(" ")}
       onClick={() => props.onClick()}>
       {props.icon ? (
         <FontAwesomeIcon
           icon={props.icon}
-          className="text-sky-200 text-2xl self-center"
+          className={[
+            "text-sky-200 text-2xl self-center",
+            props.iconClassName,
+          ].join(" ")}
         />
       ) : (
         <></>
