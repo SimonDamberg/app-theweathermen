@@ -54,7 +54,7 @@ const LocationCard = (props: ILocationCardProps) => {
   const numForecastDays = 5;
 
   return (
-    <div className="w-300 h-auto p-10 rounded-xl bg-sky-700 shadow-sm hover:shadow-lg shadow-sky-600 hover:shadow-sky-600 transition-all ease-in-out duration-300">
+    <div className="w-300 h-auto my-14 p-10 rounded-xl bg-sky-700 shadow-sm hover:shadow-lg shadow-sky-600 hover:shadow-sky-600 transition-all ease-in-out duration-300">
       {data && (
         <>
           <div className="flex flex-row justify-between content-center">
@@ -66,13 +66,11 @@ const LocationCard = (props: ILocationCardProps) => {
                 {Object.keys(providerToTS).map((provider) => (
                   <div
                     key={provider}
-                    className={`rounded-xl ${
-                      enabledProviders.includes(provider)
-                        ? "opacity-100"
-                        : "opacity-40"
-                    } p-4 m-2 cursor-pointer justify-center text-center text-sky-100 ${
-                      providerToBgColor[provider.toLowerCase()]
-                    } hover:opacity-70 transition-all ease-in-out duration-200`}
+                    className={`rounded-xl ${enabledProviders.includes(provider)
+                      ? "opacity-100"
+                      : "opacity-40"
+                      } p-4 m-2 cursor-pointer justify-center text-center text-sky-100 ${providerToBgColor[provider.toLowerCase()]
+                      } hover:opacity-70 transition-all ease-in-out duration-200`}
                     onClick={() => {
                       if (enabledProviders.includes(provider)) {
                         setEnabledProviders(

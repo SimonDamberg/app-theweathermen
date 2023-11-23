@@ -80,12 +80,17 @@ export default function Home() {
   } else {
     return (
       <>
-        <div className="grid grid-rows-2 grid-flow-col gap-16 m-16">
-          <div className="row-span-1">
+        <div className="grid grid-rows-2 grid-flow-col gap-16 mx-16">
+          <div className="row-span-2">
+            <LocationCard data={locationData[1]} />
+          </div>
+          <div>
+            <LocationCard data={locationData[2]} />
             <LocationCard data={locationData[0]} />
           </div>
-          <LocationCard data={locationData[1]} />
-          <LocationCard data={locationData[2]} />
+          {/* <div>
+            <LocationCard data={locationData[2]} />
+          </div> */}
         </div>
         <div className="fixed right-0 bottom-0 flex flex-row">
           <div className="-mr-8">
