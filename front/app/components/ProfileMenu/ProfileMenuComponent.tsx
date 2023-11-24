@@ -1,90 +1,92 @@
 "use client";
+import React, { Fragment } from "react";
+import CountrySelector from "./CountrySelectorComponent";
+import { useTranslation } from "react-i18next";
+import { Menu, Transition } from "@headlessui/react";
+import Image from "next/image";
 import {
   faArrowRightFromBracket,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Avatar,
-  Divider,
-  IconButton,
-  Menu,
-  MenuItem,
-  Tooltip,
-} from "@mui/material";
-import React from "react";
-import CountrySelector from "./CountrySelectorComponent";
-import { Lexend } from "next/font/google";
-import { useTranslation } from "react-i18next";
 
-const lexend = Lexend({ subsets: ["latin"] });
+interface IProfileMenuProps {
+  colour: string;
+  setColour: (colour: string) => void;
+}
 
-export default function ProfileMenu() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(" ");
+}
+
+export default function ProfileMenu(props: IProfileMenuProps) {
+  const { colour, setColour } = props;
+
   const { t, i18n } = useTranslation();
 
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   return (
-    <>
-      <Tooltip title={t("profile")} suppressHydrationWarning>
-        <IconButton onClick={handleClick}>
-          <Avatar
+    <Menu as="div" className="relative ml-3">
+      <div>
+        <Menu.Button
+          className={`relative flex rounded-full bg-${colour}-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-${colour}-800`}>
+          <span className="absolute -inset-1.5" />
+          <span className="sr-only">Open user menu</span>
+          <Image
             src={`/images/avatar/1.jpg`}
             alt="Johnny Silverhand"
-            className="w-16 h-16 ring-4 ring-sky-400 transform hover:scale-110 transition-all duration-200"
+            className={`w-16 h-16 ring-4 ring-${colour}-500 transform hover:scale-110 transition-all duration-200 rounded-full`}
+            width={128}
+            height={128}
           />
-        </IconButton>
-      </Tooltip>
-      <Menu
-        anchorEl={anchorEl}
-        id="account-menu"
-        open={open}
-        onClose={handleClose}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-        sx={{
-          "& .MuiMenu-paper": {
-            backgroundColor: "rgb(12 74 110)",
-            color: "#E5E7EB",
-          },
-        }}>
-        <MenuItem onClick={handleClose} className="">
-          <div className="flex items-center">
-            <Avatar
-              src={`/images/avatar/1.jpg`}
-              alt="Johnny Silverhand"
-              className="
-          bg-sky-600 w-14 h-14 mr-4"
-            />
-            <p className={`text-sky-100 ${lexend.className}`}>
-              Johnny <br />
-              Silverhand
-            </p>
+        </Menu.Button>
+      </div>
+      <Transition
+        as={Fragment}
+        enter="transition ease-out duration-100"
+        enterFrom="transform opacity-0 scale-95"
+        enterTo="transform opacity-100 scale-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="transform opacity-100 scale-100"
+        leaveTo="transform opacity-0 scale-95">
+        <Menu.Items
+          className={`absolute right-0 z-10 mt-2 w-52 origin-top-right rounded-md divide-y divide-${colour}-200 bg-${colour}-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}>
+          <div className="px-1 py-1 ">
+            <Menu.Item>
+              <p
+                className={`rounded-md px-4 py-2 text-lg hover:bg-${colour}-700 text-sky-100`}>
+                Johnny Silverhand
+              </p>
+            </Menu.Item>
           </div>
-        </MenuItem>
-        <Divider className="bg-sky-100 mx-3" />
-        <MenuItem className="flex items-center gap-2 my-2">
-          <FontAwesomeIcon icon={faUser} style={{ color: "#90A4AE" }} />
-          <p className={`text-sky-100 ${lexend.className}`}>{t("myProfile")}</p>
-        </MenuItem>
-        <MenuItem className="flex items-center gap-2 my-2">
-          <CountrySelector />
-        </MenuItem>
-        <Divider className="bg-sky-100 mx-3" />
-        <MenuItem className="flex items-center gap-2 my-2">
-          <FontAwesomeIcon
-            icon={faArrowRightFromBracket}
-            style={{ color: "#90A4AE" }}
-          />
-          <p className={`text-sky-100 ${lexend.className}`}>{t("logOut")}</p>
-        </MenuItem>
-      </Menu>
-    </>
+          <div className="px-1 py-1 ">
+            <Menu.Item>
+              <div
+                className={`rounded-md px-4 py-2 hover:bg-${colour}-700 flex items-center gap-2 `}>
+                <FontAwesomeIcon icon={faUser} className={`text-sky-100`} />
+                <p className={`text-sky-100 `}>{t("myProfile")}</p>
+              </div>
+            </Menu.Item>
+            <Menu.Item>
+              <div
+                className={`rounded-md px-4 py-2 hover:bg-${colour}-700 flex items-center gap-2 `}>
+                <CountrySelector />
+              </div>
+            </Menu.Item>
+          </div>
+          <div className="px-1 py-1 ">
+            <Menu.Item>
+              <div
+                className={`rounded-md px-4 py-2 hover:bg-${colour}-700 flex items-center gap-2 `}>
+                <FontAwesomeIcon
+                  icon={faArrowRightFromBracket}
+                  className={`text-sky-100`}
+                />
+                <p className={`text-sky-100 `}>{t("logOut")}</p>
+              </div>
+            </Menu.Item>
+          </div>
+        </Menu.Items>
+      </Transition>
+    </Menu>
   );
 }
