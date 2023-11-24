@@ -26,5 +26,7 @@
   "reset": "Återställ",
   "settings": "Färgtema",
   "colourSelector": "Välj färgtema",
-  "closeModal": "Stäng"
+  "closeModal": "Stäng",
+  "horizon": "Tidshorisont",
+  "xForecastDays": "Flerdygnsprognos"
 }

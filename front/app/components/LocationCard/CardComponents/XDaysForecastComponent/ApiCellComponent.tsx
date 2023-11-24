@@ -22,7 +22,7 @@ const ApiCellComponent = (props: IApiCellComponentProps) => {
   if (stats) {
     return (
       <div
-        className={`flex flex-col rounded-xl my-4 p-2 mx-2 border-2 ${
+        className={`flex flex-col w-36 rounded-xl my-4 p-2 mx-2 border-2 ${
           providerToBorderColor[provider.toLowerCase()]
         }`}>
         <div className="flex flex-row">

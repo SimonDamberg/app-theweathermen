@@ -6,6 +6,7 @@ interface IXDaysForecastComponentProps {
   enabledProviders: string[];
   name: string;
   numForecastDays: number;
+  setNumForecastDays: (num: number) => void;
   colour: string;
 }
 
@@ -17,7 +18,13 @@ interface IDailyLocationStats {
 }
 
 const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
-  const { name, enabledProviders, numForecastDays, colour } = props;
+  const {
+    name,
+    enabledProviders,
+    numForecastDays,
+    setNumForecastDays,
+    colour,
+  } = props;
   const { t, i18n } = useTranslation();
 
   const callString = name + "+" + numForecastDays;
@@ -43,8 +50,37 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
   } else if (enabledProviders.length > 0) {
     return (
       <div
-        className={`bg-${colour}-800 rounded-xl p-4 text-sky-100 max-h-[49rem] overflow-y-auto`}>
-        <table className="table-auto border-separate border-spacing-y-4">
+        className={`bg-${colour}-800 rounded-xl p-4 text-sky-100 max-h-[49rem] overflow-y-auto flex flex-col`}>
+        <div className="flex justify-between content-center m-4">
+          <p className="text-sky-100 text-2xl self-center">
+            {t("xForecastDays")}
+          </p>
+          <div className="flex flex-col w-1/4">
+            <p className={`text-center text-md mb-2 text-sky-100`}>
+              {t("horizon")}
+            </p>
+            <div></div>
+            <div className="relative content-center justify-center self-center">
+              <input
+                id="numForecastDays"
+                type="range"
+                min="1"
+                max="14"
+                value={numForecastDays}
+                step="1"
+                onChange={(e) => setNumForecastDays(parseInt(e.target.value))}
+                className={`h-2 bg-${colour}-500 rounded-lg appearance-none cursor-pointer `}
+              />
+              <span className="text-xs text-sky-100 absolute start-0 -bottom-6">
+                1
+              </span>
+              <span className="text-xs text-sky-100  absolute end-0 -bottom-6">
+                14
+              </span>
+            </div>
+          </div>
+        </div>
+        <table className="table-auto border-separate border-spacing-y-4 self-center">
           <thead>
             <tr>
               <th>{t("date")}</th>

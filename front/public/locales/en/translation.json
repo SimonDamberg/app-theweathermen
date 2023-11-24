@@ -26,5 +26,7 @@
   "reset": "Reset",
   "settings": "Colour Theme",
   "colourSelector": "Choose colour theme",
-  "closeModal": "Close"
+  "closeModal": "Close",
+  "horizon": "Time Horizon",
+  "xForecastDays": "Multi-day Forecast"
 }

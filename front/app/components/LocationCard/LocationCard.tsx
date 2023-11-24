@@ -52,7 +52,7 @@ const LocationCard = (props: ILocationCardProps) => {
     ]);
   };
 
-  const numForecastDays = 5;
+  const [numForecastDays, setNumForecastDays] = useState(5);
 
   return (
     <div
@@ -146,6 +146,7 @@ const LocationCard = (props: ILocationCardProps) => {
             {enabledCards.includes("windSpeedGraph") && (
               <div className="flex justify-center my-4">
                 <ForecastGraphCardComponent
+                  setNumForecastDays={setNumForecastDays}
                   colour={colour}
                   data={data}
                   dataField={"windSpeed"}
@@ -159,6 +160,7 @@ const LocationCard = (props: ILocationCardProps) => {
             {enabledCards.includes("airTemperatureGraph") && (
               <div className="flex justify-center my-4">
                 <ForecastGraphCardComponent
+                  setNumForecastDays={setNumForecastDays}
                   colour={colour}
                   data={data}
                   dataField={"airTemperature"}
@@ -172,6 +174,7 @@ const LocationCard = (props: ILocationCardProps) => {
             {enabledCards.includes("meanPrecipitationIntensityGraph") && (
               <div className="flex justify-center my-4">
                 <ForecastGraphCardComponent
+                  setNumForecastDays={setNumForecastDays}
                   colour={colour}
                   data={data}
                   dataField={"meanPrecipitationIntensity"}
@@ -185,6 +188,7 @@ const LocationCard = (props: ILocationCardProps) => {
             {enabledCards.includes("airPressureGraph") && (
               <div className="flex justify-center my-4">
                 <ForecastGraphCardComponent
+                  setNumForecastDays={setNumForecastDays}
                   colour={colour}
                   data={data}
                   dataField={"airPressure"}
@@ -202,6 +206,7 @@ const LocationCard = (props: ILocationCardProps) => {
                   name={data.name}
                   enabledProviders={enabledProviders}
                   numForecastDays={numForecastDays}
+                  setNumForecastDays={setNumForecastDays}
                 />
               </div>
             )}

@@ -25,6 +25,7 @@ ChartJS.register(
 interface IForecastGraphCardComponentProps {
   data: any;
   numForecastDays: number;
+  setNumForecastDays: (num: number) => void;
   dataField: string;
   name: string;
   suffix?: string;
@@ -39,6 +40,7 @@ const ForecastGraphCardComponent = (
   const {
     data,
     numForecastDays,
+    setNumForecastDays,
     dataField,
     name,
     suffix,
@@ -198,7 +200,33 @@ const ForecastGraphCardComponent = (
   return (
     <div
       className={`bg-${colour}-800 w-10/12 h-full rounded-xl p-4 content-center`}>
-      <p className="text-sky-100 text-2xl">{name}</p>
+      <div className="flex justify-between content-center">
+        <p className="text-sky-100 text-2xl self-center">{name}</p>
+        <div className="flex flex-col w-1/4 m-2">
+          <p className={`text-center text-md mb-2 text-sky-100`}>
+            {t("horizon")}
+          </p>
+          <div></div>
+          <div className="relative content-center justify-center self-center">
+            <input
+              id="numForecastDays"
+              type="range"
+              min="1"
+              max="14"
+              value={numForecastDays}
+              step="1"
+              onChange={(e) => setNumForecastDays(parseInt(e.target.value))}
+              className={`h-2 bg-${colour}-500 rounded-lg appearance-none cursor-pointer `}
+            />
+            <span className="text-xs text-sky-100 absolute start-0 -bottom-6">
+              1
+            </span>
+            <span className="text-xs text-sky-100  absolute end-0 -bottom-6">
+              14
+            </span>
+          </div>
+        </div>
+      </div>
       <Chart type="line" data={getChartData()} options={options} />
     </div>
   );
