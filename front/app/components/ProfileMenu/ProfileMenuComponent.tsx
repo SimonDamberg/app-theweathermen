@@ -1,31 +1,35 @@
 "use client";
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import CountrySelector from "./CountrySelectorComponent";
 import { useTranslation } from "react-i18next";
 import { Menu, Transition } from "@headlessui/react";
 import Image from "next/image";
 import {
   faArrowRightFromBracket,
+  faGear,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ColourSelector from "./ColourSelectorComponent";
 
 interface IProfileMenuProps {
   colour: string;
   setColour: (colour: string) => void;
 }
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
-
 export default function ProfileMenu(props: IProfileMenuProps) {
   const { colour, setColour } = props;
 
   const { t, i18n } = useTranslation();
-
+  let [settingsOpen, setSettingsOpen] = useState(false);
   return (
     <Menu as="div" className="relative ml-3">
+      <ColourSelector
+        open={settingsOpen}
+        setOpen={setSettingsOpen}
+        colour={colour}
+        setColour={setColour}
+      />
       <div>
         <Menu.Button
           className={`relative flex rounded-full bg-${colour}-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-${colour}-800`}>
@@ -70,6 +74,14 @@ export default function ProfileMenu(props: IProfileMenuProps) {
               <div
                 className={`rounded-md px-4 py-2 hover:bg-${colour}-700 flex items-center gap-2 `}>
                 <CountrySelector />
+              </div>
+            </Menu.Item>
+            <Menu.Item>
+              <div
+                className={`rounded-md px-4 py-2 hover:bg-${colour}-700 flex items-center gap-2 `}
+                onClick={() => setSettingsOpen(!settingsOpen)}>
+                <FontAwesomeIcon icon={faGear} className={`text-sky-100`} />
+                <p className={`text-sky-100 `}>{t("settings")}</p>
               </div>
             </Menu.Item>
           </div>

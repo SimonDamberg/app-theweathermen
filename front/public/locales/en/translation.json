@@ -23,5 +23,6 @@
   "logOut": "Log Out",
   "editDialogTitle": "Edit data for {{location}}",
   "back": "Back",
-  "reset": "Reset"
+  "reset": "Reset",
+  "settings": "Settings"
 }

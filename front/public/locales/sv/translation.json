@@ -23,5 +23,6 @@
   "logOut": "Logga ut",
   "editDialogTitle": "Redigera data för {{location}}",
   "back": "Tillbaka",
-  "reset": "Återställ"
+  "reset": "Återställ",
+  "settings": "Inställningar"
 }
