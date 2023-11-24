@@ -27,7 +27,7 @@ const config: Config = {
     },
     {
       pattern: /ring-*/,
-      variants: ["focus"],
+      variants: ["focus", "focus-visible"],
     },
 
     {

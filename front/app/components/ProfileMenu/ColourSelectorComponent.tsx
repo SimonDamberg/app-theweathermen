@@ -1,5 +1,6 @@
 import { Dialog, RadioGroup, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface IColourSelectorComponentProps {
   colour: string;
@@ -33,8 +34,23 @@ const colours = [
   "rose",
 ];
 
+const opacities = [
+  "50",
+  "100",
+  "200",
+  "300",
+  "400",
+  "500",
+  "600",
+  "700",
+  "800",
+  "900",
+  "950",
+];
+
 export default function ColourSelector(props: IColourSelectorComponentProps) {
   const { colour, setColour, open, setOpen } = props;
+  const { t, i18n } = useTranslation();
 
   return (
     <>
@@ -54,110 +70,68 @@ export default function ColourSelector(props: IColourSelectorComponentProps) {
             <div className="fixed inset-0 bg-black/25" />
           </Transition.Child>
 
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95">
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900">
-                    Payment successful
-                  </Dialog.Title>
-                  <div className="mt-2">
-                    <div className="w-full px-4 py-16">
-                      <div className="mx-auto w-full max-w-md">
-                        <RadioGroup value={colour} onChange={setColour}>
-                          <RadioGroup.Label className="sr-only">
-                            Server size
-                          </RadioGroup.Label>
-                          <div className="space-y-2">
-                            {colours.map((ind) => (
-                              <RadioGroup.Option
-                                key={ind}
-                                value={ind} //colour here
-                                className={({ active, checked }) =>
-                                  `${
-                                    active
-                                      ? "ring-2 ring-white/60 ring-offset-2 ring-offset-sky-300"
-                                      : ""
-                                  }
-                  ${checked ? "bg-sky-900/75 text-white" : "bg-white"}
-                    relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none`
-                                }>
-                                {({ active, checked }) => (
-                                  <>
-                                    <div className="flex w-full items-center justify-between">
-                                      <div className="flex items-center">
-                                        <div className="text-sm">
-                                          <RadioGroup.Label
-                                            as="p"
-                                            className={`font-medium  ${
-                                              checked
-                                                ? "text-white"
-                                                : "text-gray-900"
-                                            }`}>
-                                            {ind}
-                                          </RadioGroup.Label>
-                                          <RadioGroup.Description
-                                            as="span"
-                                            className={`inline ${
-                                              checked
-                                                ? "text-sky-100"
-                                                : "text-gray-500"
-                                            }`}></RadioGroup.Description>
-                                        </div>
-                                      </div>
-                                      {checked && (
-                                        <div className="shrink-0 text-white">
-                                          <CheckIcon className="h-6 w-6" />
-                                        </div>
-                                      )}
-                                    </div>
-                                  </>
-                                )}
-                              </RadioGroup.Option>
-                            ))}
+          <div className="fixed inset-0 flex mx-20 items-center justify-center p-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95">
+              <Dialog.Panel
+                className={`w-fit transform rounded-2xl bg-${colour}-900 p-6 text-left align-middle shadow-xl transition-all`}>
+                <Dialog.Title
+                  as="h3"
+                  className="text-xl font-medium leading-6 text-sky-100">
+                  {t("colourSelector")}
+                </Dialog.Title>
+                <div className="mx-auto w-full mt-4 ">
+                  <RadioGroup value={colour} onChange={setColour}>
+                    <div className="space-y-2 grid grid-cols-3 auto-rows-min">
+                      {colours.map((ind) => (
+                        <RadioGroup.Option
+                          key={ind}
+                          value={ind}
+                          className={({ checked }) =>
+                            `flex cursor-pointer rounded-lg px-5 py-4 mx-4 w-fit shadow-md focus:outline-none ${
+                              checked ? `bg-${colour}-500` : `bg-${colour}-700`
+                            } `
+                          }>
+                          <div className="flex w-auto items-center justify-between">
+                            <div className="text-sm ">
+                              <RadioGroup.Label
+                                as="p"
+                                className={`font-medium text-sky-100`}>
+                                {ind[0].toUpperCase() + ind.slice(1)}
+                              </RadioGroup.Label>
+                              <RadioGroup.Description as="span">
+                                {opacities.map((op) => (
+                                  <span
+                                    className={`bg-${ind}-${op} w-4 mr-2 mt-1 h-4 rounded-full inline-block`}
+                                  />
+                                ))}
+                              </RadioGroup.Description>
+                            </div>
                           </div>
-                        </RadioGroup>
-                      </div>
+                        </RadioGroup.Option>
+                      ))}
                     </div>
-                  </div>
-                  <div className="mt-4">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={() => setOpen(false)}>
-                      Got it, thanks!
-                    </button>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
+                  </RadioGroup>
+                </div>
+                <div className="mt-4">
+                  <button
+                    type="button"
+                    className={`inline-flex justify-center rounded-md border border-transparent bg-${colour}-400 px-4 py-2 text-sm font-medium text-sky-100 hover:bg-${colour}-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-${colour}-500 focus-visible:ring-offset-2`}
+                    onClick={() => setOpen(false)}>
+                    {t("closeModal")}
+                  </button>
+                </div>
+              </Dialog.Panel>
+            </Transition.Child>
           </div>
         </Dialog>
       </Transition>
     </>
-  );
-}
-
-function CheckIcon(props: any) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <circle cx={12} cy={12} r={12} fill="#fff" opacity="0.2" />
-      <path
-        d="M7 13l3 3 7-7"
-        stroke="#fff"
-        strokeWidth={1.5}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }

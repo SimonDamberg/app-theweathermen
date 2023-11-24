@@ -24,5 +24,7 @@
   "editDialogTitle": "Edit data for {{location}}",
   "back": "Back",
   "reset": "Reset",
-  "settings": "Settings"
+  "settings": "Settings",
+  "colourSelector": "Choose colour theme",
+  "closeModal": "Close"
 }

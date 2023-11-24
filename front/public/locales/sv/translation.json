@@ -24,5 +24,7 @@
   "editDialogTitle": "Redigera data för {{location}}",
   "back": "Tillbaka",
   "reset": "Återställ",
-  "settings": "Inställningar"
+  "settings": "Inställningar",
+  "colourSelector": "Välj färgtema",
+  "closeModal": "Stäng"
 }
