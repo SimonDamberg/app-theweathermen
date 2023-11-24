@@ -3,7 +3,7 @@ import CurrentWeatherCardComponent from "./CardComponents/CurrentWeatherCardComp
 import ForecastGraphCardComponent from "./CardComponents/ForecastGraphCardComponent";
 import WindCardComponent from "./CardComponents/WindCardComponent";
 import XDaysForecastComponent from "./CardComponents/XDaysForecastComponent/XDaysForecastComponent";
-import { providerToBgColor } from "../../utils/colors";
+import { providerToBgColor, providerToBorderColor } from "../../utils/colors";
 import { useTranslation } from "react-i18next";
 import CircleButtonComponent from "../CircleButtonComponent";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
@@ -72,7 +72,9 @@ const LocationCard = (props: ILocationCardProps) => {
                       enabledProviders.includes(provider)
                         ? "opacity-100"
                         : "opacity-40"
-                    } p-4 m-2 cursor-pointer justify-center text-center text-sky-100 ${
+                    } p-4 m-2 cursor-pointer justify-center text-center text-sky-100 border-2 ${
+                      providerToBorderColor[provider.toLowerCase()]
+                    } ${
                       providerToBgColor[provider.toLowerCase()]
                     } hover:opacity-70 transition-all ease-in-out duration-200`}
                     onClick={() => {

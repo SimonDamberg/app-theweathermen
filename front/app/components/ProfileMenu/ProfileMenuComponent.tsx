@@ -7,6 +7,7 @@ import Image from "next/image";
 import {
   faArrowRightFromBracket,
   faGear,
+  faPalette,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -72,16 +73,16 @@ export default function ProfileMenu(props: IProfileMenuProps) {
             </Menu.Item>
             <Menu.Item>
               <div
-                className={`rounded-md px-4 py-2 hover:bg-${colour}-700 flex items-center gap-2 `}>
-                <CountrySelector />
+                className={`rounded-md px-4 py-2 hover:bg-${colour}-700 flex items-center gap-2 `}
+                onClick={() => setSettingsOpen(!settingsOpen)}>
+                <FontAwesomeIcon icon={faPalette} className={`text-sky-100`} />
+                <p className={`text-sky-100 `}>{t("settings")}</p>
               </div>
             </Menu.Item>
             <Menu.Item>
               <div
-                className={`rounded-md px-4 py-2 hover:bg-${colour}-700 flex items-center gap-2 `}
-                onClick={() => setSettingsOpen(!settingsOpen)}>
-                <FontAwesomeIcon icon={faGear} className={`text-sky-100`} />
-                <p className={`text-sky-100 `}>{t("settings")}</p>
+                className={`rounded-md px-4 py-2 hover:bg-${colour}-700 flex items-center gap-2 `}>
+                <CountrySelector />
               </div>
             </Menu.Item>
           </div>

@@ -15,17 +15,17 @@ const colours = [
   "zinc",
   "neutral",
   "stone",
-  "red",
+  //"red",
   "orange",
   "amber",
-  "yellow",
+  //"yellow",
   "lime",
   "green",
   "emerald",
   "teal",
   "cyan",
   "sky",
-  "blue",
+  //"blue",
   "indigo",
   "violet",
   "purple",
@@ -79,53 +79,58 @@ export default function ColourSelector(props: IColourSelectorComponentProps) {
               leave="ease-in duration-200"
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95">
-              <Dialog.Panel
-                className={`w-fit transform rounded-2xl bg-${colour}-900 p-6 text-left align-middle shadow-xl transition-all`}>
-                <Dialog.Title
-                  as="h3"
-                  className="text-xl font-medium leading-6 text-sky-100">
-                  {t("colourSelector")}
-                </Dialog.Title>
-                <div className="mx-auto w-full mt-4 ">
-                  <RadioGroup value={colour} onChange={setColour}>
-                    <div className="space-y-2 grid grid-cols-3 auto-rows-min">
-                      {colours.map((ind) => (
-                        <RadioGroup.Option
-                          key={ind}
-                          value={ind}
-                          className={({ checked }) =>
-                            `flex cursor-pointer rounded-lg px-5 py-4 mx-4 w-fit shadow-md focus:outline-none ${
-                              checked ? `bg-${colour}-500` : `bg-${colour}-700`
-                            } `
-                          }>
-                          <div className="flex w-auto items-center justify-between">
-                            <div className="text-sm ">
-                              <RadioGroup.Label
-                                as="p"
-                                className={`font-medium text-sky-100`}>
-                                {ind[0].toUpperCase() + ind.slice(1)}
-                              </RadioGroup.Label>
-                              <RadioGroup.Description as="span">
-                                {opacities.map((op) => (
-                                  <span
-                                    className={`bg-${ind}-${op} w-4 mr-2 mt-1 h-4 rounded-full inline-block`}
-                                  />
-                                ))}
-                              </RadioGroup.Description>
+              <Dialog.Panel>
+                <div
+                  className={`w-fit transform rounded-2xl bg-${colour}-900 p-6 text-left align-middle shadow-xl transition-all`}>
+                  <Dialog.Title
+                    as="h3"
+                    className="text-xl font-medium leading-6 text-sky-100">
+                    {t("colourSelector")}
+                  </Dialog.Title>
+                  <div className="mx-auto w-full mt-4">
+                    <RadioGroup value={colour} onChange={setColour}>
+                      <div className="grid grid-cols-3 auto-rows-min gap-4">
+                        {colours.map((ind) => (
+                          <RadioGroup.Option
+                            key={ind}
+                            value={ind}
+                            className={({ checked }) =>
+                              `flex cursor-pointer rounded-lg p-4 w-fit shadow-lg hover:opacity-70 transition-all ease-in-out duration-300 ${
+                                checked
+                                  ? `bg-${colour}-500`
+                                  : `bg-${colour}-700`
+                              } `
+                            }>
+                            <div className="flex w-auto items-center justify-between">
+                              <div className="text-sm ">
+                                <RadioGroup.Label
+                                  as="p"
+                                  className={`font-medium text-sky-100`}>
+                                  {ind[0].toUpperCase() + ind.slice(1)}
+                                </RadioGroup.Label>
+                                <RadioGroup.Description as="span">
+                                  {opacities.map((op, idx) => (
+                                    <span
+                                      key={idx}
+                                      className={`bg-${ind}-${op} w-4 mr-2 mt-1 h-4 rounded-full inline-block`}
+                                    />
+                                  ))}
+                                </RadioGroup.Description>
+                              </div>
                             </div>
-                          </div>
-                        </RadioGroup.Option>
-                      ))}
-                    </div>
-                  </RadioGroup>
-                </div>
-                <div className="mt-4">
-                  <button
-                    type="button"
-                    className={`inline-flex justify-center rounded-md border border-transparent bg-${colour}-400 px-4 py-2 text-sm font-medium text-sky-100 hover:bg-${colour}-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-${colour}-500 focus-visible:ring-offset-2`}
-                    onClick={() => setOpen(false)}>
-                    {t("closeModal")}
-                  </button>
+                          </RadioGroup.Option>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </div>
+                  <div className="mt-4 flex justify-end">
+                    <button
+                      type="button"
+                      className={`inline-flex justify-center rounded-md border border-transparent bg-${colour}-500 px-4 py-2 text-sm font-medium text-sky-100 hover:bg-${colour}-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-${colour}-500 focus-visible:ring-offset-2`}
+                      onClick={() => setOpen(false)}>
+                      {t("closeModal")}
+                    </button>
+                  </div>
                 </div>
               </Dialog.Panel>
             </Transition.Child>
