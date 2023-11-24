@@ -11,6 +11,7 @@ import LocationEditDialog from "./LocationEditDialog";
 
 interface ILocationCardProps {
   data?: any;
+  colour: string;
 }
 
 const providerToTS: { [key: string]: string } = {
@@ -20,7 +21,7 @@ const providerToTS: { [key: string]: string } = {
 };
 
 const LocationCard = (props: ILocationCardProps) => {
-  const { data } = props;
+  const { data, colour } = props;
   const { t, i18n } = useTranslation();
 
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -54,7 +55,8 @@ const LocationCard = (props: ILocationCardProps) => {
   const numForecastDays = 5;
 
   return (
-    <div className="w-300 h-auto my-14 p-10 rounded-xl bg-sky-700 shadow-sm hover:shadow-lg shadow-sky-600 hover:shadow-sky-600 transition-all ease-in-out duration-300">
+    <div
+      className={`w-300 h-auto my-14 p-10 rounded-xl bg-${colour}-700 shadow-sm hover:shadow-lg shadow-${colour}-600 hover:shadow-${colour}-600 transition-all ease-in-out duration-300`}>
       {data && (
         <>
           <div className="flex flex-row justify-between content-center">
@@ -66,11 +68,13 @@ const LocationCard = (props: ILocationCardProps) => {
                 {Object.keys(providerToTS).map((provider) => (
                   <div
                     key={provider}
-                    className={`rounded-xl ${enabledProviders.includes(provider)
-                      ? "opacity-100"
-                      : "opacity-40"
-                      } p-4 m-2 cursor-pointer justify-center text-center text-sky-100 ${providerToBgColor[provider.toLowerCase()]
-                      } hover:opacity-70 transition-all ease-in-out duration-200`}
+                    className={`rounded-xl ${
+                      enabledProviders.includes(provider)
+                        ? "opacity-100"
+                        : "opacity-40"
+                    } p-4 m-2 cursor-pointer justify-center text-center text-sky-100 ${
+                      providerToBgColor[provider.toLowerCase()]
+                    } hover:opacity-70 transition-all ease-in-out duration-200`}
                     onClick={() => {
                       if (enabledProviders.includes(provider)) {
                         setEnabledProviders(
@@ -86,12 +90,13 @@ const LocationCard = (props: ILocationCardProps) => {
               </div>
             </div>
             <CircleButtonComponent
-              className={"bg-sky-600 p-4 rounded-xl"}
+              className={`bg-${colour}-600 p-4 rounded-xl`}
               iconClassName="text-lg"
               icon={faPen}
               onClick={() => setShowEditDialog(true)}
             />
             <LocationEditDialog
+              colour={colour}
               resetEnabledCards={resetEnabledCards}
               open={showEditDialog}
               setOpen={setShowEditDialog}
@@ -106,6 +111,7 @@ const LocationCard = (props: ILocationCardProps) => {
                 {/* CURRENT WEATHER */}
                 {enabledProviders.map((provider) => (
                   <CurrentWeatherCardComponent
+                    colour={colour}
                     key={provider}
                     airTemperature={
                       data[providerToTS[provider]][0].airTemperature
@@ -121,6 +127,7 @@ const LocationCard = (props: ILocationCardProps) => {
                 {/* WIND */}
                 {enabledProviders.map((provider) => (
                   <WindCardComponent
+                    colour={colour}
                     key={provider}
                     windDirection={
                       data[providerToTS[provider]][0].windDirection
@@ -137,6 +144,7 @@ const LocationCard = (props: ILocationCardProps) => {
             {enabledCards.includes("windSpeedGraph") && (
               <div className="flex justify-center my-4">
                 <ForecastGraphCardComponent
+                  colour={colour}
                   data={data}
                   dataField={"windSpeed"}
                   suffix={t("meterPerSecond")}
@@ -149,6 +157,7 @@ const LocationCard = (props: ILocationCardProps) => {
             {enabledCards.includes("airTemperatureGraph") && (
               <div className="flex justify-center my-4">
                 <ForecastGraphCardComponent
+                  colour={colour}
                   data={data}
                   dataField={"airTemperature"}
                   name={t("airTemperature")}
@@ -161,6 +170,7 @@ const LocationCard = (props: ILocationCardProps) => {
             {enabledCards.includes("meanPrecipitationIntensityGraph") && (
               <div className="flex justify-center my-4">
                 <ForecastGraphCardComponent
+                  colour={colour}
                   data={data}
                   dataField={"meanPrecipitationIntensity"}
                   suffix={"mm"}
@@ -173,6 +183,7 @@ const LocationCard = (props: ILocationCardProps) => {
             {enabledCards.includes("airPressureGraph") && (
               <div className="flex justify-center my-4">
                 <ForecastGraphCardComponent
+                  colour={colour}
                   data={data}
                   dataField={"airPressure"}
                   suffix={"hPa"}
@@ -185,6 +196,7 @@ const LocationCard = (props: ILocationCardProps) => {
             {enabledCards.includes("xDaysTable") && (
               <div className="flex justify-center my-4">
                 <XDaysForecastComponent
+                  colour={colour}
                   name={data.name}
                   enabledProviders={enabledProviders}
                   numForecastDays={numForecastDays}

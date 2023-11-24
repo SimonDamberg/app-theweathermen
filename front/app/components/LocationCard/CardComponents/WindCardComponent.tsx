@@ -10,15 +10,16 @@ interface IWindCardComponentProps {
   windSpeed: number;
   windGustSpeed: number;
   provider: string;
+  colour: string;
 }
 
 const WindCardComponent = (props: IWindCardComponentProps) => {
-  const { windDirection, windSpeed, windGustSpeed, provider } = props;
+  const { windDirection, windSpeed, windGustSpeed, provider, colour } = props;
   const { t, i18n } = useTranslation();
 
   return (
     <div
-      className={`flex flex-col bg-sky-800 rounded-xl p-4 mx-4 border-2 ${
+      className={`flex flex-col bg-${colour}-800 rounded-xl p-4 mx-4 border-2 ${
         providerToBorderColor[provider.toLowerCase()]
       }`}>
       <div className="flex flex-row justify-center content-center">

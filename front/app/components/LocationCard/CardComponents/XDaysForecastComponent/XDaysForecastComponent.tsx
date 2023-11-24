@@ -6,6 +6,7 @@ interface IXDaysForecastComponentProps {
   enabledProviders: string[];
   name: string;
   numForecastDays: number;
+  colour: string;
 }
 
 interface IDailyLocationStats {
@@ -16,7 +17,7 @@ interface IDailyLocationStats {
 }
 
 const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
-  const { name, enabledProviders, numForecastDays } = props;
+  const { name, enabledProviders, numForecastDays, colour } = props;
   const { t, i18n } = useTranslation();
 
   const callString = name + "+" + numForecastDays;
@@ -41,7 +42,8 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
     );
   } else if (enabledProviders.length > 0) {
     return (
-      <div className="bg-sky-800 rounded-xl p-4 text-sky-100 max-h-[49rem] overflow-y-auto">
+      <div
+        className={`bg-${colour}-800 rounded-xl p-4 text-sky-100 max-h-[49rem] overflow-y-auto`}>
         <table className="table-auto border-separate border-spacing-y-4">
           <thead>
             <tr>
@@ -57,7 +59,7 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
             {dailyStats.map((row, idx) => {
               if (row.smhi || row.wa || row.owm) {
                 return (
-                  <tr className="bg-sky-900" key={idx}>
+                  <tr className={`bg-${colour}-900`} key={idx}>
                     <td>
                       <p className="m-2 mr-4">
                         {new Date(row.date).toLocaleDateString(i18n.language, {
@@ -69,7 +71,11 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
                     </td>
                     {enabledProviders.includes("SMHI") && (
                       <td>
-                        <ApiCellComponent stats={row.smhi} provider={"smhi"} />
+                        <ApiCellComponent
+                          stats={row.smhi}
+                          provider={"smhi"}
+                          colour={colour}
+                        />
                       </td>
                     )}
                     {enabledProviders.includes("WeatherAPI") && (
@@ -77,6 +83,7 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
                         <ApiCellComponent
                           stats={row.wa}
                           provider={"weatherapi"}
+                          colour={colour}
                         />
                       </td>
                     )}
@@ -85,6 +92,7 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
                         <ApiCellComponent
                           stats={row.owm}
                           provider={"openweathermap"}
+                          colour={colour}
                         />
                       </td>
                     )}

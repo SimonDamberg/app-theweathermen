@@ -30,6 +30,7 @@ interface IForecastGraphCardComponentProps {
   suffix?: string;
   prefix?: string;
   enabledProviders: string[];
+  colour: string;
 }
 
 const ForecastGraphCardComponent = (
@@ -43,6 +44,7 @@ const ForecastGraphCardComponent = (
     suffix,
     prefix,
     enabledProviders,
+    colour,
   } = props;
 
   const { t, i18n } = useTranslation();
@@ -194,7 +196,8 @@ const ForecastGraphCardComponent = (
   };
 
   return (
-    <div className="bg-sky-800 w-10/12 h-full rounded-xl p-4 content-center">
+    <div
+      className={`bg-${colour}-800 w-10/12 h-full rounded-xl p-4 content-center`}>
       <p className="text-sky-100 text-2xl">{name}</p>
       <Chart type="line" data={getChartData()} options={options} />
     </div>

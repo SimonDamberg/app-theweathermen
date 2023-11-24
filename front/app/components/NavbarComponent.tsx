@@ -1,12 +1,19 @@
 import React from "react";
 import ProfileMenu from "./ProfileMenu/ProfileMenuComponent";
 
-const NavbarComponent = () => {
+interface INavbarComponentProps {
+  colour: string;
+  setColour: (colour: string) => void;
+}
+
+const NavbarComponent = (props: INavbarComponentProps) => {
+  const { colour, setColour } = props;
   return (
-    <div className="w-full bg-sky-700 h-24 flex justify-center content-center">
+    <div
+      className={`w-full bg-${colour}-700 h-24 flex justify-center content-center`}>
       <p className="text-sky-100 self-center text-5xl">The Weathermen</p>
       <div className="absolute right-0 mx-6 self-center">
-        <ProfileMenu />
+        <ProfileMenu colour={colour} setColour={setColour} />
       </div>
     </div>
   );

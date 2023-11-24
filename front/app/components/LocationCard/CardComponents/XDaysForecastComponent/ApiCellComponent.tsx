@@ -12,10 +12,11 @@ export interface IDailyStats {
 interface IApiCellComponentProps {
   stats: IDailyStats | null;
   provider: string;
+  colour: string;
 }
 
 const ApiCellComponent = (props: IApiCellComponentProps) => {
-  const { stats, provider } = props;
+  const { stats, provider, colour } = props;
   const { t, i18n } = useTranslation();
 
   if (stats) {
@@ -34,7 +35,7 @@ const ApiCellComponent = (props: IApiCellComponentProps) => {
             <p>{stats?.maxTemp.toFixed(1)}°C</p>
           </div>
         </div>
-        <div className="border-b-2 border-sky-700 my-2"></div>
+        <div className={`border-b-2 border-${colour}-700 my-2`}></div>
         <div className="flex flex-row items-center">
           <Image
             src={`/images/weatherSymbols/${stats?.weatherSymbol}.png`}

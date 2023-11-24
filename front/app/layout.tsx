@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
-import { Lexend } from "next/font/google";
-import "./globals.css";
-import NavbarComponent from "./components/NavbarComponent";
-import React from "react";
-import "./i18n";
-import i18next from "i18next";
 
-const lexend = Lexend({ subsets: ["latin"] });
+import "./globals.css";
+import React from "react";
 
 export const metadata: Metadata = {
   title: "The Weathermen",
@@ -17,12 +12,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <html>
-      <body className={`bg-sky-950 ${lexend.className}`}>
-        <NavbarComponent />
-        {children}
-      </body>
-    </html>
-  );
+  return <html>{children}</html>;
 }
