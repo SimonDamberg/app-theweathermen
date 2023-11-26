@@ -29,9 +29,12 @@ const config: Config = {
       pattern: /ring-*/,
       variants: ["focus", "focus-visible"],
     },
-
     {
       pattern: /divide-*/,
+    },
+    {
+      pattern: /text-*/,
+      variants: ["hover", "focus"],
     },
   ],
 };

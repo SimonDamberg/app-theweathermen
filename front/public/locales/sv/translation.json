@@ -28,5 +28,6 @@
   "colourSelector": "Välj färgtema",
   "closeModal": "Stäng",
   "horizon": "Tidshorisont",
-  "xForecastDays": "Flerdygnsprognos"
+  "xForecastDays": "Flerdygnsprognos",
+  "addCardDescription": "Lägg till en ny komponent"
 }

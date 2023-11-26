@@ -7,16 +7,20 @@ interface ICircleButtonProps {
   iconClassName?: string;
   onClick: () => void;
   className: string;
+  disabled?: boolean;
 }
 
 const CircleButtonComponent = (props: ICircleButtonProps) => {
   return (
     <div
       className={[
-        "rounded-full flex justify-center m-6 cursor-pointer hover:opacity-70 transition-all ease-in-out duration-300",
+        "rounded-full flex justify-center",
         props.className,
+        props.disabled
+          ? "opacity-50"
+          : "hover:opacity-70 cursor-pointer transition-all ease-in-out duration-300",
       ].join(" ")}
-      onClick={() => props.onClick()}>
+      onClick={props.disabled ? () => {} : props.onClick}>
       {props.icon ? (
         <FontAwesomeIcon
           icon={props.icon}

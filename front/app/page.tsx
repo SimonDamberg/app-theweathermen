@@ -106,13 +106,13 @@ export default function Home() {
         <div className="fixed right-0 bottom-0 flex flex-row">
           <div className="-mr-8">
             <CircleButtonComponent
-              className={`bg-${colour}-600 w-16 h-16 `}
+              className={`bg-${colour}-600 w-16 h-16 m-6 `}
               icon={faPen}
               onClick={() => null}
             />
           </div>
           <CircleButtonComponent
-            className={`bg-${colour}-600 w-16 h-16 `}
+            className={`bg-${colour}-600 w-16 h-16 m-6 `}
             icon={faPlus}
             onClick={() => null}
           />

@@ -7,7 +7,7 @@ import { providerToBgColor, providerToBorderColor } from "../../utils/colors";
 import { useTranslation } from "react-i18next";
 import CircleButtonComponent from "../CircleButtonComponent";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
-import LocationEditDialog from "./LocationEditDialog";
+import LocationEditDialog from "./EditDialog/LocationEditDialog";
 
 interface ILocationCardProps {
   data?: any;
@@ -20,9 +20,22 @@ const providerToTS: { [key: string]: string } = {
   OpenWeatherMap: "owmTS",
 };
 
+export const componentTypes = [
+  { name: "Graph", id: 0 },
+  { name: "Today's weather", id: 1 },
+  { name: "Forecast table", id: 2 },
+];
+
+export const dataTypes = [
+  { name: "Air temperature", id: 0 },
+  { name: "Wind", id: 1 },
+  { name: "Precipitation", id: 2 },
+  { name: "Air pressure", id: 3 },
+];
+
 const LocationCard = (props: ILocationCardProps) => {
   const { data, colour } = props;
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [enabledProviders, setEnabledProviders] = useState([
@@ -30,26 +43,41 @@ const LocationCard = (props: ILocationCardProps) => {
     "WeatherAPI",
     "OpenWeatherMap",
   ]);
+
   const [enabledCards, setEnabledCards] = useState([
-    "weather",
-    "wind",
-    "airTemperatureGraph",
-    "windSpeedGraph",
-    "meanPrecipitationIntensityGraph",
-    "airPressureGraph",
-    "xDaysTable",
+    { component: 1, data: 0 },
+    { component: 1, data: 1 },
+    { component: 0, data: 1 },
+    { component: 0, data: 0 },
+    { component: 0, data: 2 },
+    { component: 0, data: 3 },
+    { component: 2, data: null },
   ]);
 
   const resetEnabledCards = () => {
     setEnabledCards([
-      "weather",
-      "wind",
-      "airTemperatureGraph",
-      "windSpeedGraph",
-      "meanPrecipitationIntensityGraph",
-      "airPressureGraph",
-      "xDaysTable",
+      { component: 1, data: 0 },
+      { component: 1, data: 1 },
+      { component: 0, data: 1 },
+      { component: 0, data: 0 },
+      { component: 0, data: 2 },
+      { component: 0, data: 3 },
+      { component: 2, data: null },
     ]);
+  };
+
+  const graphData = (dataIndex: number | null) => {
+    if (dataIndex === 0) {
+      return ["airTemperature", "°C", t("airTemperature")];
+    } else if (dataIndex === 1) {
+      return ["windSpeed", t("meterPerSecond"), t("windSpeed")];
+    } else if (dataIndex === 2) {
+      return ["meanPrecipitationIntensity", "mm", t("precipitation")];
+    } else if (dataIndex === 3) {
+      return ["airPressure", "hPa", t("airPressure")];
+    } else {
+      return ["ERROR", "ERROR", "ERROR"];
+    }
   };
 
   const [numForecastDays, setNumForecastDays] = useState(5);
@@ -92,7 +120,7 @@ const LocationCard = (props: ILocationCardProps) => {
               </div>
             </div>
             <CircleButtonComponent
-              className={`bg-${colour}-600 p-4 rounded-xl`}
+              className={`bg-${colour}-600 p-4 rounded-xl m-6`}
               iconClassName="text-lg"
               icon={faPen}
               onClick={() => setShowEditDialog(true)}
@@ -108,108 +136,81 @@ const LocationCard = (props: ILocationCardProps) => {
             />
           </div>
           <div className="flex flex-col">
-            {enabledCards.includes("weather") && (
-              <div className="flex flex-row p-4 justify-center">
-                {/* CURRENT WEATHER */}
-                {enabledProviders.map((provider) => (
-                  <CurrentWeatherCardComponent
-                    colour={colour}
-                    key={provider}
-                    airTemperature={
-                      data[providerToTS[provider]][0].airTemperature
-                    }
-                    symbol={data[providerToTS[provider]][0].weatherSymbol}
-                    provider={provider}
-                  />
-                ))}
-              </div>
-            )}
-            {enabledCards.includes("wind") && (
-              <div className="flex flex-row p-4 justify-center">
-                {/* WIND */}
-                {enabledProviders.map((provider) => (
-                  <WindCardComponent
-                    colour={colour}
-                    key={provider}
-                    windDirection={
-                      data[providerToTS[provider]][0].windDirection
-                    }
-                    windSpeed={data[providerToTS[provider]][0].windSpeed}
-                    windGustSpeed={
-                      data[providerToTS[provider]][0].windGustSpeed
-                    }
-                    provider={provider}
-                  />
-                ))}
-              </div>
-            )}
-            {enabledCards.includes("windSpeedGraph") && (
-              <div className="flex justify-center my-4">
-                <ForecastGraphCardComponent
-                  setNumForecastDays={setNumForecastDays}
-                  colour={colour}
-                  data={data}
-                  dataField={"windSpeed"}
-                  suffix={t("meterPerSecond")}
-                  name={t("windSpeed")}
-                  numForecastDays={numForecastDays}
-                  enabledProviders={enabledProviders}
-                />
-              </div>
-            )}
-            {enabledCards.includes("airTemperatureGraph") && (
-              <div className="flex justify-center my-4">
-                <ForecastGraphCardComponent
-                  setNumForecastDays={setNumForecastDays}
-                  colour={colour}
-                  data={data}
-                  dataField={"airTemperature"}
-                  name={t("airTemperature")}
-                  suffix={"°C"}
-                  numForecastDays={numForecastDays}
-                  enabledProviders={enabledProviders}
-                />
-              </div>
-            )}
-            {enabledCards.includes("meanPrecipitationIntensityGraph") && (
-              <div className="flex justify-center my-4">
-                <ForecastGraphCardComponent
-                  setNumForecastDays={setNumForecastDays}
-                  colour={colour}
-                  data={data}
-                  dataField={"meanPrecipitationIntensity"}
-                  suffix={"mm"}
-                  name={t("precipitation")}
-                  numForecastDays={numForecastDays}
-                  enabledProviders={enabledProviders}
-                />
-              </div>
-            )}
-            {enabledCards.includes("airPressureGraph") && (
-              <div className="flex justify-center my-4">
-                <ForecastGraphCardComponent
-                  setNumForecastDays={setNumForecastDays}
-                  colour={colour}
-                  data={data}
-                  dataField={"airPressure"}
-                  suffix={"hPa"}
-                  name={t("airPressure")}
-                  numForecastDays={numForecastDays}
-                  enabledProviders={enabledProviders}
-                />
-              </div>
-            )}
-            {enabledCards.includes("xDaysTable") && (
-              <div className="flex justify-center my-4">
-                <XDaysForecastComponent
-                  colour={colour}
-                  name={data.name}
-                  enabledProviders={enabledProviders}
-                  numForecastDays={numForecastDays}
-                  setNumForecastDays={setNumForecastDays}
-                />
-              </div>
-            )}
+            {enabledCards.map((row, index) => {
+              if (row.component === 0) {
+                return (
+                  <div
+                    key={row.component + String(row.data ?? "") + index}
+                    className="flex justify-center my-4">
+                    <ForecastGraphCardComponent
+                      setNumForecastDays={setNumForecastDays}
+                      colour={colour}
+                      data={data}
+                      numForecastDays={numForecastDays}
+                      enabledProviders={enabledProviders}
+                      dataField={graphData(row.data)[0]}
+                      suffix={graphData(row.data)[1]}
+                      name={graphData(row.data)[2]}
+                    />
+                  </div>
+                );
+              } else if (row.component === 1) {
+                if (row.data === 0) {
+                  return (
+                    <div
+                      key={row.component + String(row.data ?? "") + index}
+                      className="flex flex-row p-4 justify-center">
+                      {enabledProviders.map((provider) => (
+                        <CurrentWeatherCardComponent
+                          colour={colour}
+                          key={provider}
+                          airTemperature={
+                            data[providerToTS[provider]][0].airTemperature
+                          }
+                          symbol={data[providerToTS[provider]][0].weatherSymbol}
+                          provider={provider}
+                        />
+                      ))}
+                    </div>
+                  );
+                } else if (row.data === 1) {
+                  return (
+                    <div
+                      key={row.component + String(row.data ?? "") + index}
+                      className="flex flex-row p-4 justify-center">
+                      {enabledProviders.map((provider) => (
+                        <WindCardComponent
+                          colour={colour}
+                          key={provider}
+                          windDirection={
+                            data[providerToTS[provider]][0].windDirection
+                          }
+                          windSpeed={data[providerToTS[provider]][0].windSpeed}
+                          windGustSpeed={
+                            data[providerToTS[provider]][0].windGustSpeed
+                          }
+                          provider={provider}
+                        />
+                      ))}
+                    </div>
+                  );
+                }
+              } else if (row.component === 2) {
+                return (
+                  <div
+                    key={row.component + String(row.data ?? "") + index}
+                    className="flex justify-center my-4">
+                    <XDaysForecastComponent
+                      colour={colour}
+                      name={data.name}
+                      enabledProviders={enabledProviders}
+                      numForecastDays={numForecastDays}
+                      setNumForecastDays={setNumForecastDays}
+                    />
+                  </div>
+                );
+              }
+            })}
           </div>
         </>
       )}

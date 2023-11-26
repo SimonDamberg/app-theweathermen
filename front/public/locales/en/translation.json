@@ -28,5 +28,6 @@
   "colourSelector": "Choose colour theme",
   "closeModal": "Close",
   "horizon": "Time Horizon",
-  "xForecastDays": "Multi-day Forecast"
+  "xForecastDays": "Multi-day Forecast",
+  "addCardDescription": "Add a new card to your dashboard"
 }
