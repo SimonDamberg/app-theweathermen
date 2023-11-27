@@ -93,7 +93,7 @@ const LocationEditDialog = (props: ILocationEditDialogProps) => {
                   <div className="mt-4 flex flex-col text-center justify-center sm:ml-4 sm:mt-0 sm:text-left">
                     <Dialog.Title
                       as="h2"
-                      className="font-semibold leading-6 text-sky-100 text-xl">
+                      className={`font-semibold leading-6 text-${colour}-100 text-xl`}>
                       {t("editDialogTitle", { location: locationName })}
                     </Dialog.Title>
                   </div>

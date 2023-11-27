@@ -75,7 +75,7 @@ export default function SelectComp(props: IListBoxSelectComponentProps) {
               <Listbox.Option
                 key={singleData.id}
                 className={`relative cursor-pointer select-none py-2
-                    bg-${colour}-500 text-sky-100 hover:bg-${colour}-300 hover:text-${colour}-800  transition-all ease-in-out
+                    bg-${colour}-500 text-${colour}-100 hover:bg-${colour}-300 hover:text-${colour}-800  transition-all ease-in-out
                   `}
                 value={singleData}>
                 {({ selected }) => (

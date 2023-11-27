@@ -76,7 +76,7 @@ const LocationCard = (props: ILocationCardProps) => {
         <>
           <div className="flex flex-row justify-between content-center">
             {/* HEADER */}
-            <p className="text-4xl text-sky-100 self-center">{data.name}</p>
+            <p className={`text-4xl text-${colour}-100 self-center`}>{data.name}</p>
             <div className="flex flex-col self-center">
               {/* PROVIDER TOGGLE */}
               <div className="flex flex-row justify-center self-center">
@@ -87,7 +87,7 @@ const LocationCard = (props: ILocationCardProps) => {
                       enabledProviders.includes(provider)
                         ? "opacity-100"
                         : "opacity-40"
-                    } p-4 m-2 cursor-pointer justify-center text-center text-sky-100 border-2 ${
+                    } p-4 m-2 cursor-pointer justify-center text-center text-${colour}-100 border-2 ${
                       providerToBorderColor[provider.toLowerCase()]
                     } ${
                       providerToBgColor[provider.toLowerCase()]

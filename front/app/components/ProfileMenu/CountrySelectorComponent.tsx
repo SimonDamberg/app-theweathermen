@@ -2,9 +2,13 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
 
-export default function CountrySelector() {
+interface CountrySelectorProps {
+  colour: string;
+}
+
+export default function CountrySelector(props: CountrySelectorProps) {
+  const { colour } = props;
   const { i18n } = useTranslation();
-  // await i18n.changeLanguage(language.key);
 
   return (
     <div className="flex items-center">
@@ -22,7 +26,7 @@ export default function CountrySelector() {
               }
             }}
           />
-          <div className={`block bg-sky-100 w-16 h-8 rounded-full `}></div>
+          <div className={`block bg-${colour}-500 w-16 h-8 rounded-full `}></div>
           <div
             className={`dot absolute ${
               i18n.language === "sv" ? "left-0 ml-0.5" : "translate-x-8"

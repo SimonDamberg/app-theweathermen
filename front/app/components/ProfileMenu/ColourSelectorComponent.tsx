@@ -84,7 +84,7 @@ export default function ColourSelector(props: IColourSelectorComponentProps) {
                   className={`w-fit transform rounded-2xl bg-${colour}-900 p-6 text-left align-middle shadow-xl transition-all`}>
                   <Dialog.Title
                     as="h3"
-                    className="text-xl font-medium leading-6 text-sky-100">
+                    className={`text-xl font-medium leading-6 text-${colour}-100`}>
                     {t("colourSelector")}
                   </Dialog.Title>
                   <div className="mx-auto w-full mt-4">
@@ -105,7 +105,7 @@ export default function ColourSelector(props: IColourSelectorComponentProps) {
                               <div className="text-sm ">
                                 <RadioGroup.Label
                                   as="p"
-                                  className={`font-medium text-sky-100`}>
+                                  className={`font-medium text-${colour}-100`}>
                                   {ind[0].toUpperCase() + ind.slice(1)}
                                 </RadioGroup.Label>
                                 <RadioGroup.Description as="span">
@@ -126,7 +126,7 @@ export default function ColourSelector(props: IColourSelectorComponentProps) {
                   <div className="mt-4 flex justify-end">
                     <button
                       type="button"
-                      className={`inline-flex justify-center rounded-md border border-transparent bg-${colour}-500 px-4 py-2 text-sm font-medium text-sky-100 hover:bg-${colour}-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-${colour}-500 focus-visible:ring-offset-2`}
+                      className={`inline-flex justify-center rounded-md border border-transparent bg-${colour}-500 px-4 py-2 text-sm font-medium text-${colour}-100 hover:bg-${colour}-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-${colour}-500 focus-visible:ring-offset-2`}
                       onClick={() => setOpen(false)}>
                       {t("closeModal")}
                     </button>

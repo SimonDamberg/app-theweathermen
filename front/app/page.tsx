@@ -68,7 +68,7 @@ export default function Home() {
         <div className="h-screen flex items-center justify-center">
           <svg
             aria-hidden="true"
-            className={`w-12 h-12 animate-spin text-sky-100 fill-${colour}-700 text-center`}
+            className={`w-12 h-12 animate-spin text-${colour}-100 fill-${colour}-700 text-center`}
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg">

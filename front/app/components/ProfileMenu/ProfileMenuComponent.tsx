@@ -58,7 +58,7 @@ export default function ProfileMenu(props: IProfileMenuProps) {
           <div className="px-1 py-1 ">
             <Menu.Item>
               <p
-                className={`rounded-md px-4 py-2 text-lg hover:bg-${colour}-700 text-sky-100`}>
+                className={`rounded-md px-4 py-2 text-lg hover:bg-${colour}-700 text-${colour}-100`}>
                 Johnny Silverhand
               </p>
             </Menu.Item>
@@ -67,22 +67,22 @@ export default function ProfileMenu(props: IProfileMenuProps) {
             <Menu.Item>
               <div
                 className={`rounded-md px-4 py-2 hover:bg-${colour}-700 flex items-center gap-2 `}>
-                <FontAwesomeIcon icon={faUser} className={`text-sky-100`} />
-                <p className={`text-sky-100 `}>{t("myProfile")}</p>
+                <FontAwesomeIcon icon={faUser} className={`text-${colour}-100`} />
+                <p className={`text-${colour}-100 `}>{t("myProfile")}</p>
               </div>
             </Menu.Item>
             <Menu.Item>
               <div
                 className={`rounded-md px-4 py-2 hover:bg-${colour}-700 flex items-center gap-2 `}
                 onClick={() => setSettingsOpen(!settingsOpen)}>
-                <FontAwesomeIcon icon={faPalette} className={`text-sky-100`} />
-                <p className={`text-sky-100 `}>{t("settings")}</p>
+                <FontAwesomeIcon icon={faPalette} className={`text-${colour}-100`} />
+                <p className={`text-${colour}-100 `}>{t("settings")}</p>
               </div>
             </Menu.Item>
             <Menu.Item>
               <div
                 className={`rounded-md px-4 py-2 hover:bg-${colour}-700 flex items-center gap-2 `}>
-                <CountrySelector />
+                <CountrySelector colour={colour} />
               </div>
             </Menu.Item>
           </div>
@@ -92,9 +92,9 @@ export default function ProfileMenu(props: IProfileMenuProps) {
                 className={`rounded-md px-4 py-2 hover:bg-${colour}-700 flex items-center gap-2 `}>
                 <FontAwesomeIcon
                   icon={faArrowRightFromBracket}
-                  className={`text-sky-100`}
+                  className={`text-${colour}-100`}
                 />
-                <p className={`text-sky-100 `}>{t("logOut")}</p>
+                <p className={`text-${colour}-100 `}>{t("logOut")}</p>
               </div>
             </Menu.Item>
           </div>

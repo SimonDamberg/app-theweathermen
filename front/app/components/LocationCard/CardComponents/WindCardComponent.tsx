@@ -23,7 +23,7 @@ const WindCardComponent = (props: IWindCardComponentProps) => {
         providerToBorderColor[provider.toLowerCase()]
       }`}>
       <div className="flex flex-row justify-center content-center">
-        <p className="text-sky-100 text-lg mx-2 self-center">
+        <p className={`text-${colour}-100 text-lg mx-2 self-center`}>
           {t(windDirectionFromDegrees(windDirection))}
         </p>
         <FontAwesomeIcon
@@ -35,7 +35,7 @@ const WindCardComponent = (props: IWindCardComponentProps) => {
             color: "#e0f2fe",
           }}
         />
-        <p className="text-sky-100 text-lg mx-2 self-center">
+        <p className={`text-${colour}-100 text-lg mx-2 self-center`}>
           <span className="font-bold">{windSpeed.toFixed(0)}</span> (
           {windGustSpeed.toFixed(0)}){" "}
           <span className="text-xs">{t("meterPerSecond")}</span>

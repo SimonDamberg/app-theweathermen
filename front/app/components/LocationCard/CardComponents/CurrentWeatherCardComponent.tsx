@@ -20,7 +20,7 @@ const CurrentWeatherCard = (props: ICurrentWeatherCardProps) => {
         providerToBorderColor[provider.toLowerCase()]
       }`}>
       <div className="flex flex-row justify-center">
-        <p className="text-sky-100 text-2xl mx-2">
+        <p className={`text-${colour}-100 text-2xl mx-2`}>
           {airTemperature.toLocaleString(i18n.language, {
             minimumFractionDigits: 1,
             maximumFractionDigits: 1,
