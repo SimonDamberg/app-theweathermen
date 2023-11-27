@@ -7,6 +7,7 @@ import {
   faChevronDown,
   faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "react-i18next";
 
 interface IListBoxSelectComponentProps {
   rowIdx: number;
@@ -19,6 +20,7 @@ interface IListBoxSelectComponentProps {
 }
 
 export default function SelectComp(props: IListBoxSelectComponentProps) {
+  const { t } = useTranslation();
   const { colour, rowIdx, setEnabledCards, isData, enabledCards } = props;
   const data = isData ? dataTypes : componentTypes;
   const row = enabledCards[rowIdx];
@@ -48,29 +50,32 @@ export default function SelectComp(props: IListBoxSelectComponentProps) {
       value={data[idx]}
       onChange={(newIndex) => handleChanges(newIndex.id)}>
       <div className="relative">
-        <Listbox.Button
-          className={`cursor-pointer rounded-lg bg-${colour}-500 py-2 pl-3 pr-10 shadow-md sm:text-sm`}>
-          <span className=" text-sky-100">{selected.name}</span>
+        <Listbox.Button className={`cursor-pointer flex items-center justify-center rounded-lg bg-${colour}-500 py-2 shadow-md sm:text-sm hover:opacity-70 transition-all ease-in-out w-60`}>
+          <span className={`text-${colour}-100 text-center`}>{t(selected.name)}</span>
           <span className="absolute inset-y-0 right-0 flex flex-col justify-center pr-2">
-            <FontAwesomeIcon icon={faChevronUp} className="h-3 text-sky-100" />
+            <FontAwesomeIcon icon={faChevronUp} className={`h-3 text-${colour}-100`} />
             <FontAwesomeIcon
               icon={faChevronDown}
-              className="h-3 text-sky-100"
+              className={`h-3 text-${colour}-100`}
             />
           </span>
         </Listbox.Button>
         <Transition
           as={Fragment}
+          enter="transition ease-out duration-200"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
           leave="transition ease-in duration-200"
           leaveFrom="opacity-100"
-          leaveTo="opacity-0">
+          leaveTo="opacity-0"
+          >
           <Listbox.Options
             className={`z-10 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-${colour}-500 py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm`}>
             {data.map((singleData: { name: string; id: number }) => (
               <Listbox.Option
                 key={singleData.id}
-                className={`relative cursor-pointer select-none py-2 pl-10 pr-4 
-                    bg-${colour}-500 text-sky-100 hover:bg-${colour}-300 hover:text-${colour}-800
+                className={`relative cursor-pointer select-none py-2
+                    bg-${colour}-500 text-sky-100 hover:bg-${colour}-300 hover:text-${colour}-800  transition-all ease-in-out
                   `}
                 value={singleData}>
                 {({ selected }) => (
@@ -79,10 +84,10 @@ export default function SelectComp(props: IListBoxSelectComponentProps) {
                       className={`block truncate ${
                         selected ? "font-medium" : "font-normal"
                       }`}>
-                      {singleData.name}
+                      {t(singleData.name)}
                     </span>
                     {selected ? (
-                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-sky-100">
+                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 ">
                         <FontAwesomeIcon icon={faCheck} className="h-4 " />
                       </span>
                     ) : null}

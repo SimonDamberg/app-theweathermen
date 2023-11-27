@@ -18,7 +18,6 @@ interface ILocationEditDialogProps {
   setEnabledCards: (
     cards: { component: number; data: number | null }[]
   ) => void;
-  resetEnabledCards: () => void;
   colour: string;
 }
 
@@ -31,7 +30,6 @@ const LocationEditDialog = (props: ILocationEditDialogProps) => {
     locationName,
     enabledCards,
     setEnabledCards,
-    resetEnabledCards,
     colour,
   } = props;
   const cancelButtonRef = useRef(null);
@@ -79,7 +77,7 @@ const LocationEditDialog = (props: ILocationEditDialogProps) => {
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
         </Transition.Child>
 
-        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div className="fixed inset-0 z-10 w-screen overflow-y-auto ">
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <Transition.Child
               as={Fragment}
@@ -89,9 +87,9 @@ const LocationEditDialog = (props: ILocationEditDialogProps) => {
               leave="ease-in duration-200"
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+              <Dialog.Panel className="relative rounded-lg overflow-hidden transform shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-3xl">
                 <div
-                  className={`bg-${colour}-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4`}>
+                  className={`bg-${colour}-800 px-4 pt-5 sm:px-4`}>
                   <div className="mt-4 flex flex-col text-center justify-center sm:ml-4 sm:mt-0 sm:text-left">
                     <Dialog.Title
                       as="h2"
@@ -100,7 +98,7 @@ const LocationEditDialog = (props: ILocationEditDialogProps) => {
                     </Dialog.Title>
                   </div>
                   <div
-                    className={`mt-4 max-h-[32rem] min-h-[15rem] mb-4 overflow-y-auto rounded-xl bg-${colour}-700 p-4 flex flex-col text-center `}>
+                    className={`mt-4 h-[32rem] overflow-y-auto rounded-xl px-4 flex flex-col text-center `}>
                     {enabledCards.map((row, index) => (
                       <div
                         key={
@@ -108,7 +106,7 @@ const LocationEditDialog = (props: ILocationEditDialogProps) => {
                           (row.data !== null ? row.data.toString() : "") +
                           index
                         }
-                        className={`flex flex-row justify-between bg-${colour}-600 my-3 p-2 rounded-xl`}>
+                        className={`flex flex-row justify-between bg-${colour}-600 mb-4 p-2 rounded-xl`}>
                         <div className="flex flex-col mx-2 self-center">
                           <ListBoxSelectComponent
                             rowIdx={index}
@@ -132,7 +130,7 @@ const LocationEditDialog = (props: ILocationEditDialogProps) => {
                         <div className="">
                           <CircleButtonComponent
                             className={`bg-${colour}-500 m-1 p-2 rounded-xl`}
-                            iconClassName="text-lg"
+                            iconClassName={`text-lg text-${colour}-100`}
                             icon={faTrash}
                             onClick={() => handleDelete(index)}
                           />
@@ -140,14 +138,14 @@ const LocationEditDialog = (props: ILocationEditDialogProps) => {
                             className={`bg-${colour}-500 m-1 p-2 rounded-xl ${
                               index === 0 && "disabled"
                             }`}
-                            iconClassName="text-lg"
+                            iconClassName={`text-lg text-${colour}-100`}
                             icon={faArrowUp}
                             onClick={() => handleMove(index, "up")}
                             disabled={index === 0}
                           />
                           <CircleButtonComponent
                             className={`bg-${colour}-500 m-1 p-2 rounded-xl`}
-                            iconClassName="text-lg"
+                            iconClassName={`text-lg text-${colour}-100`}
                             icon={faArrowDown}
                             onClick={() => handleMove(index, "down")}
                             disabled={index === enabledCards.length - 1}
@@ -156,27 +154,30 @@ const LocationEditDialog = (props: ILocationEditDialogProps) => {
                       </div>
                     ))}
                   </div>
-                  <div
-                    className={`bg-${colour}-600 p-4 rounded-xl text-sky-100 flex flex-row justify-center cursor-pointer hover:opacity-70 transition-all ease-in-out duration-300`}
-                    onClick={() => handleAdd()}>
-                    <p>{t("addCardDescription")}</p>
-                  </div>
                 </div>
                 <div
-                  className={`bg-${colour}-900 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6`}>
+                  className={`bg-${colour}-950 px-2 py-3 sm:flex sm:flex-row-reverse`}>
                   <button
                     type="button"
-                    className={`inline-flex w-full justify-center rounded-md bg-${colour}-500 hover:opacity-80 px-3 py-2 text-sm font-semibold text-sky-100 shadow-sm sm:ml-3 sm:w-auto`}
-                    onClick={() => resetEnabledCards()}>
-                    {t("reset")}
-                  </button>
-                  <button
-                    type="button"
-                    className={`mt-3 inline-flex w-full justify-center rounded-md bg-${colour}-200 hover:opacity-80 px-3 py-2 text-sm font-semibold text-${colour}-900 shadow-sm sm:mt-0 sm:w-auto`}
+                    className={`mt-3 inline-flex w-full justify-center rounded-md bg-${colour}-800 hover:opacity-80 px-3 py-2 text-sm font-semibold text-${colour}-100 shadow-sm sm:ml-3 sm:w-auto mt-0`}
                     onClick={() => setOpen(false)}
                     ref={cancelButtonRef}>
                     {t("back")}
                   </button>
+                  <button
+                    type="button"
+                    className={`inline-flex w-full justify-center rounded-md bg-${colour}-700 hover:opacity-80 px-3 py-2 text-sm font-semibold text-${colour}-100 shadow-sm sm:ml-3 sm:w-auto`}
+                    onClick={() => setEnabledCards([])}>
+                    {t("clear")}
+                  </button>
+                  <button
+                    type="button"
+                    className={`inline-flex w-full justify-center rounded-md bg-${colour}-600 hover:opacity-80 px-3 py-2 text-sm font-semibold text-${colour}-100 shadow-sm sm:ml-3 sm:w-auto`}
+                    onClick={() => handleAdd()}>
+                    {t("addCardDescription")}
+                  </button>
+                  
+
                 </div>
               </Dialog.Panel>
             </Transition.Child>

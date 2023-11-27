@@ -25,8 +25,8 @@ const CircleButtonComponent = (props: ICircleButtonProps) => {
         <FontAwesomeIcon
           icon={props.icon}
           className={[
-            "text-sky-200 text-2xl self-center",
-            props.iconClassName,
+
+            "text-2xl self-center",            props.iconClassName,
           ].join(" ")}
         />
       ) : (

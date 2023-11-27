@@ -23,11 +23,18 @@
   "logOut": "Logga ut",
   "editDialogTitle": "Redigera data för {{location}}",
   "back": "Tillbaka",
-  "reset": "Återställ",
+  "clear": "Rensa",
   "settings": "Färgtema",
   "colourSelector": "Välj färgtema",
   "closeModal": "Stäng",
   "horizon": "Tidshorisont",
   "xForecastDays": "Flerdygnsprognos",
-  "addCardDescription": "Lägg till en ny komponent"
+  "addCardDescription": "Lägg till en ny komponent",
+  "todayWeather": "Idag",
+  "meanPrecipitationIntensity": "Nederbörd",
+  "horizontalVisibility": "Sikt",
+  "relativeHumidity": "Luftfuktighet",
+  "totalCloudCover": "Molnmängd",
+  "graph": "Graf",
+  "forecastTable": "Prognostabell"
 }

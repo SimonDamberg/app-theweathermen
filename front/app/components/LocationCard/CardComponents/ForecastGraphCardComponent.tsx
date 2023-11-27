@@ -27,7 +27,6 @@ interface IForecastGraphCardComponentProps {
   numForecastDays: number;
   setNumForecastDays: (num: number) => void;
   dataField: string;
-  name: string;
   suffix?: string;
   prefix?: string;
   enabledProviders: string[];
@@ -42,7 +41,6 @@ const ForecastGraphCardComponent = (
     numForecastDays,
     setNumForecastDays,
     dataField,
-    name,
     suffix,
     prefix,
     enabledProviders,
@@ -201,7 +199,7 @@ const ForecastGraphCardComponent = (
     <div
       className={`bg-${colour}-800 w-10/12 h-full rounded-xl p-4 content-center`}>
       <div className="flex justify-between content-center">
-        <p className="text-sky-100 text-2xl self-center">{name}</p>
+        <p className="text-sky-100 text-2xl self-center">{t(dataField)}</p>
         <div className="flex flex-col w-1/4 m-2">
           <p className={`text-center text-md mb-2 text-sky-100`}>
             {t("horizon")}

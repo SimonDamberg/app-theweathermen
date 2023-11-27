@@ -23,11 +23,18 @@
   "logOut": "Log Out",
   "editDialogTitle": "Edit data for {{location}}",
   "back": "Back",
-  "reset": "Reset",
+  "clear": "Clear",
   "settings": "Colour Theme",
   "colourSelector": "Choose colour theme",
   "closeModal": "Close",
   "horizon": "Time Horizon",
   "xForecastDays": "Multi-day Forecast",
-  "addCardDescription": "Add a new card to your dashboard"
+  "addCardDescription": "Add a new card to your dashboard",
+  "todayWeather": "Today",
+  "meanPrecipitationIntensity": "Precipitation",
+  "horizontalVisibility": "Visibility",
+  "relativeHumidity": "Humidity",
+  "totalCloudCover": "Cloud cover",
+  "graph": "Graph",
+  "forecastTable": "Forecast Table"
 }

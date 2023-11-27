@@ -21,17 +21,30 @@ const providerToTS: { [key: string]: string } = {
 };
 
 export const componentTypes = [
-  { name: "Graph", id: 0 },
-  { name: "Today's weather", id: 1 },
-  { name: "Forecast table", id: 2 },
+  { name: "graph", id: 0 },
+  { name: "todayWeather", id: 1 },
+  { name: "forecastTable", id: 2 },
 ];
 
 export const dataTypes = [
-  { name: "Air temperature", id: 0 },
-  { name: "Wind", id: 1 },
-  { name: "Precipitation", id: 2 },
-  { name: "Air pressure", id: 3 },
+  { name: "airTemperature", id: 0 },
+  { name: "windSpeed", id: 1 },
+  { name: "meanPrecipitationIntensity", id: 2 },
+  { name: "airPressure", id: 3 },
+  { name: "horizontalVisibility", id: 4 },
+  { name: "relativeHumidity", id: 5 },
+  { name: "totalCloudCover", id: 6 },
 ];
+
+export const dataToSuffix: { [key: string]: string } = {
+  airTemperature: "°C",
+  windSpeed: "m/s",
+  meanPrecipitationIntensity: "mm",
+  airPressure: "hPa",
+  horizontalVisibility: "km",
+  relativeHumidity: "%",
+  totalCloudCover: "%",
+};
 
 const LocationCard = (props: ILocationCardProps) => {
   const { data, colour } = props;
@@ -53,32 +66,6 @@ const LocationCard = (props: ILocationCardProps) => {
     { component: 0, data: 3 },
     { component: 2, data: null },
   ]);
-
-  const resetEnabledCards = () => {
-    setEnabledCards([
-      { component: 1, data: 0 },
-      { component: 1, data: 1 },
-      { component: 0, data: 1 },
-      { component: 0, data: 0 },
-      { component: 0, data: 2 },
-      { component: 0, data: 3 },
-      { component: 2, data: null },
-    ]);
-  };
-
-  const graphData = (dataIndex: number | null) => {
-    if (dataIndex === 0) {
-      return ["airTemperature", "°C", t("airTemperature")];
-    } else if (dataIndex === 1) {
-      return ["windSpeed", t("meterPerSecond"), t("windSpeed")];
-    } else if (dataIndex === 2) {
-      return ["meanPrecipitationIntensity", "mm", t("precipitation")];
-    } else if (dataIndex === 3) {
-      return ["airPressure", "hPa", t("airPressure")];
-    } else {
-      return ["ERROR", "ERROR", "ERROR"];
-    }
-  };
 
   const [numForecastDays, setNumForecastDays] = useState(5);
 
@@ -121,13 +108,12 @@ const LocationCard = (props: ILocationCardProps) => {
             </div>
             <CircleButtonComponent
               className={`bg-${colour}-600 p-4 rounded-xl m-6`}
-              iconClassName="text-lg"
+              iconClassName={`text-lg text-${colour}-100`}
               icon={faPen}
               onClick={() => setShowEditDialog(true)}
             />
             <LocationEditDialog
               colour={colour}
-              resetEnabledCards={resetEnabledCards}
               open={showEditDialog}
               setOpen={setShowEditDialog}
               locationName={data.name}
@@ -148,9 +134,8 @@ const LocationCard = (props: ILocationCardProps) => {
                       data={data}
                       numForecastDays={numForecastDays}
                       enabledProviders={enabledProviders}
-                      dataField={graphData(row.data)[0]}
-                      suffix={graphData(row.data)[1]}
-                      name={graphData(row.data)[2]}
+                      dataField={dataTypes[row.data ?? 0].name}
+                      suffix={dataToSuffix[dataTypes[row.data ?? 0].name]}
                     />
                   </div>
                 );
