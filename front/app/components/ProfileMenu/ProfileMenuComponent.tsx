@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ColourSelector from "./ColourSelectorComponent";
 import { useAuthContext } from "@/context/AuthContext";
 import { signOut } from "firebase/auth";
+import { logOutUser } from "@/firebase/auth/logout";
 
 interface IProfileMenuProps {
   colour: string;
@@ -99,7 +100,7 @@ export default function ProfileMenu(props: IProfileMenuProps) {
           <div className="px-1 py-1 ">
             <Menu.Item>
               <div
-                onClick={() => signOut(user.auth)}
+                onClick={() => logOutUser()}
                 className={`rounded-md px-4 py-2 hover:bg-${colour}-700 flex items-center gap-2 `}>
                 <FontAwesomeIcon
                   icon={faArrowRightFromBracket}

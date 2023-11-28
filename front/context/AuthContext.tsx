@@ -10,7 +10,13 @@ import SpinnerComponent from "@/app/components/SpinnerComponent";
 const auth = getAuth(firebase_app);
 const lexend = Lexend({ subsets: ["latin"] });
 
-export const AuthContext = React.createContext({});
+type AuthContextType = {
+  user: User | null;
+};
+
+export const AuthContext = React.createContext<AuthContextType>({
+  user: null,
+});
 
 export const useAuthContext = () => React.useContext(AuthContext);
 
