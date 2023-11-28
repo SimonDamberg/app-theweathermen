@@ -1,9 +1,13 @@
 import firebase_app from "../config";
-import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  getAuth,
+  signInAnonymously,
+} from "firebase/auth";
 
 const auth = getAuth(firebase_app);
 
-const logIn = async (email: string, password: string) => {
+export const logIn = async (email: string, password: string) => {
   let result = null,
     error = null;
   try {
@@ -15,4 +19,14 @@ const logIn = async (email: string, password: string) => {
   return { result, error };
 };
 
-export default logIn;
+export const anonymousLogin = async () => {
+  let result = null,
+    error = null;
+  try {
+    result = await signInAnonymously(auth);
+  } catch (e) {
+    error = e;
+  }
+
+  return { result, error };
+};

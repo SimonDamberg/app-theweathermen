@@ -43,5 +43,6 @@
   "noAccount": "Don't have an account?",
   "haveAccount": "Do you have an account?",
   "register": "Register",
-  "name": "Name"
+  "name": "Name",
+  "continueWithoutAccount": "Continue without an account"
 }

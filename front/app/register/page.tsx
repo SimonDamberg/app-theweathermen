@@ -28,7 +28,6 @@ const Register = () => {
     }
 
     // else successful
-    console.log(result);
     return router.push("/");
   };
 
@@ -49,7 +48,7 @@ const Register = () => {
         className="z-10 invert mt-32 transition-all ease-in-out duration-1000 transform hover:scale-110"
       />
       <div className="z-10 form-wrapper rounded-xl bg-slate-800 p-8 hover:shadow-xl hover:shadow-slate-600 transition-all transform ease-in-out hover:-translate-y-4 duration-1000">
-        <h1 className="mb-4 text-xl font-bold text-slate-100">
+        <h1 className="mb-2 text-2xl font-bold text-slate-100">
           {t("register")}
         </h1>
         <form onSubmit={handleForm}>

@@ -57,14 +57,16 @@ export default function ProfileMenu(props: IProfileMenuProps) {
         leaveTo="transform opacity-0 scale-95">
         <Menu.Items
           className={`absolute right-0 z-10 mt-2 w-52 origin-top-right rounded-md divide-y divide-${colour}-200 bg-${colour}-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}>
-          <div className="px-1 py-1 ">
-            <Menu.Item>
-              <p
-                className={`rounded-md px-4 py-2 text-lg hover:bg-${colour}-700 text-${colour}-100`}>
-                {user && user.displayName}
-              </p>
-            </Menu.Item>
-          </div>
+          {user && user.displayName && (
+            <div className="px-1 py-1 ">
+              <Menu.Item>
+                <p
+                  className={`rounded-md px-4 py-2 text-lg hover:bg-${colour}-700 text-${colour}-100`}>
+                  {user.displayName}
+                </p>
+              </Menu.Item>
+            </div>
+          )}
           <div className="px-1 py-1 ">
             <Menu.Item>
               <div
