@@ -50,13 +50,13 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
   } else if (enabledProviders.length > 0) {
     return (
       <div
-        className={`bg-${colour}-800 rounded-xl p-4 text-sky-100 max-h-[49rem] overflow-y-auto flex flex-col`}>
+        className={`bg-${colour}-800 rounded-xl p-4 text-${colour}-100 max-h-[49rem] overflow-y-auto flex flex-col`}>
         <div className="flex justify-between content-center m-4">
-          <p className="text-sky-100 text-2xl self-center">
+          <p className={`text-${colour}-100 text-2xl self-center`}>
             {t("xForecastDays")}
           </p>
           <div className="flex flex-col w-1/4">
-            <p className={`text-center text-md mb-2 text-sky-100`}>
+            <p className={`text-center text-md mb-2 text-${colour}-100`}>
               {t("horizon")}
             </p>
             <div></div>
@@ -71,10 +71,12 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
                 onChange={(e) => setNumForecastDays(parseInt(e.target.value))}
                 className={`h-2 bg-${colour}-500 rounded-lg appearance-none cursor-pointer `}
               />
-              <span className="text-xs text-sky-100 absolute start-0 -bottom-6">
+              <span
+                className={`text-xs text-${colour}-100 absolute start-0 -bottom-6`}>
                 1
               </span>
-              <span className="text-xs text-sky-100  absolute end-0 -bottom-6">
+              <span
+                className={`text-xs text-${colour}-100  absolute end-0 -bottom-6`}>
                 14
               </span>
             </div>
