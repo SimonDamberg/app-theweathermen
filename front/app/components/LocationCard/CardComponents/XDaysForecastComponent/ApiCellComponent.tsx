@@ -1,6 +1,7 @@
-import { providerToBorderColor } from "@/app/utils/colors";
+import { providerToBorderColor } from "@/utils/colors";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
+import { useAuthContext } from "@/context/AuthContext";
 
 export interface IDailyStats {
   minTemp: number;
@@ -12,12 +13,12 @@ export interface IDailyStats {
 interface IApiCellComponentProps {
   stats: IDailyStats | null;
   provider: string;
-  colour: string;
 }
 
 const ApiCellComponent = (props: IApiCellComponentProps) => {
-  const { stats, provider, colour } = props;
+  const { stats, provider } = props;
   const { t, i18n } = useTranslation();
+  const { theme } = useAuthContext();
 
   if (stats) {
     return (
@@ -35,7 +36,7 @@ const ApiCellComponent = (props: IApiCellComponentProps) => {
             <p>{stats?.maxTemp.toFixed(1)}°C</p>
           </div>
         </div>
-        <div className={`border-b-2 border-${colour}-700 my-2`}></div>
+        <div className={`border-b-2 border-${theme}-700 my-2`}></div>
         <div className="flex flex-row items-center">
           <Image
             src={`/images/weatherSymbols/${stats?.weatherSymbol}.png`}

@@ -1,15 +1,13 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
+import { useAuthContext } from "@/context/AuthContext";
 
-interface CountrySelectorProps {
-  colour: string;
-}
+interface CountrySelectorProps {}
 
 export default function CountrySelector(props: CountrySelectorProps) {
-  const { colour } = props;
   const { i18n } = useTranslation();
-
+  const { theme } = useAuthContext();
   return (
     <div className="flex items-center">
       <label className="flex items-center cursor-pointer">
@@ -26,7 +24,7 @@ export default function CountrySelector(props: CountrySelectorProps) {
               }
             }}
           />
-          <div className={`block bg-${colour}-500 w-16 h-8 rounded-full `}></div>
+          <div className={`block bg-${theme}-500 w-16 h-8 rounded-full `}></div>
           <div
             className={`dot absolute ${
               i18n.language === "sv" ? "left-0 ml-0.5" : "translate-x-8"

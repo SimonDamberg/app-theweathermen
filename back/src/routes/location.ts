@@ -155,13 +155,13 @@ locRouter.get(
 );
 
 /**
- * GET /location/:name
+ * GET /location/:id
  * TODO
  */
 locRouter.get(
-  "/:name",
+  "/:id",
   async (req: Request, res: Response, next: NextFunction) => {
-    const loc = await Location.findOne({ name: req.params.name.toLowerCase() });
+    const loc = await Location.findOne({ _id: req.params.id });
 
     if (!loc) {
       return res.status(404).send("Location not found");
