@@ -96,7 +96,7 @@ const LocationEditDialog = (props: ILocationEditDialogProps) => {
                       <div
                         key={
                           row.component +
-                          (row.data !== null ? row.data.toString() : "") +
+                          (row.data ? row.data.toString() : "") +
                           index
                         }
                         className={`flex flex-row justify-between bg-${theme}-600 mb-4 p-2 rounded-xl`}>

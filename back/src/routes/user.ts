@@ -31,7 +31,12 @@ userRouter.post(
       const newUser = new User({
         fb_id: fb_id,
         theme: theme,
-        tracked_cards: [],
+        tracked_cards: [
+          {
+            location_id: "65535c9d9e3c5549804b7eec",
+            card_components: [],
+          },
+        ],
       });
       newUser.save();
       res.send(newUser);

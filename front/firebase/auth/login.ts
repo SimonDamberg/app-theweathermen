@@ -1,3 +1,4 @@
+import { apiPOST } from "@/utils/requestWrapper";
 import firebase_app from "../config";
 import {
   signInWithEmailAndPassword,
@@ -24,6 +25,24 @@ export const anonymousLogin = async () => {
     error = null;
   try {
     result = await signInAnonymously(auth);
+    if (result.user) {
+      apiPOST("/user", {
+        fb_id: result.user.uid,
+        theme: "slate",
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+
+          // delete user in firebase
+          result!.user?.delete();
+
+          // log out user
+          auth.signOut();
+        });
+    }
   } catch (e) {
     error = e;
   }

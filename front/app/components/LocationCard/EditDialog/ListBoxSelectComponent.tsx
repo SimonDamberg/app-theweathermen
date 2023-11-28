@@ -1,6 +1,5 @@
 import { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
-import { componentTypes, dataTypes } from "../LocationCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
@@ -9,6 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "@/context/AuthContext";
+import { componentTypes, dataTypes } from "@/utils/location";
 
 interface IListBoxSelectComponentProps {
   rowIdx: number;
@@ -21,6 +21,8 @@ interface IListBoxSelectComponentProps {
 
 export default function SelectComp(props: IListBoxSelectComponentProps) {
   const { t } = useTranslation();
+  const { theme } = useAuthContext();
+
   const { rowIdx, setEnabledCards, isData, enabledCards } = props;
   const data = isData ? dataTypes : componentTypes;
   const row = enabledCards[rowIdx];
@@ -29,7 +31,6 @@ export default function SelectComp(props: IListBoxSelectComponentProps) {
     return null;
   }
   const selected = data[idx];
-  const { theme } = useAuthContext();
 
   const handleChanges = (newIndex: number) => {
     const newData = [...enabledCards];
@@ -54,7 +55,7 @@ export default function SelectComp(props: IListBoxSelectComponentProps) {
         <Listbox.Button
           className={`cursor-pointer flex items-center justify-center rounded-lg bg-${theme}-500 py-2 shadow-md sm:text-sm hover:opacity-70 transition-all ease-in-out w-60`}>
           <span className={`text-${theme}-100 text-center`}>
-            {t(selected.name)}
+            {selected && t(selected.name)}
           </span>
           <span className="absolute inset-y-0 right-0 flex flex-col justify-center pr-2">
             <FontAwesomeIcon

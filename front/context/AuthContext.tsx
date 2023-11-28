@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Lexend } from "next/font/google";
 import SpinnerComponent from "@/app/components/SpinnerComponent";
 import { apiGET } from "@/utils/requestWrapper";
+import { ITrackedCard } from "@/utils/location";
 
 const auth = getAuth(firebase_app);
 const lexend = Lexend({ subsets: ["latin"] });
@@ -14,8 +15,8 @@ type AuthContextType = {
   user: User | null;
   theme: string;
   setTheme: (theme: string) => void;
-  trackedCards: string[];
-  setTrackedCards: (trackedCards: string[]) => void;
+  trackedCards: ITrackedCard[];
+  setTrackedCards: (trackedCards: ITrackedCard[]) => void;
 };
 
 export const AuthContext = React.createContext<AuthContextType>({
@@ -35,7 +36,7 @@ export const AuthContextProvider = ({
 }) => {
   const [user, setUser] = React.useState<User | null>(null);
   const [theme, setTheme] = React.useState<string>("slate");
-  const [trackedCards, setTrackedCards] = React.useState<string[]>([]);
+  const [trackedCards, setTrackedCards] = React.useState<ITrackedCard[]>([]);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
@@ -44,9 +45,10 @@ export const AuthContextProvider = ({
         setUser(user);
         console.log(user);
         apiGET(`/user/${user.uid}`).then((res) => {
+          console.log(res.tracked_cards);
           if (res) {
             setTheme(res.theme);
-            setTrackedCards(res.trackedCards);
+            setTrackedCards(res.tracked_cards);
           }
         });
       } else {

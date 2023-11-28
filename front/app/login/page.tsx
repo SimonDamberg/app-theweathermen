@@ -20,7 +20,7 @@ function Page() {
     if (user) {
       router.push("/");
     }
-  }, [user]);
+  }, [user, router]);
 
   const handleForm = async (event: any) => {
     event.preventDefault();

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CurrentWeatherCardComponent from "./CardComponents/CurrentWeatherCardComponent";
 import ForecastGraphCardComponent from "./CardComponents/ForecastGraphCardComponent";
 import WindCardComponent from "./CardComponents/WindCardComponent";
@@ -9,47 +9,26 @@ import { faPen } from "@fortawesome/free-solid-svg-icons";
 import LocationEditDialog from "./EditDialog/LocationEditDialog";
 import { useAuthContext } from "@/context/AuthContext";
 import { providerToBgColor, providerToBorderColor } from "@/utils/colors";
+import {
+  ICardComponent,
+  dataToSuffix,
+  dataTypes,
+  providerToTS,
+} from "@/utils/location";
+import { apiGET } from "@/utils/requestWrapper";
 
 interface ILocationCardProps {
-  data?: any;
+  locationID: string;
+  enabledComponents: ICardComponent[];
+  setEnabledComponents: (components: ICardComponent[]) => void;
 }
 
-const providerToTS: { [key: string]: string } = {
-  SMHI: "smhiTS",
-  WeatherAPI: "waTS",
-  OpenWeatherMap: "owmTS",
-};
-
-export const componentTypes = [
-  { name: "graph", id: 0 },
-  { name: "todayWeather", id: 1 },
-  { name: "forecastTable", id: 2 },
-];
-
-export const dataTypes = [
-  { name: "airTemperature", id: 0 },
-  { name: "windSpeed", id: 1 },
-  { name: "meanPrecipitationIntensity", id: 2 },
-  { name: "airPressure", id: 3 },
-  { name: "horizontalVisibility", id: 4 },
-  { name: "relativeHumidity", id: 5 },
-  { name: "totalCloudCover", id: 6 },
-];
-
-export const dataToSuffix: { [key: string]: string } = {
-  airTemperature: "°C",
-  windSpeed: "m/s",
-  meanPrecipitationIntensity: "mm",
-  airPressure: "hPa",
-  horizontalVisibility: "km",
-  relativeHumidity: "%",
-  totalCloudCover: "%",
-};
-
 const LocationCard = (props: ILocationCardProps) => {
-  const { data } = props;
+  const { locationID, enabledComponents, setEnabledComponents } = props;
   const { theme } = useAuthContext();
   const { t } = useTranslation();
+
+  const [data, setData] = useState<any>(null);
 
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [enabledProviders, setEnabledProviders] = useState([
@@ -58,17 +37,14 @@ const LocationCard = (props: ILocationCardProps) => {
     "OpenWeatherMap",
   ]);
 
-  const [enabledCards, setEnabledCards] = useState([
-    { component: 1, data: 0 },
-    { component: 1, data: 1 },
-    { component: 0, data: 1 },
-    { component: 0, data: 0 },
-    { component: 0, data: 2 },
-    { component: 0, data: 3 },
-    { component: 2, data: null },
-  ]);
-
   const [numForecastDays, setNumForecastDays] = useState(5);
+
+  useEffect(() => {
+    // fetch data from API for locationID
+    apiGET(`/location/${locationID}`).then((res) => {
+      setData(res);
+    });
+  }, [locationID]);
 
   return (
     <div
@@ -119,12 +95,12 @@ const LocationCard = (props: ILocationCardProps) => {
               open={showEditDialog}
               setOpen={setShowEditDialog}
               locationName={data.name}
-              enabledCards={enabledCards}
-              setEnabledCards={setEnabledCards}
+              enabledCards={enabledComponents}
+              setEnabledCards={setEnabledComponents}
             />
           </div>
           <div className="flex flex-col">
-            {enabledCards.map((row, index) => {
+            {enabledComponents.map((row, index) => {
               if (row.component === 0) {
                 return (
                   <div

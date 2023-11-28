@@ -7,7 +7,7 @@ export interface ITrackedCard {
 
 export interface ICardComponent {
   component: number;
-  data: number;
+  data: number | null;
 }
 
 // Create a Schema corresponding to the document interface.

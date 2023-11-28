@@ -12,6 +12,8 @@ import NavbarComponent from "./components/NavbarComponent";
 import { useAuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import SpinnerComponent from "./components/SpinnerComponent";
+import { ITrackedCard } from "@/utils/location";
+import { apiPOST } from "@/utils/requestWrapper";
 
 const lexend = Lexend({ subsets: ["latin"] });
 
@@ -51,7 +53,7 @@ export default function Home() {
   const [loading, setLoading] = useState<Boolean>(true);
   const { t, i18n } = useTranslation();
 
-  const { user, theme } = useAuthContext();
+  const { user, theme, trackedCards, setTrackedCards } = useAuthContext();
   const router = useRouter();
 
   useEffect(() => {
@@ -60,33 +62,45 @@ export default function Home() {
     } else {
       console.log(user);
     }
-  }, [user]);
+  }, [user, router]);
 
-  useEffect(() => {
-    // Loop through all locations and fetch data for each
-    if (user) {
-      fetch(`http://localhost:8000/location/weather`)
-        .then((response) => response.json())
-        .then((data) => {
-          setLocationData(data);
-        });
-    }
-  }, [user]);
+  const updateTrackedCards = (newTrackedCards: ITrackedCard[]) => {
+    // save to db
+    apiPOST(`/user/tracked_cards`, {
+      fb_id: user?.uid,
+      tracked_cards: newTrackedCards,
+    })
+      .then((res) => {
+        console.log(res);
+        setTrackedCards(newTrackedCards);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  console.log(trackedCards);
 
   return (
-    <div className={`bg-${theme}-950 ${lexend.className}`}>
+    <div className={`bg-${theme}-950 ${lexend.className} h-screen`}>
       <NavbarComponent />
-      <div className="grid grid-rows-2 grid-flow-col gap-16 mx-16">
-        <div className="row-span-2">
-          <LocationCard data={locationData[1]} />
-        </div>
-        <div>
-          <LocationCard data={locationData[2]} />
-          <LocationCard data={locationData[0]} />
-        </div>
-        {/* <div>
-            <LocationCard data={locationData[2]} />
-          </div> */}
+      <div className="grid grid-rows-1 grid-flow-col gap-16 mx-16">
+        {trackedCards.map((card) => (
+          <div key={card.location_id}>
+            <LocationCard
+              locationID={card.location_id}
+              enabledComponents={card.card_components}
+              setEnabledComponents={(components) => {
+                const newTrackedCards = [...trackedCards];
+                const cardIndex = newTrackedCards.findIndex(
+                  (c) => c.location_id === card.location_id
+                );
+                newTrackedCards[cardIndex].card_components = components;
+                updateTrackedCards(newTrackedCards);
+              }}
+            />
+          </div>
+        ))}
       </div>
       <div className="fixed right-0 bottom-0 flex flex-row">
         <div className="-mr-8">
