@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { providerToBorderColor } from "@/app/utils/colors";
+import { providerToBorderColor } from "@/utils/colors";
 import { useTranslation } from "react-i18next";
 
 interface ICurrentWeatherCardProps {

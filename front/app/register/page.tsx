@@ -5,7 +5,7 @@ import "../i18n";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
-import { renderRain } from "../utils/rain";
+import { renderRain } from "../../utils/rain";
 
 const Register = () => {
   const [name, setName] = React.useState("");

@@ -1,8 +1,8 @@
-import windDirectionFromDegrees from "@/app/utils/weather";
+import windDirectionFromDegrees from "@/utils/weather";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { providerToBorderColor } from "@/app/utils/colors";
+import { providerToBorderColor } from "@/utils/colors";
 import { useTranslation } from "react-i18next";
 
 interface IWindCardComponentProps {

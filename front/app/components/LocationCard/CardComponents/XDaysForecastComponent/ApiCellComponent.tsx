@@ -1,4 +1,4 @@
-import { providerToBorderColor } from "@/app/utils/colors";
+import { providerToBorderColor } from "@/utils/colors";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 

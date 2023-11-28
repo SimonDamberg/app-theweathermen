@@ -3,7 +3,10 @@ import CurrentWeatherCardComponent from "./CardComponents/CurrentWeatherCardComp
 import ForecastGraphCardComponent from "./CardComponents/ForecastGraphCardComponent";
 import WindCardComponent from "./CardComponents/WindCardComponent";
 import XDaysForecastComponent from "./CardComponents/XDaysForecastComponent/XDaysForecastComponent";
-import { providerToBgColor, providerToBorderColor } from "../../utils/colors";
+import {
+  providerToBgColor,
+  providerToBorderColor,
+} from "../../../utils/colors";
 import { useTranslation } from "react-i18next";
 import CircleButtonComponent from "../CircleButtonComponent";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
@@ -76,7 +79,9 @@ const LocationCard = (props: ILocationCardProps) => {
         <>
           <div className="flex flex-row justify-between content-center">
             {/* HEADER */}
-            <p className={`text-4xl text-${colour}-100 self-center`}>{data.name}</p>
+            <p className={`text-4xl text-${colour}-100 self-center`}>
+              {data.name}
+            </p>
             <div className="flex flex-col self-center">
               {/* PROVIDER TOGGLE */}
               <div className="flex flex-row justify-center self-center">

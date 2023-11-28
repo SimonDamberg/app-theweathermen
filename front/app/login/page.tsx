@@ -5,7 +5,7 @@ import { useAuthContext } from "@/context/AuthContext";
 import "../i18n";
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
-import { renderRain } from "../utils/rain";
+import { renderRain } from "../../utils/rain";
 import { anonymousLogin, logIn } from "@/firebase/auth/login";
 
 function Page() {

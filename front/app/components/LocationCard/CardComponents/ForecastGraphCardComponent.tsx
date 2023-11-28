@@ -10,7 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
-import { apiToColor } from "@/app/utils/colors";
+import { apiToColor } from "@/utils/colors";
 import { useTranslation } from "react-i18next";
 
 ChartJS.register(
@@ -199,7 +199,9 @@ const ForecastGraphCardComponent = (
     <div
       className={`bg-${colour}-800 w-10/12 h-full rounded-xl p-4 content-center`}>
       <div className="flex justify-between content-center">
-        <p className={`text-${colour}-100 text-2xl self-center`}>{t(dataField)}</p>
+        <p className={`text-${colour}-100 text-2xl self-center`}>
+          {t(dataField)}
+        </p>
         <div className="flex flex-col w-1/4 m-2">
           <p className={`text-center text-md mb-2 text-${colour}-100`}>
             {t("horizon")}
@@ -216,10 +218,12 @@ const ForecastGraphCardComponent = (
               onChange={(e) => setNumForecastDays(parseInt(e.target.value))}
               className={`h-2 bg-${colour}-500 rounded-lg appearance-none cursor-pointer `}
             />
-            <span className={`text-xs text-${colour}-100 absolute start-0 -bottom-6`}>
+            <span
+              className={`text-xs text-${colour}-100 absolute start-0 -bottom-6`}>
               1
             </span>
-            <span className={`text-xs text-${colour}-100 absolute end-0 -bottom-6`}>
+            <span
+              className={`text-xs text-${colour}-100 absolute end-0 -bottom-6`}>
               14
             </span>
           </div>
