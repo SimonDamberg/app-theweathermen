@@ -1,3 +1,4 @@
+import { apiPOST } from "@/utils/requestWrapper";
 import firebase_app from "../config";
 import {
   createUserWithEmailAndPassword,
@@ -20,6 +21,23 @@ const registerPasswordEmail = async (
       updateProfile(result.user, {
         displayName: name,
       });
+
+      apiPOST("/user", {
+        fb_id: result.user.uid,
+        theme: "slate",
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+
+          // delete user in firebase
+          result!.user?.delete();
+
+          // log out user
+          auth.signOut();
+        });
     }
   } catch (e) {
     error = e;

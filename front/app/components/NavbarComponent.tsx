@@ -1,22 +1,16 @@
 import React from "react";
 import ProfileMenu from "./ProfileMenu/ProfileMenuComponent";
+import { AuthContext, useAuthContext } from "@/context/AuthContext";
 
-interface INavbarComponentProps {
-  colour: string;
-  setColour: (colour: string) => void;
-}
-
-const NavbarComponent = (props: INavbarComponentProps) => {
-  const { colour, setColour } = props;
+const NavbarComponent = () => {
+  const { theme } = useAuthContext();
 
   return (
     <div
-      className={`w-full bg-${colour}-700 h-24 flex justify-center content-center`}>
-      <p className={`text-${colour}-100 self-center text-5xl`}>
-        The Weathermen
-      </p>
+      className={`w-full bg-${theme}-700 h-24 flex justify-center content-center`}>
+      <p className={`text-${theme}-100 self-center text-5xl`}>The Weathermen</p>
       <div className="absolute right-0 mx-6 self-center">
-        <ProfileMenu colour={colour} setColour={setColour} />
+        <ProfileMenu />
       </div>
     </div>
   );

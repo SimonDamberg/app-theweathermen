@@ -9,6 +9,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import CircleButtonComponent from "../../CircleButtonComponent";
+import { useAuthContext } from "@/context/AuthContext";
 
 interface ILocationEditDialogProps {
   open: boolean;
@@ -18,20 +19,13 @@ interface ILocationEditDialogProps {
   setEnabledCards: (
     cards: { component: number; data: number | null }[]
   ) => void;
-  colour: string;
 }
 
 const LocationEditDialog = (props: ILocationEditDialogProps) => {
   const { t } = useTranslation();
+  const { theme } = useAuthContext();
 
-  const {
-    open,
-    setOpen,
-    locationName,
-    enabledCards,
-    setEnabledCards,
-    colour,
-  } = props;
+  const { open, setOpen, locationName, enabledCards, setEnabledCards } = props;
   const cancelButtonRef = useRef(null);
 
   const handleMove = (index: number, direction: "up" | "down") => {
@@ -88,12 +82,11 @@ const LocationEditDialog = (props: ILocationEditDialogProps) => {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
               <Dialog.Panel className="relative rounded-lg overflow-hidden transform shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-3xl">
-                <div
-                  className={`bg-${colour}-800 px-4 pt-5 sm:px-4`}>
+                <div className={`bg-${theme}-800 px-4 pt-5 sm:px-4`}>
                   <div className="mt-4 flex flex-col text-center justify-center sm:ml-4 sm:mt-0 sm:text-left">
                     <Dialog.Title
                       as="h2"
-                      className={`font-semibold leading-6 text-${colour}-100 text-xl`}>
+                      className={`font-semibold leading-6 text-${theme}-100 text-xl`}>
                       {t("editDialogTitle", { location: locationName })}
                     </Dialog.Title>
                   </div>
@@ -106,11 +99,10 @@ const LocationEditDialog = (props: ILocationEditDialogProps) => {
                           (row.data !== null ? row.data.toString() : "") +
                           index
                         }
-                        className={`flex flex-row justify-between bg-${colour}-600 mb-4 p-2 rounded-xl`}>
+                        className={`flex flex-row justify-between bg-${theme}-600 mb-4 p-2 rounded-xl`}>
                         <div className="flex flex-col mx-2 self-center">
                           <ListBoxSelectComponent
                             rowIdx={index}
-                            colour={colour}
                             setEnabledCards={setEnabledCards}
                             isData={false}
                             enabledCards={enabledCards}
@@ -120,7 +112,6 @@ const LocationEditDialog = (props: ILocationEditDialogProps) => {
                           {row.data !== null && (
                             <ListBoxSelectComponent
                               rowIdx={index}
-                              colour={colour}
                               setEnabledCards={setEnabledCards}
                               isData={true}
                               enabledCards={enabledCards}
@@ -129,23 +120,23 @@ const LocationEditDialog = (props: ILocationEditDialogProps) => {
                         </div>
                         <div className="">
                           <CircleButtonComponent
-                            className={`bg-${colour}-500 m-1 p-2 rounded-xl`}
-                            iconClassName={`text-lg text-${colour}-100`}
+                            className={`bg-${theme}-500 m-1 p-2 rounded-xl`}
+                            iconClassName={`text-lg text-${theme}-100`}
                             icon={faTrash}
                             onClick={() => handleDelete(index)}
                           />
                           <CircleButtonComponent
-                            className={`bg-${colour}-500 m-1 p-2 rounded-xl ${
+                            className={`bg-${theme}-500 m-1 p-2 rounded-xl ${
                               index === 0 && "disabled"
                             }`}
-                            iconClassName={`text-lg text-${colour}-100`}
+                            iconClassName={`text-lg text-${theme}-100`}
                             icon={faArrowUp}
                             onClick={() => handleMove(index, "up")}
                             disabled={index === 0}
                           />
                           <CircleButtonComponent
-                            className={`bg-${colour}-500 m-1 p-2 rounded-xl`}
-                            iconClassName={`text-lg text-${colour}-100`}
+                            className={`bg-${theme}-500 m-1 p-2 rounded-xl`}
+                            iconClassName={`text-lg text-${theme}-100`}
                             icon={faArrowDown}
                             onClick={() => handleMove(index, "down")}
                             disabled={index === enabledCards.length - 1}
@@ -156,28 +147,26 @@ const LocationEditDialog = (props: ILocationEditDialogProps) => {
                   </div>
                 </div>
                 <div
-                  className={`bg-${colour}-950 px-2 py-3 sm:flex sm:flex-row-reverse`}>
+                  className={`bg-${theme}-950 px-2 py-3 sm:flex sm:flex-row-reverse`}>
                   <button
                     type="button"
-                    className={`inline-flex w-full justify-center rounded-md bg-${colour}-800 hover:opacity-80 px-3 py-2 text-sm font-semibold text-${colour}-100 shadow-sm sm:ml-3 sm:w-auto`}
+                    className={`inline-flex w-full justify-center rounded-md bg-${theme}-800 hover:opacity-80 px-3 py-2 text-sm font-semibold text-${theme}-100 shadow-sm sm:ml-3 sm:w-auto`}
                     onClick={() => setOpen(false)}
                     ref={cancelButtonRef}>
                     {t("back")}
                   </button>
                   <button
                     type="button"
-                    className={`inline-flex w-full justify-center rounded-md bg-${colour}-700 hover:opacity-80 px-3 py-2 text-sm font-semibold text-${colour}-100 shadow-sm sm:ml-3 sm:w-auto`}
+                    className={`inline-flex w-full justify-center rounded-md bg-${theme}-700 hover:opacity-80 px-3 py-2 text-sm font-semibold text-${theme}-100 shadow-sm sm:ml-3 sm:w-auto`}
                     onClick={() => setEnabledCards([])}>
                     {t("clear")}
                   </button>
                   <button
                     type="button"
-                    className={`inline-flex w-full justify-center rounded-md bg-${colour}-600 hover:opacity-80 px-3 py-2 text-sm font-semibold text-${colour}-100 shadow-sm sm:ml-3 sm:w-auto`}
+                    className={`inline-flex w-full justify-center rounded-md bg-${theme}-600 hover:opacity-80 px-3 py-2 text-sm font-semibold text-${theme}-100 shadow-sm sm:ml-3 sm:w-auto`}
                     onClick={() => handleAdd()}>
                     {t("addCardDescription")}
                   </button>
-                  
-
                 </div>
               </Dialog.Panel>
             </Transition.Child>

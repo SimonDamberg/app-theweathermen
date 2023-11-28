@@ -12,6 +12,7 @@ import {
 import { Chart } from "react-chartjs-2";
 import { apiToColor } from "@/utils/colors";
 import { useTranslation } from "react-i18next";
+import { useAuthContext } from "@/context/AuthContext";
 
 ChartJS.register(
   CategoryScale,
@@ -30,7 +31,6 @@ interface IForecastGraphCardComponentProps {
   suffix?: string;
   prefix?: string;
   enabledProviders: string[];
-  colour: string;
 }
 
 const ForecastGraphCardComponent = (
@@ -44,8 +44,8 @@ const ForecastGraphCardComponent = (
     suffix,
     prefix,
     enabledProviders,
-    colour,
   } = props;
+  const { theme } = useAuthContext();
 
   const { t, i18n } = useTranslation();
 
@@ -197,13 +197,13 @@ const ForecastGraphCardComponent = (
 
   return (
     <div
-      className={`bg-${colour}-800 w-10/12 h-full rounded-xl p-4 content-center`}>
+      className={`bg-${theme}-800 w-10/12 h-full rounded-xl p-4 content-center`}>
       <div className="flex justify-between content-center">
-        <p className={`text-${colour}-100 text-2xl self-center`}>
+        <p className={`text-${theme}-100 text-2xl self-center`}>
           {t(dataField)}
         </p>
         <div className="flex flex-col w-1/4 m-2">
-          <p className={`text-center text-md mb-2 text-${colour}-100`}>
+          <p className={`text-center text-md mb-2 text-${theme}-100`}>
             {t("horizon")}
           </p>
           <div></div>
@@ -216,14 +216,14 @@ const ForecastGraphCardComponent = (
               value={numForecastDays}
               step="1"
               onChange={(e) => setNumForecastDays(parseInt(e.target.value))}
-              className={`h-2 bg-${colour}-500 rounded-lg appearance-none cursor-pointer `}
+              className={`h-2 bg-${theme}-500 rounded-lg appearance-none cursor-pointer `}
             />
             <span
-              className={`text-xs text-${colour}-100 absolute start-0 -bottom-6`}>
+              className={`text-xs text-${theme}-100 absolute start-0 -bottom-6`}>
               1
             </span>
             <span
-              className={`text-xs text-${colour}-100 absolute end-0 -bottom-6`}>
+              className={`text-xs text-${theme}-100 absolute end-0 -bottom-6`}>
               14
             </span>
           </div>

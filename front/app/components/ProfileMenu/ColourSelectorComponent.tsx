@@ -1,10 +1,10 @@
+import { useAuthContext } from "@/context/AuthContext";
+import { apiPOST } from "@/utils/requestWrapper";
 import { Dialog, RadioGroup, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 interface IColourSelectorComponentProps {
-  colour: string;
-  setColour: (colour: string) => void;
   open: boolean;
   setOpen: (open: boolean) => void;
 }
@@ -49,8 +49,19 @@ const opacities = [
 ];
 
 export default function ColourSelector(props: IColourSelectorComponentProps) {
-  const { colour, setColour, open, setOpen } = props;
+  const { open, setOpen } = props;
   const { t, i18n } = useTranslation();
+
+  const { user, theme, setTheme } = useAuthContext();
+
+  const saveNewTheme = (newTheme: string) => {
+    apiPOST(`/user/theme`, { theme: newTheme, fb_id: user?.uid }).then(
+      (res) => {
+        console.log(res);
+        setTheme(newTheme);
+      }
+    );
+  };
 
   return (
     <>
@@ -81,14 +92,14 @@ export default function ColourSelector(props: IColourSelectorComponentProps) {
               leaveTo="opacity-0 scale-95">
               <Dialog.Panel>
                 <div
-                  className={`w-fit transform rounded-2xl bg-${colour}-900 p-6 text-left align-middle shadow-xl transition-all`}>
+                  className={`w-fit transform rounded-2xl bg-${theme}-900 p-6 text-left align-middle shadow-xl transition-all`}>
                   <Dialog.Title
                     as="h3"
-                    className={`text-xl font-medium leading-6 text-${colour}-100`}>
+                    className={`text-xl font-medium leading-6 text-${theme}-100`}>
                     {t("colourSelector")}
                   </Dialog.Title>
                   <div className="mx-auto w-full mt-4">
-                    <RadioGroup value={colour} onChange={setColour}>
+                    <RadioGroup value={theme} onChange={saveNewTheme}>
                       <div className="grid grid-cols-3 auto-rows-min gap-4">
                         {colours.map((ind) => (
                           <RadioGroup.Option
@@ -96,16 +107,14 @@ export default function ColourSelector(props: IColourSelectorComponentProps) {
                             value={ind}
                             className={({ checked }) =>
                               `flex cursor-pointer rounded-lg p-4 w-fit shadow-lg hover:opacity-70 transition-all ease-in-out duration-300 ${
-                                checked
-                                  ? `bg-${colour}-500`
-                                  : `bg-${colour}-700`
+                                checked ? `bg-${theme}-500` : `bg-${theme}-700`
                               } `
                             }>
                             <div className="flex w-auto items-center justify-between">
                               <div className="text-sm ">
                                 <RadioGroup.Label
                                   as="p"
-                                  className={`font-medium text-${colour}-100`}>
+                                  className={`font-medium text-${theme}-100`}>
                                   {ind[0].toUpperCase() + ind.slice(1)}
                                 </RadioGroup.Label>
                                 <RadioGroup.Description as="span">
@@ -126,7 +135,7 @@ export default function ColourSelector(props: IColourSelectorComponentProps) {
                   <div className="mt-4 flex justify-end">
                     <button
                       type="button"
-                      className={`inline-flex justify-center rounded-md border border-transparent bg-${colour}-500 px-4 py-2 text-sm font-medium text-${colour}-100 hover:bg-${colour}-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-${colour}-500 focus-visible:ring-offset-2`}
+                      className={`inline-flex justify-center rounded-md border border-transparent bg-${theme}-500 px-4 py-2 text-sm font-medium text-${theme}-100 hover:bg-${theme}-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-${theme}-500 focus-visible:ring-offset-2`}
                       onClick={() => setOpen(false)}>
                       {t("closeModal")}
                     </button>

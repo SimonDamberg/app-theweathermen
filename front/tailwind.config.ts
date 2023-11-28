@@ -36,6 +36,9 @@ const config: Config = {
       pattern: /text-*/,
       variants: ["hover", "focus"],
     },
+    {
+      pattern: /border-*/,
+    },
   ],
 };
 export default config;

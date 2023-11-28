@@ -50,9 +50,8 @@ export default function Home() {
   const [locationData, setLocationData] = useState<ILocationData[]>([]);
   const [loading, setLoading] = useState<Boolean>(true);
   const { t, i18n } = useTranslation();
-  const [colour, setColour] = React.useState("slate");
 
-  const { user } = useAuthContext();
+  const { user, theme } = useAuthContext();
   const router = useRouter();
 
   useEffect(() => {
@@ -75,15 +74,15 @@ export default function Home() {
   }, [user]);
 
   return (
-    <div className={`bg-${colour}-950 ${lexend.className}`}>
-      <NavbarComponent colour={colour} setColour={setColour} />
+    <div className={`bg-${theme}-950 ${lexend.className}`}>
+      <NavbarComponent />
       <div className="grid grid-rows-2 grid-flow-col gap-16 mx-16">
         <div className="row-span-2">
-          <LocationCard data={locationData[1]} colour={colour} />
+          <LocationCard data={locationData[1]} />
         </div>
         <div>
-          <LocationCard data={locationData[2]} colour={colour} />
-          <LocationCard data={locationData[0]} colour={colour} />
+          <LocationCard data={locationData[2]} />
+          <LocationCard data={locationData[0]} />
         </div>
         {/* <div>
             <LocationCard data={locationData[2]} />
@@ -92,13 +91,13 @@ export default function Home() {
       <div className="fixed right-0 bottom-0 flex flex-row">
         <div className="-mr-8">
           <CircleButtonComponent
-            className={`bg-${colour}-600 w-16 h-16 m-6 text-${colour}-100`}
+            className={`bg-${theme}-600 w-16 h-16 m-6 text-${theme}-100`}
             icon={faPen}
             onClick={() => null}
           />
         </div>
         <CircleButtonComponent
-          className={`bg-${colour}-600 w-16 h-16 m-6 text-${colour}-100`}
+          className={`bg-${theme}-600 w-16 h-16 m-6 text-${theme}-100`}
           icon={faPlus}
           onClick={() => null}
         />

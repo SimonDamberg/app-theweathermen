@@ -3,18 +3,15 @@ import CurrentWeatherCardComponent from "./CardComponents/CurrentWeatherCardComp
 import ForecastGraphCardComponent from "./CardComponents/ForecastGraphCardComponent";
 import WindCardComponent from "./CardComponents/WindCardComponent";
 import XDaysForecastComponent from "./CardComponents/XDaysForecastComponent/XDaysForecastComponent";
-import {
-  providerToBgColor,
-  providerToBorderColor,
-} from "../../../utils/colors";
 import { useTranslation } from "react-i18next";
 import CircleButtonComponent from "../CircleButtonComponent";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import LocationEditDialog from "./EditDialog/LocationEditDialog";
+import { useAuthContext } from "@/context/AuthContext";
+import { providerToBgColor, providerToBorderColor } from "@/utils/colors";
 
 interface ILocationCardProps {
   data?: any;
-  colour: string;
 }
 
 const providerToTS: { [key: string]: string } = {
@@ -50,7 +47,8 @@ export const dataToSuffix: { [key: string]: string } = {
 };
 
 const LocationCard = (props: ILocationCardProps) => {
-  const { data, colour } = props;
+  const { data } = props;
+  const { theme } = useAuthContext();
   const { t } = useTranslation();
 
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -74,12 +72,12 @@ const LocationCard = (props: ILocationCardProps) => {
 
   return (
     <div
-      className={`w-300 h-auto my-14 p-10 rounded-xl bg-${colour}-700 shadow-sm hover:shadow-lg shadow-${colour}-600 hover:shadow-${colour}-600 transition-all ease-in-out duration-300`}>
+      className={`w-300 h-auto my-14 p-10 rounded-xl bg-${theme}-700 shadow-sm hover:shadow-lg shadow-${theme}-600 hover:shadow-${theme}-600 transition-all ease-in-out duration-300`}>
       {data && (
         <>
           <div className="flex flex-row justify-between content-center">
             {/* HEADER */}
-            <p className={`text-4xl text-${colour}-100 self-center`}>
+            <p className={`text-4xl text-${theme}-100 self-center`}>
               {data.name}
             </p>
             <div className="flex flex-col self-center">
@@ -92,7 +90,7 @@ const LocationCard = (props: ILocationCardProps) => {
                       enabledProviders.includes(provider)
                         ? "opacity-100"
                         : "opacity-40"
-                    } p-4 m-2 cursor-pointer justify-center text-center text-${colour}-100 border-2 ${
+                    } p-4 m-2 cursor-pointer justify-center text-center text-${theme}-100 border-2 ${
                       providerToBorderColor[provider.toLowerCase()]
                     } ${
                       providerToBgColor[provider.toLowerCase()]
@@ -112,13 +110,12 @@ const LocationCard = (props: ILocationCardProps) => {
               </div>
             </div>
             <CircleButtonComponent
-              className={`bg-${colour}-600 p-4 rounded-xl m-6`}
-              iconClassName={`text-lg text-${colour}-100`}
+              className={`bg-${theme}-600 p-4 rounded-xl m-6`}
+              iconClassName={`text-lg text-${theme}-100`}
               icon={faPen}
               onClick={() => setShowEditDialog(true)}
             />
             <LocationEditDialog
-              colour={colour}
               open={showEditDialog}
               setOpen={setShowEditDialog}
               locationName={data.name}
@@ -135,7 +132,6 @@ const LocationCard = (props: ILocationCardProps) => {
                     className="flex justify-center my-4">
                     <ForecastGraphCardComponent
                       setNumForecastDays={setNumForecastDays}
-                      colour={colour}
                       data={data}
                       numForecastDays={numForecastDays}
                       enabledProviders={enabledProviders}
@@ -152,7 +148,6 @@ const LocationCard = (props: ILocationCardProps) => {
                       className="flex flex-row p-4 justify-center">
                       {enabledProviders.map((provider) => (
                         <CurrentWeatherCardComponent
-                          colour={colour}
                           key={provider}
                           airTemperature={
                             data[providerToTS[provider]][0].airTemperature
@@ -170,7 +165,6 @@ const LocationCard = (props: ILocationCardProps) => {
                       className="flex flex-row p-4 justify-center">
                       {enabledProviders.map((provider) => (
                         <WindCardComponent
-                          colour={colour}
                           key={provider}
                           windDirection={
                             data[providerToTS[provider]][0].windDirection
@@ -191,7 +185,6 @@ const LocationCard = (props: ILocationCardProps) => {
                     key={row.component + String(row.data ?? "") + index}
                     className="flex justify-center my-4">
                     <XDaysForecastComponent
-                      colour={colour}
                       name={data.name}
                       enabledProviders={enabledProviders}
                       numForecastDays={numForecastDays}
