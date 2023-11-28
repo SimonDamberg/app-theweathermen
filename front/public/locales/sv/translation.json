@@ -36,5 +36,12 @@
   "relativeHumidity": "Luftfuktighet",
   "totalCloudCover": "Molnmängd",
   "graph": "Graf",
-  "forecastTable": "Prognostabell"
+  "forecastTable": "Prognostabell",
+  "login": "Logga in",
+  "email": "Mejl",
+  "password": "Lösenord",
+  "noAccount": "Inget konto än?",
+  "haveAccount": "Har du ett konto?",
+  "register": "Registrera",
+  "name": "Namn"
 }

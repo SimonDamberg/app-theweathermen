@@ -12,6 +12,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ColourSelector from "./ColourSelectorComponent";
+import { useAuthContext } from "@/context/AuthContext";
+import { signOut } from "firebase/auth";
 
 interface IProfileMenuProps {
   colour: string;
@@ -20,7 +22,7 @@ interface IProfileMenuProps {
 
 export default function ProfileMenu(props: IProfileMenuProps) {
   const { colour, setColour } = props;
-
+  const { user } = useAuthContext();
   const { t, i18n } = useTranslation();
   let [settingsOpen, setSettingsOpen] = useState(false);
   return (
@@ -38,7 +40,7 @@ export default function ProfileMenu(props: IProfileMenuProps) {
           <span className="sr-only">Open user menu</span>
           <Image
             src={`/images/avatar/1.jpg`}
-            alt="Johnny Silverhand"
+            alt={t("name")}
             className={`w-16 h-16 ring-4 ring-${colour}-500 transform hover:scale-110 transition-all duration-200 rounded-full`}
             width={128}
             height={128}
@@ -59,7 +61,7 @@ export default function ProfileMenu(props: IProfileMenuProps) {
             <Menu.Item>
               <p
                 className={`rounded-md px-4 py-2 text-lg hover:bg-${colour}-700 text-${colour}-100`}>
-                Johnny Silverhand
+                {user && user.displayName}
               </p>
             </Menu.Item>
           </div>
@@ -67,7 +69,10 @@ export default function ProfileMenu(props: IProfileMenuProps) {
             <Menu.Item>
               <div
                 className={`rounded-md px-4 py-2 hover:bg-${colour}-700 flex items-center gap-2 `}>
-                <FontAwesomeIcon icon={faUser} className={`text-${colour}-100`} />
+                <FontAwesomeIcon
+                  icon={faUser}
+                  className={`text-${colour}-100`}
+                />
                 <p className={`text-${colour}-100 `}>{t("myProfile")}</p>
               </div>
             </Menu.Item>
@@ -75,7 +80,10 @@ export default function ProfileMenu(props: IProfileMenuProps) {
               <div
                 className={`rounded-md px-4 py-2 hover:bg-${colour}-700 flex items-center gap-2 `}
                 onClick={() => setSettingsOpen(!settingsOpen)}>
-                <FontAwesomeIcon icon={faPalette} className={`text-${colour}-100`} />
+                <FontAwesomeIcon
+                  icon={faPalette}
+                  className={`text-${colour}-100`}
+                />
                 <p className={`text-${colour}-100 `}>{t("settings")}</p>
               </div>
             </Menu.Item>
@@ -89,6 +97,7 @@ export default function ProfileMenu(props: IProfileMenuProps) {
           <div className="px-1 py-1 ">
             <Menu.Item>
               <div
+                onClick={() => signOut(user.auth)}
                 className={`rounded-md px-4 py-2 hover:bg-${colour}-700 flex items-center gap-2 `}>
                 <FontAwesomeIcon
                   icon={faArrowRightFromBracket}
