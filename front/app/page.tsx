@@ -82,7 +82,7 @@ export default function Home() {
   console.log(trackedCards);
 
   return (
-    <div className={`bg-${theme}-950 ${lexend.className} h-screen`}>
+    <div className={`bg-${theme}-950 ${lexend.className} h-full`}>
       <NavbarComponent />
       <div className="grid grid-rows-1 grid-flow-col gap-16 mx-16">
         {trackedCards.map((card) => (
