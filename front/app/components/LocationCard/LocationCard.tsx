@@ -5,8 +5,7 @@ import WindCardComponent from "./CardComponents/WindCardComponent";
 import XDaysForecastComponent from "./CardComponents/XDaysForecastComponent/XDaysForecastComponent";
 import { useTranslation } from "react-i18next";
 import CircleButtonComponent from "../CircleButtonComponent";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
-import LocationEditDialog from "./EditDialog/LocationEditDialog";
+import { faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useAuthContext } from "@/context/AuthContext";
 import { providerToBgColor, providerToBorderColor } from "@/utils/colors";
 import {
@@ -16,6 +15,7 @@ import {
   providerToTS,
 } from "@/utils/location";
 import { apiGET } from "@/utils/requestWrapper";
+import MoveCardComponent from "./MoveCardComponent";
 
 interface ILocationCardProps {
   locationID: string;
@@ -30,14 +30,21 @@ const LocationCard = (props: ILocationCardProps) => {
 
   const [data, setData] = useState<any>(null);
 
-  const [showEditDialog, setShowEditDialog] = useState(false);
   const [enabledProviders, setEnabledProviders] = useState([
     "SMHI",
     "WeatherAPI",
     "OpenWeatherMap",
   ]);
 
+  const [editing, setEditing] = useState(false);
+
   const [numForecastDays, setNumForecastDays] = useState(5);
+
+  const handleAdd = () => {
+    const newData = [...enabledComponents];
+    newData.push({ component: 0, data: 0 });
+    setEnabledComponents(newData);
+  };
 
   useEffect(() => {
     // fetch data from API for locationID
@@ -85,86 +92,129 @@ const LocationCard = (props: ILocationCardProps) => {
                 ))}
               </div>
             </div>
-            <CircleButtonComponent
-              className={`bg-${theme}-600 p-4 rounded-xl m-6`}
-              iconClassName={`text-lg text-${theme}-100`}
-              icon={faPen}
-              onClick={() => setShowEditDialog(true)}
-            />
-            <LocationEditDialog
-              open={showEditDialog}
-              setOpen={setShowEditDialog}
-              locationName={data.name}
-              enabledCards={enabledComponents}
-              setEnabledCards={setEnabledComponents}
-            />
+            <div className="ml-12 w-20 flex flex-row">
+              {editing && (
+                <CircleButtonComponent
+                  className={`bg-${theme}-600 p-4 rounded-xl mt-6`}
+                  iconClassName={`text-lg text-${theme}-100`}
+                  icon={faPlus}
+                  onClick={() => handleAdd}
+                />
+              )}
+              <CircleButtonComponent
+                className={`bg-${theme}-600 p-4 rounded-xl mr-4 mt-6 ml-1`}
+                iconClassName={`text-lg text-${theme}-100`}
+                icon={faPen}
+                onClick={() => setEditing(!editing)}
+              />
+            </div>
           </div>
           <div className="flex flex-col">
             {enabledComponents.map((row, index) => {
               if (row.component === 0) {
                 return (
-                  <div
-                    key={row.component + String(row.data ?? "") + index}
-                    className="flex justify-center my-4">
-                    <ForecastGraphCardComponent
-                      setNumForecastDays={setNumForecastDays}
-                      data={data}
-                      numForecastDays={numForecastDays}
-                      enabledProviders={enabledProviders}
-                      dataField={dataTypes[row.data ?? 0].name}
-                      suffix={dataToSuffix[dataTypes[row.data ?? 0].name]}
+                  <div className="flex flex-row justify-between">
+                    <div className="w-16" />
+                    <div
+                      key={row.component + String(row.data ?? "") + index}
+                      className="flex justify-center my-4">
+                      <ForecastGraphCardComponent
+                        setNumForecastDays={setNumForecastDays}
+                        data={data}
+                        numForecastDays={numForecastDays}
+                        enabledProviders={enabledProviders}
+                        dataField={dataTypes[row.data ?? 0].name}
+                        suffix={dataToSuffix[dataTypes[row.data ?? 0].name]}
+                      />
+                    </div>
+                    <MoveCardComponent
+                      editing={editing}
+                      enabledCards={enabledComponents}
+                      setEnabledCards={setEnabledComponents}
+                      index={index}
                     />
                   </div>
                 );
               } else if (row.component === 1) {
                 if (row.data === 0) {
                   return (
-                    <div
-                      key={row.component + String(row.data ?? "") + index}
-                      className="flex flex-row p-4 justify-center">
-                      {enabledProviders.map((provider) => (
-                        <CurrentWeatherCardComponent
-                          key={provider}
-                          airTemperature={
-                            data[providerToTS[provider]][0].airTemperature
-                          }
-                          symbol={data[providerToTS[provider]][0].weatherSymbol}
-                          provider={provider}
-                        />
-                      ))}
+                    <div className="flex flex-row justify-between">
+                      <div className="w-16" />
+                      <div
+                        key={row.component + String(row.data ?? "") + index}
+                        className="flex flex-row p-4 justify-center">
+                        {enabledProviders.map((provider) => (
+                          <CurrentWeatherCardComponent
+                            key={provider}
+                            airTemperature={
+                              data[providerToTS[provider]][0].airTemperature
+                            }
+                            symbol={
+                              data[providerToTS[provider]][0].weatherSymbol
+                            }
+                            provider={provider}
+                          />
+                        ))}
+                      </div>
+                      <MoveCardComponent
+                        editing={editing}
+                        enabledCards={enabledComponents}
+                        setEnabledCards={setEnabledComponents}
+                        index={index}
+                      />
                     </div>
                   );
                 } else if (row.data === 1) {
                   return (
-                    <div
-                      key={row.component + String(row.data ?? "") + index}
-                      className="flex flex-row p-4 justify-center">
-                      {enabledProviders.map((provider) => (
-                        <WindCardComponent
-                          key={provider}
-                          windDirection={
-                            data[providerToTS[provider]][0].windDirection
-                          }
-                          windSpeed={data[providerToTS[provider]][0].windSpeed}
-                          windGustSpeed={
-                            data[providerToTS[provider]][0].windGustSpeed
-                          }
-                          provider={provider}
-                        />
-                      ))}
+                    <div className="flex flex-row justify-between">
+                      <div className="w-16" />
+                      <div
+                        key={row.component + String(row.data ?? "") + index}
+                        className="flex flex-row p-4 justify-center">
+                        {enabledProviders.map((provider) => (
+                          <WindCardComponent
+                            key={provider}
+                            windDirection={
+                              data[providerToTS[provider]][0].windDirection
+                            }
+                            windSpeed={
+                              data[providerToTS[provider]][0].windSpeed
+                            }
+                            windGustSpeed={
+                              data[providerToTS[provider]][0].windGustSpeed
+                            }
+                            provider={provider}
+                          />
+                        ))}
+                      </div>
+                      <MoveCardComponent
+                        editing={editing}
+                        enabledCards={enabledComponents}
+                        setEnabledCards={setEnabledComponents}
+                        index={index}
+                      />
                     </div>
                   );
                 }
               } else if (row.component === 2) {
                 return (
-                  <div
-                    key={row.component + String(row.data ?? "") + index}
-                    className="flex justify-center my-4">
-                    <XDaysForecastComponent
-                      name={data.name}
-                      enabledProviders={enabledProviders}
-                      numForecastDays={numForecastDays}
-                      setNumForecastDays={setNumForecastDays}
+                  <div className="flex flex-row justify-between">
+                    <div className="w-16" />
+                    <div
+                      key={row.component + String(row.data ?? "") + index}
+                      className="flex justify-center my-4">
+                      <XDaysForecastComponent
+                        name={data.name}
+                        enabledProviders={enabledProviders}
+                        numForecastDays={numForecastDays}
+                        setNumForecastDays={setNumForecastDays}
+                      />
+                    </div>
+                    <MoveCardComponent
+                      editing={editing}
+                      enabledCards={enabledComponents}
+                      setEnabledCards={setEnabledComponents}
+                      index={index}
                     />
                   </div>
                 );

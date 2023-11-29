@@ -118,7 +118,7 @@ const LocationEditDialog = (props: ILocationEditDialogProps) => {
                             />
                           )}
                         </div>
-                        <div className="">
+                        <div>
                           <CircleButtonComponent
                             className={`bg-${theme}-500 m-1 p-2 rounded-xl`}
                             iconClassName={`text-lg text-${theme}-100`}

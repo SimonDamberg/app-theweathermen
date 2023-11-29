@@ -86,20 +86,37 @@ export default function Home() {
       <NavbarComponent />
       <div className="grid grid-rows-1 grid-flow-col gap-16 mx-16">
         {trackedCards.map((card) => (
-          <div key={card.location_id}>
-            <LocationCard
-              locationID={card.location_id}
-              enabledComponents={card.card_components}
-              setEnabledComponents={(components) => {
-                const newTrackedCards = [...trackedCards];
-                const cardIndex = newTrackedCards.findIndex(
-                  (c) => c.location_id === card.location_id
-                );
-                newTrackedCards[cardIndex].card_components = components;
-                updateTrackedCards(newTrackedCards);
-              }}
-            />
-          </div>
+          <>
+            <div key={card.location_id}>
+              <LocationCard
+                locationID={card.location_id}
+                enabledComponents={card.card_components}
+                setEnabledComponents={(components) => {
+                  const newTrackedCards = [...trackedCards];
+                  const cardIndex = newTrackedCards.findIndex(
+                    (c) => c.location_id === card.location_id
+                  );
+                  newTrackedCards[cardIndex].card_components = components;
+                  updateTrackedCards(newTrackedCards);
+                }}
+              />
+            </div>
+            {/* SHOULD BE REMOVED UNDER */}
+            <div key={card.location_id}>
+              <LocationCard
+                locationID={card.location_id}
+                enabledComponents={card.card_components}
+                setEnabledComponents={(components) => {
+                  const newTrackedCards = [...trackedCards];
+                  const cardIndex = newTrackedCards.findIndex(
+                    (c) => c.location_id === card.location_id
+                  );
+                  newTrackedCards[cardIndex].card_components = components;
+                  updateTrackedCards(newTrackedCards);
+                }}
+              />
+            </div>
+          </>
         ))}
       </div>
       <div className="fixed right-0 bottom-0 flex flex-row">
