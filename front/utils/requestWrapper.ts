@@ -10,7 +10,7 @@ export const getAPIEndpoint = () => {
     return "http://localhost:8000";
   } else {
     // If app is built in production, use prod environment
-    return "http://164.92.236.143:8000";
+    return "https://squid-app-znkgm.ondigitalocean.app/";
   }
 };
 
