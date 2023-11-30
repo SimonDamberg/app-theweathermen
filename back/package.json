@@ -5,7 +5,9 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "npx tsc",
-    "start": "node dist/index.js",
+    "start": "pm2 dist/index.js",
+    "stop": "pm2 stop dist/index.js",
+    "restart": "pm2 restart dist/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
   },
   "author": "",
