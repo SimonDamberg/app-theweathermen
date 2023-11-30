@@ -42,12 +42,9 @@ const LocationCard = (props: ILocationCardProps) => {
   const [numForecastDays, setNumForecastDays] = useState(5);
 
   const handleAdd = () => {
-    console.log("add");
     const newData = [...enabledComponents];
-    console.log(newData);
     newData.push({ component: 0, data: 0 });
     setEnabledComponents(newData);
-    console.log("added");
   };
 
   useEffect(() => {

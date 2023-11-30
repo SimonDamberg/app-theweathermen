@@ -75,8 +75,6 @@ export default function Home() {
       });
   };
 
-  console.log(trackedCards);
-
   return (
     <div className={`bg-${theme}-950 ${lexend.className} h-screen`}>
       <NavbarComponent />
