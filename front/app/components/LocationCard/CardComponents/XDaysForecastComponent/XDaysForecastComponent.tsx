@@ -96,11 +96,11 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
               />
               <span
                 className={`text-xs text-${theme}-100 absolute start-0 -bottom-6`}>
-                1
+                1 {t("day")}
               </span>
               <span
                 className={`text-xs text-${theme}-100  absolute end-0 -bottom-6`}>
-                14
+                14 {t("days")}
               </span>
             </div>
           </div>
