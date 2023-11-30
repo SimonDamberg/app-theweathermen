@@ -16,6 +16,7 @@ import {
 } from "@/utils/location";
 import { apiGET } from "@/utils/requestWrapper";
 import MoveCardComponent from "./MoveCardComponent";
+import ListBoxSelectComponent from "./EditDialog/ListBoxSelectComponent";
 
 interface ILocationCardProps {
   locationID: string;
@@ -41,9 +42,12 @@ const LocationCard = (props: ILocationCardProps) => {
   const [numForecastDays, setNumForecastDays] = useState(5);
 
   const handleAdd = () => {
+    console.log("add");
     const newData = [...enabledComponents];
+    console.log(newData);
     newData.push({ component: 0, data: 0 });
     setEnabledComponents(newData);
+    console.log("added");
   };
 
   useEffect(() => {
@@ -55,7 +59,7 @@ const LocationCard = (props: ILocationCardProps) => {
 
   return (
     <div
-      className={`w-300 h-auto my-14 p-10 rounded-xl bg-${theme}-700 shadow-sm hover:shadow-lg shadow-${theme}-600 hover:shadow-${theme}-600 transition-all ease-in-out duration-300`}>
+      className={`w-[54rem] h-auto my-14 p-10 rounded-xl bg-${theme}-700 shadow-sm hover:shadow-lg shadow-${theme}-600 hover:shadow-${theme}-600 transition-all ease-in-out duration-300`}>
       {data && (
         <>
           <div className="flex flex-row justify-between content-center">
@@ -93,40 +97,40 @@ const LocationCard = (props: ILocationCardProps) => {
               </div>
             </div>
             <div className="ml-12 w-20 flex flex-row">
+              <CircleButtonComponent
+                className={`bg-${theme}-600 p-4 rounded-xl mr-1 mt-6`}
+                iconClassName={`text-lg text-${theme}-100`}
+                icon={faPen}
+                onClick={() => setEditing(!editing)}
+              />
               {editing && (
                 <CircleButtonComponent
                   className={`bg-${theme}-600 p-4 rounded-xl mt-6`}
                   iconClassName={`text-lg text-${theme}-100`}
                   icon={faPlus}
-                  onClick={() => handleAdd}
+                  onClick={handleAdd}
                 />
               )}
-              <CircleButtonComponent
-                className={`bg-${theme}-600 p-4 rounded-xl mr-4 mt-6 ml-1`}
-                iconClassName={`text-lg text-${theme}-100`}
-                icon={faPen}
-                onClick={() => setEditing(!editing)}
-              />
             </div>
           </div>
           <div className="flex flex-col">
             {enabledComponents.map((row, index) => {
               if (row.component === 0) {
                 return (
-                  <div className="flex flex-row justify-between">
-                    <div className="w-16" />
-                    <div
+                  <div className="flex flex-row">
+                    <ForecastGraphCardComponent
                       key={row.component + String(row.data ?? "") + index}
-                      className="flex justify-center my-4">
-                      <ForecastGraphCardComponent
-                        setNumForecastDays={setNumForecastDays}
-                        data={data}
-                        numForecastDays={numForecastDays}
-                        enabledProviders={enabledProviders}
-                        dataField={dataTypes[row.data ?? 0].name}
-                        suffix={dataToSuffix[dataTypes[row.data ?? 0].name]}
-                      />
-                    </div>
+                      setNumForecastDays={setNumForecastDays}
+                      data={data}
+                      numForecastDays={numForecastDays}
+                      enabledProviders={enabledProviders}
+                      dataField={dataTypes[row.data ?? 0].name}
+                      suffix={dataToSuffix[dataTypes[row.data ?? 0].name]}
+                      editing={editing}
+                      enabledCards={enabledComponents}
+                      setEnabledCards={setEnabledComponents}
+                      index={index}
+                    />
                     <MoveCardComponent
                       editing={editing}
                       enabledCards={enabledComponents}
@@ -138,23 +142,44 @@ const LocationCard = (props: ILocationCardProps) => {
               } else if (row.component === 1) {
                 if (row.data === 0) {
                   return (
-                    <div className="flex flex-row justify-between">
-                      <div className="w-16" />
+                    <div className="flex flex-row">
                       <div
                         key={row.component + String(row.data ?? "") + index}
-                        className="flex flex-row p-4 justify-center">
-                        {enabledProviders.map((provider) => (
-                          <CurrentWeatherCardComponent
-                            key={provider}
-                            airTemperature={
-                              data[providerToTS[provider]][0].airTemperature
-                            }
-                            symbol={
-                              data[providerToTS[provider]][0].weatherSymbol
-                            }
-                            provider={provider}
-                          />
-                        ))}
+                        className="flex flex-row p-4 justify-center w-[40rem] ml-16">
+                        {editing ? (
+                          <div
+                            className={`flex p-4 rounded-xl flex-row bg-${theme}-800`}>
+                            <div className="flex flex-col mx-2 self-center">
+                              <ListBoxSelectComponent
+                                rowIdx={index}
+                                setEnabledCards={setEnabledComponents}
+                                isData={true}
+                                enabledCards={enabledComponents}
+                              />
+                            </div>
+                            <div className="flex flex-col mx-2 self-center">
+                              <ListBoxSelectComponent
+                                rowIdx={index}
+                                setEnabledCards={setEnabledComponents}
+                                isData={false}
+                                enabledCards={enabledComponents}
+                              />
+                            </div>
+                          </div>
+                        ) : (
+                          enabledProviders.map((provider) => (
+                            <CurrentWeatherCardComponent
+                              key={provider}
+                              airTemperature={
+                                data[providerToTS[provider]][0].airTemperature
+                              }
+                              symbol={
+                                data[providerToTS[provider]][0].weatherSymbol
+                              }
+                              provider={provider}
+                            />
+                          ))
+                        )}
                       </div>
                       <MoveCardComponent
                         editing={editing}
@@ -166,26 +191,47 @@ const LocationCard = (props: ILocationCardProps) => {
                   );
                 } else if (row.data === 1) {
                   return (
-                    <div className="flex flex-row justify-between">
-                      <div className="w-16" />
+                    <div className="flex flex-row">
                       <div
                         key={row.component + String(row.data ?? "") + index}
-                        className="flex flex-row p-4 justify-center">
-                        {enabledProviders.map((provider) => (
-                          <WindCardComponent
-                            key={provider}
-                            windDirection={
-                              data[providerToTS[provider]][0].windDirection
-                            }
-                            windSpeed={
-                              data[providerToTS[provider]][0].windSpeed
-                            }
-                            windGustSpeed={
-                              data[providerToTS[provider]][0].windGustSpeed
-                            }
-                            provider={provider}
-                          />
-                        ))}
+                        className="flex flex-row p-4 justify-center w-[40rem] ml-16">
+                        {editing ? (
+                          <div
+                            className={`flex p-4 rounded-xl flex-row bg-${theme}-800 transition-all duration-1000 ease-in-out`}>
+                            <div className="flex flex-col mx-2 self-center">
+                              <ListBoxSelectComponent
+                                rowIdx={index}
+                                setEnabledCards={setEnabledComponents}
+                                isData={true}
+                                enabledCards={enabledComponents}
+                              />
+                            </div>
+                            <div className="flex flex-col mx-2 self-center">
+                              <ListBoxSelectComponent
+                                rowIdx={index}
+                                setEnabledCards={setEnabledComponents}
+                                isData={false}
+                                enabledCards={enabledComponents}
+                              />
+                            </div>
+                          </div>
+                        ) : (
+                          enabledProviders.map((provider) => (
+                            <WindCardComponent
+                              key={provider}
+                              windDirection={
+                                data[providerToTS[provider]][0].windDirection
+                              }
+                              windSpeed={
+                                data[providerToTS[provider]][0].windSpeed
+                              }
+                              windGustSpeed={
+                                data[providerToTS[provider]][0].windGustSpeed
+                              }
+                              provider={provider}
+                            />
+                          ))
+                        )}
                       </div>
                       <MoveCardComponent
                         editing={editing}
@@ -198,8 +244,7 @@ const LocationCard = (props: ILocationCardProps) => {
                 }
               } else if (row.component === 2) {
                 return (
-                  <div className="flex flex-row justify-between">
-                    <div className="w-16" />
+                  <div className="flex flex-row">
                     <div
                       key={row.component + String(row.data ?? "") + index}
                       className="flex justify-center my-4">
@@ -208,6 +253,10 @@ const LocationCard = (props: ILocationCardProps) => {
                         enabledProviders={enabledProviders}
                         numForecastDays={numForecastDays}
                         setNumForecastDays={setNumForecastDays}
+                        editing={editing}
+                        enabledCards={enabledComponents}
+                        setEnabledCards={setEnabledComponents}
+                        index={index}
                       />
                     </div>
                     <MoveCardComponent

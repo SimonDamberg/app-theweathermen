@@ -53,7 +53,7 @@ export default function SelectComp(props: IListBoxSelectComponentProps) {
       onChange={(newIndex) => handleChanges(newIndex.id)}>
       <div className="relative">
         <Listbox.Button
-          className={`cursor-pointer flex items-center justify-center rounded-lg bg-${theme}-500 py-2 shadow-md sm:text-sm hover:opacity-70 transition-all ease-in-out w-60`}>
+          className={`cursor-pointer flex items-center justify-center rounded-lg bg-${theme}-500 py-2 shadow-md sm:text-sm hover:opacity-70 transition-all ease-in-out w-48`}>
           <span className={`text-${theme}-100 text-center`}>
             {selected && t(selected.name)}
           </span>

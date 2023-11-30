@@ -2,12 +2,19 @@ import React, { use, useEffect, useState } from "react";
 import ApiCellComponent, { IDailyStats } from "./ApiCellComponent";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "@/context/AuthContext";
+import ListBoxSelectComponent from "../../EditDialog/ListBoxSelectComponent";
 
 interface IXDaysForecastComponentProps {
   enabledProviders: string[];
   name: string;
   numForecastDays: number;
   setNumForecastDays: (num: number) => void;
+  editing: boolean;
+  enabledCards: { component: number; data: number | null }[];
+  setEnabledCards: (
+    cards: { component: number; data: number | null }[]
+  ) => void;
+  index: number;
 }
 
 interface IDailyLocationStats {
@@ -18,7 +25,16 @@ interface IDailyLocationStats {
 }
 
 const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
-  const { name, enabledProviders, numForecastDays, setNumForecastDays } = props;
+  const {
+    name,
+    enabledProviders,
+    numForecastDays,
+    setNumForecastDays,
+    editing,
+    enabledCards,
+    setEnabledCards,
+    index,
+  } = props;
   const { t, i18n } = useTranslation();
   const { theme } = useAuthContext();
 
@@ -45,11 +61,23 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
   } else if (enabledProviders.length > 0) {
     return (
       <div
-        className={`bg-${theme}-800 rounded-xl p-4 text-${theme}-100 max-h-[49rem] overflow-y-auto flex flex-col`}>
+        className={`bg-${theme}-800 w-[40rem] ml-16 rounded-xl p-4 text-${theme}-100 max-h-[49rem] overflow-y-auto flex flex-col`}>
         <div className="flex justify-between content-center m-4">
-          <p className={`text-${theme}-100 text-2xl self-center`}>
-            {t("xForecastDays")}
-          </p>
+          {editing ? (
+            <div className="flex flex-col mx-2 self-center">
+              <ListBoxSelectComponent
+                rowIdx={index}
+                setEnabledCards={setEnabledCards}
+                isData={false}
+                enabledCards={enabledCards}
+              />
+            </div>
+          ) : (
+            <p className={`text-${theme}-100 text-2xl self-center`}>
+              {t("xForecastDays")}
+            </p>
+          )}
+
           <div className="flex flex-col w-1/4">
             <p className={`text-center text-md mb-2 text-${theme}-100`}>
               {t("horizon")}
