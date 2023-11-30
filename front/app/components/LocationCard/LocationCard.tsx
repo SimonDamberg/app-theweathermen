@@ -129,6 +129,7 @@ const LocationCard = (props: ILocationCardProps) => {
                       index={index}
                     />
                     <MoveCardComponent
+                      key={row.component + String(row.data ?? "") + index + "M"}
                       editing={editing}
                       enabledCards={enabledComponents}
                       setEnabledCards={setEnabledComponents}
@@ -179,6 +180,9 @@ const LocationCard = (props: ILocationCardProps) => {
                         )}
                       </div>
                       <MoveCardComponent
+                        key={
+                          row.component + String(row.data ?? "") + index + "M"
+                        }
                         editing={editing}
                         enabledCards={enabledComponents}
                         setEnabledCards={setEnabledComponents}
@@ -231,6 +235,9 @@ const LocationCard = (props: ILocationCardProps) => {
                         )}
                       </div>
                       <MoveCardComponent
+                        key={
+                          row.component + String(row.data ?? "") + index + "M"
+                        }
                         editing={editing}
                         enabledCards={enabledComponents}
                         setEnabledCards={setEnabledComponents}
@@ -257,6 +264,7 @@ const LocationCard = (props: ILocationCardProps) => {
                       />
                     </div>
                     <MoveCardComponent
+                      key={row.component + String(row.data ?? "") + index + "M"}
                       editing={editing}
                       enabledCards={enabledComponents}
                       setEnabledCards={setEnabledComponents}
