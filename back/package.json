@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "npx tsc",
-    "start": "pm2 start dist/index.js",
+    "start": "node dist/index.js",
     "stop": "pm2 stop dist/index.js",
     "restart": "pm2 restart dist/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
