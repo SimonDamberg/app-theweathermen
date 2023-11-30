@@ -114,9 +114,10 @@ const LocationCard = (props: ILocationCardProps) => {
             {enabledComponents.map((row, index) => {
               if (row.component === 0) {
                 return (
-                  <div className="flex flex-row">
+                  <div
+                    key={row.component + String(row.data ?? "") + index}
+                    className="flex flex-row">
                     <ForecastGraphCardComponent
-                      key={row.component + String(row.data ?? "") + index}
                       setNumForecastDays={setNumForecastDays}
                       data={data}
                       numForecastDays={numForecastDays}
@@ -129,7 +130,6 @@ const LocationCard = (props: ILocationCardProps) => {
                       index={index}
                     />
                     <MoveCardComponent
-                      key={row.component + String(row.data ?? "") + index + "M"}
                       editing={editing}
                       enabledCards={enabledComponents}
                       setEnabledCards={setEnabledComponents}
@@ -140,10 +140,10 @@ const LocationCard = (props: ILocationCardProps) => {
               } else if (row.component === 1) {
                 if (row.data === 0) {
                   return (
-                    <div className="flex flex-row">
-                      <div
-                        key={row.component + String(row.data ?? "") + index}
-                        className="flex flex-row p-4 justify-center w-[40rem] ml-16">
+                    <div
+                      key={row.component + String(row.data ?? "") + index}
+                      className="flex flex-row">
+                      <div className="flex flex-row p-4 justify-center w-[40rem] ml-16">
                         {editing ? (
                           <div
                             className={`flex p-4 rounded-xl flex-row bg-${theme}-800`}>
@@ -180,9 +180,6 @@ const LocationCard = (props: ILocationCardProps) => {
                         )}
                       </div>
                       <MoveCardComponent
-                        key={
-                          row.component + String(row.data ?? "") + index + "M"
-                        }
                         editing={editing}
                         enabledCards={enabledComponents}
                         setEnabledCards={setEnabledComponents}
@@ -192,10 +189,10 @@ const LocationCard = (props: ILocationCardProps) => {
                   );
                 } else if (row.data === 1) {
                   return (
-                    <div className="flex flex-row">
-                      <div
-                        key={row.component + String(row.data ?? "") + index}
-                        className="flex flex-row p-4 justify-center w-[40rem] ml-16">
+                    <div
+                      key={row.component + String(row.data ?? "") + index}
+                      className="flex flex-row">
+                      <div className="flex flex-row p-4 justify-center w-[40rem] ml-16">
                         {editing ? (
                           <div
                             className={`flex p-4 rounded-xl flex-row bg-${theme}-800 transition-all duration-1000 ease-in-out`}>
@@ -235,9 +232,6 @@ const LocationCard = (props: ILocationCardProps) => {
                         )}
                       </div>
                       <MoveCardComponent
-                        key={
-                          row.component + String(row.data ?? "") + index + "M"
-                        }
                         editing={editing}
                         enabledCards={enabledComponents}
                         setEnabledCards={setEnabledComponents}
@@ -248,10 +242,10 @@ const LocationCard = (props: ILocationCardProps) => {
                 }
               } else if (row.component === 2) {
                 return (
-                  <div className="flex flex-row">
-                    <div
-                      key={row.component + String(row.data ?? "") + index}
-                      className="flex justify-center my-4">
+                  <div
+                    key={row.component + String(row.data ?? "") + index}
+                    className="flex flex-row">
+                    <div className="flex justify-center my-4">
                       <XDaysForecastComponent
                         name={data.name}
                         enabledProviders={enabledProviders}
@@ -264,7 +258,6 @@ const LocationCard = (props: ILocationCardProps) => {
                       />
                     </div>
                     <MoveCardComponent
-                      key={row.component + String(row.data ?? "") + index + "M"}
                       editing={editing}
                       enabledCards={enabledComponents}
                       setEnabledCards={setEnabledComponents}
