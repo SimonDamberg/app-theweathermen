@@ -88,7 +88,7 @@ export default function SelectComp(props: IListBoxSelectComponentProps) {
                 {({ selected }) => (
                   <>
                     <span
-                      className={`block truncate ${
+                      className={`block truncate ml-10 ${
                         selected ? "font-medium" : "font-normal"
                       }`}>
                       {t(singleData.name)}
