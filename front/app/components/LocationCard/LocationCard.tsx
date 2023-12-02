@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CurrentWeatherCardComponent from "./CardComponents/CurrentWeatherCardComponent";
 import ForecastGraphCardComponent from "./CardComponents/ForecastGraphCardComponent";
+import CurrentPrecipitationCardComponent from "./CardComponents/CurrentPrecipitationCardComponent";
 import WindCardComponent from "./CardComponents/WindCardComponent";
 import XDaysForecastComponent from "./CardComponents/XDaysForecastComponent/XDaysForecastComponent";
 import { useTranslation } from "react-i18next";
@@ -62,15 +63,12 @@ const LocationCard = (props: ILocationCardProps) => {
                 {Object.keys(providerToTS).map((provider) => (
                   <div
                     key={provider}
-                    className={`rounded-xl ${
-                      enabledProviders.includes(provider)
-                        ? "opacity-100"
-                        : "opacity-40"
-                    } p-4 m-2 cursor-pointer justify-center text-center text-${theme}-100 border-2 ${
-                      providerToBorderColor[provider.toLowerCase()]
-                    } ${
-                      providerToBgColor[provider.toLowerCase()]
-                    } hover:opacity-70 transition-all ease-in-out duration-200`}
+                    className={`rounded-xl ${enabledProviders.includes(provider)
+                      ? "opacity-100"
+                      : "opacity-40"
+                      } p-4 m-2 cursor-pointer justify-center text-center text-${theme}-100 border-2 ${providerToBorderColor[provider.toLowerCase()]
+                      } ${providerToBgColor[provider.toLowerCase()]
+                      } hover:opacity-70 transition-all ease-in-out duration-200`}
                     onClick={() => {
                       if (enabledProviders.includes(provider)) {
                         setEnabledProviders(
@@ -148,6 +146,24 @@ const LocationCard = (props: ILocationCardProps) => {
                           windSpeed={data[providerToTS[provider]][0].windSpeed}
                           windGustSpeed={
                             data[providerToTS[provider]][0].windGustSpeed
+                          }
+                          provider={provider}
+                        />
+                      ))}
+                    </div>
+                  );
+                } else if (row.data === 2) {
+
+                  return (
+                    <div
+                      key={row.component + String(row.data ?? "") + index}
+                      className="flex flex-row p-4 justify-center">
+                      {enabledProviders.map((provider) => (
+
+                        <CurrentPrecipitationCardComponent
+                          key={provider}
+                          precipitation={
+                            data[providerToTS[provider]][0].meanPrecipitationIntensity
                           }
                           provider={provider}
                         />
