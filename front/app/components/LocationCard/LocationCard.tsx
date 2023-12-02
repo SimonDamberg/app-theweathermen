@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import CurrentWeatherCardComponent from "./CardComponents/CurrentWeatherCardComponent";
 import ForecastGraphCardComponent from "./CardComponents/ForecastGraphCardComponent";
 import CurrentPrecipitationCardComponent from "./CardComponents/CurrentPrecipitationCardComponent";
+import CurrentAirPressureCardComponent from "./CardComponents/CurrentAirPressureCardComponent"
 import WindCardComponent from "./CardComponents/WindCardComponent";
 import XDaysForecastComponent from "./CardComponents/XDaysForecastComponent/XDaysForecastComponent";
 import { useTranslation } from "react-i18next";
@@ -164,6 +165,24 @@ const LocationCard = (props: ILocationCardProps) => {
                           key={provider}
                           precipitation={
                             data[providerToTS[provider]][0].meanPrecipitationIntensity
+                          }
+                          provider={provider}
+                        />
+                      ))}
+                    </div>
+                  );
+                } else if (row.data === 3) {
+
+                  return (
+                    <div
+                      key={row.component + String(row.data ?? "") + index}
+                      className="flex flex-row p-4 justify-center">
+                      {enabledProviders.map((provider) => (
+
+                        <CurrentAirPressureCardComponent
+                          key={provider}
+                          airPressure={
+                            data[providerToTS[provider]][0].airPressure
                           }
                           provider={provider}
                         />

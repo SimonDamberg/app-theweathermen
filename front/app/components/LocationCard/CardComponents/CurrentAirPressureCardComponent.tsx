@@ -1,16 +1,15 @@
 import React from "react";
-import Image from "next/image";
 import { providerToBorderColor } from "@/utils/colors";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "@/context/AuthContext";
 
-interface ICurrentPrecipitationCardProps {
-    precipitation: number;
+interface ICurrentAirPressureCardProps {
+    airPressure: number;
     provider: string;
 }
 
-const CurrentPrecipitationCard = (props: ICurrentPrecipitationCardProps) => {
-    const { precipitation, provider } = props;
+const CurrentPrecipitationCard = (props: ICurrentAirPressureCardProps) => {
+    const { airPressure, provider } = props;
     const { theme } = useAuthContext();
 
     return (
@@ -19,7 +18,7 @@ const CurrentPrecipitationCard = (props: ICurrentPrecipitationCardProps) => {
                 }`}>
             <div className="flex flex-row justify-center">
                 <p className={`text-${theme}-100 text-2xl mx-2`}>
-                    {precipitation.toString() + " mm"}
+                    {airPressure.toString() + " hPa"}
                 </p>
                 <div className="flex flex-col justify-center">
                 </div>
