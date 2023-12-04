@@ -1,31 +1,13 @@
 import React from "react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  LineController,
-} from "chart.js";
+import { Chart as ChartJS, registerables } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { apiToColor } from "@/utils/colors";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "@/context/AuthContext";
 import ListBoxSelectComponent from "../EditDialog/ListBoxSelectComponent";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  LineController
-);
+ChartJS.register(...registerables);
+
 interface IForecastGraphCardComponentProps {
   data: any;
   numForecastDays: number;
