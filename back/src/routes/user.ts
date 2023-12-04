@@ -1,5 +1,5 @@
 import express, { Router, Request, Response, NextFunction } from "express";
-import { User, UserType } from "../schemas/user";
+import { User } from "../schemas/user";
 
 const userRouter: Router = express.Router();
 

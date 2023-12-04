@@ -1,4 +1,4 @@
-import { tsType } from "../schemas/timeSeries";
+import { ITimeSeries } from "../schemas/timeSeries";
 
 export interface IDailyStats {
   minTemp: number;
@@ -7,7 +7,7 @@ export interface IDailyStats {
   totPrecip: number;
 }
 
-export const getDailyStats = (ts: tsType[]): IDailyStats => {
+export const getDailyStats = (ts: ITimeSeries[]): IDailyStats => {
   let minTemp = Number.MAX_SAFE_INTEGER;
   let maxTemp = Number.MIN_SAFE_INTEGER;
   let totPrecip = 0;
