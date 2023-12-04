@@ -1,9 +1,37 @@
-import { Schema, model, InferSchemaType } from "mongoose";
+import { Schema, model, Types } from "mongoose";
+
+export interface ITimeSeries {
+  locationId: Types.ObjectId;
+  timeStamp: Date;
+  lastUpdated: Date;
+  airPressure: number;
+  airTemperature: number;
+  horizontalVisibility: number;
+  windDirection: number;
+  windSpeed: number;
+  windGustSpeed: number;
+  relativeHumidity: number;
+  thunderProbability?: number; // Only SMHI
+  totalCloudCover: number;
+  minPrecipitationIntensity?: number; // Only SMHI
+  meanPrecipitationIntensity: number;
+  maxPrecipitationIntensity?: number; // Only SMHI
+  precipitationCategory: number;
+  frozenPrecipitationFraction?: number; // Only SMHI
+  weatherSymbol: number;
+  sunrise?: Date; // Only WA and OWM
+  sunset?: Date; // Only WA and OWM
+  source: string;
+}
 
 // Create a Schema corresponding to the document interface.
-export const tsSchema = new Schema(
+export const tsSchema = new Schema<ITimeSeries>(
   {
-    locationId: { type: String, required: true },
+    locationId: {
+      type: Schema.Types.ObjectId,
+      ref: "Location",
+      required: true,
+    },
     timeStamp: { type: Date, required: true },
     lastUpdated: { type: Date, required: true },
     airPressure: { type: Number, required: true },
@@ -38,7 +66,5 @@ export const tsSchema = new Schema(
   }
 );
 
-export type tsType = InferSchemaType<typeof tsSchema>;
-
 // Create a Model.
-export const tsModel = model<tsType>("timeSeries", tsSchema);
+export const tsModel = model<ITimeSeries>("timeSeries", tsSchema);

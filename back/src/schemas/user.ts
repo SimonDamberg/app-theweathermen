@@ -10,6 +10,12 @@ export interface ICardComponent {
   data: number | null;
 }
 
+export interface IUser {
+  fb_id: string;
+  theme: string;
+  tracked_cards: Array<ITrackedCard>;
+}
+
 // Create a Schema corresponding to the document interface.
 export const UserSchema = new Schema({
   fb_id: { type: String, required: true },
@@ -17,7 +23,5 @@ export const UserSchema = new Schema({
   tracked_cards: { type: Array<ITrackedCard>, required: false },
 });
 
-export type UserType = InferSchemaType<typeof UserSchema>;
-
 // Create a Model.
-export const User = model<UserType>("User", UserSchema);
+export const User = model<IUser>("User", UserSchema);
