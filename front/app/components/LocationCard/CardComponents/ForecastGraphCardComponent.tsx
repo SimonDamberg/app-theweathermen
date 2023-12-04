@@ -8,6 +8,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  LineController,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { apiToColor } from "@/utils/colors";
@@ -22,7 +23,8 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  LineController
 );
 interface IForecastGraphCardComponentProps {
   data: any;
