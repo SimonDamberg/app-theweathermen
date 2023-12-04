@@ -40,7 +40,7 @@ const MoveCardComponent = (props: IMoveCardComponentProps) => {
 
   if (editing)
     return (
-      <div className="ml-4 flex flex-row items-center">
+      <div className="ml-4 flex flex-row items-center transition-all duration-500 ease-in-out">
         <div>
           <CircleButtonComponent
             className={`bg-${theme}-500 m-1 p-2 rounded-xl ${
