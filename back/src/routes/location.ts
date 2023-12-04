@@ -1,15 +1,15 @@
 import express, { Router, Request, Response, NextFunction } from "express";
-import { Location, LocationType } from "../schemas/location";
+import { ILocation, Location } from "../schemas/location";
 import { parseSMHIToTS, parseOWMToTS, parseWAToTS } from "../utils/parsing";
-import { tsModel, tsType } from "../schemas/timeSeries";
+import { ITimeSeries, tsModel } from "../schemas/timeSeries";
 import { getDailyStats, IDailyStats } from "../utils/stats";
 
 const locRouter: Router = express.Router();
 
-interface ILocationWeather extends LocationType {
-  smhiTS: tsType[];
-  owmTS: tsType[];
-  waTS: tsType[];
+interface ILocationWeather extends ILocation {
+  smhiTS: ITimeSeries[];
+  owmTS: ITimeSeries[];
+  waTS: ITimeSeries[];
 }
 
 interface IDailyLocationStats {
@@ -196,7 +196,7 @@ locRouter.get(
   "/update/:name",
   async (req: Request, res: Response, next: NextFunction) => {
     // Get relevant Location object from DB
-    const loc: LocationType | null = await Location.findOne({
+    const loc = await Location.findOne({
       name: req.params.name.toLowerCase(),
     });
 
@@ -212,7 +212,7 @@ locRouter.get(
     const smhiResp = await fetch(smhiURL);
     const smhiData = await smhiResp.json();
     // Parse data from SMHI API
-    const parsedSMHI: tsType[] = parseSMHIToTS(smhiData, loc._id);
+    const parsedSMHI: ITimeSeries[] = parseSMHIToTS(smhiData, loc._id);
     parsedSMHI.forEach(async (data) => {
       const ts = new tsModel(data);
       await ts.save();
@@ -224,7 +224,7 @@ locRouter.get(
     const owmResp = await fetch(owmURL);
     const owmData = await owmResp.json();
     // Parse data from OpenWeatherMap API
-    const parsedOWM: tsType[] = parseOWMToTS(owmData, loc._id);
+    const parsedOWM: ITimeSeries[] = parseOWMToTS(owmData, loc._id);
     parsedOWM.forEach(async (data) => {
       const ts = new tsModel(data);
       await ts.save();
@@ -236,7 +236,7 @@ locRouter.get(
     const waResp = await fetch(waURL);
     const waData = await waResp.json();
     // Parse data from WeatherAPI
-    const parsedWA: tsType[] = parseWAToTS(waData, loc._id);
+    const parsedWA: ITimeSeries[] = parseWAToTS(waData, loc._id);
     parsedWA.forEach(async (data) => {
       const ts = new tsModel(data);
       await ts.save();

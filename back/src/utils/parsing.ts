@@ -1,4 +1,5 @@
-import { tsType } from "../schemas/timeSeries";
+import { Schema, Types } from "mongoose";
+import { ITimeSeries } from "../schemas/timeSeries";
 
 export interface ISMHIResponse {
   approvedTime: string;
@@ -210,12 +211,15 @@ const parseWaSunriseSunset = (time: string): Date => {
   return date;
 };
 
-const parseWAToTS = (data: IWAResponse, locID: string): tsType[] => {
+const parseWAToTS = (
+  data: IWAResponse,
+  locID: Types.ObjectId
+): ITimeSeries[] => {
   // For each forecastday, loop through each hour
-  const parsed: tsType[] = data.forecast.forecastday
+  const parsed: ITimeSeries[] = data.forecast.forecastday
     .map((day) => {
-      const parsedDay: tsType[] = day.hour.map((hour) => {
-        const parsedHour: tsType = {
+      const parsedDay: ITimeSeries[] = day.hour.map((hour) => {
+        const parsedHour: ITimeSeries = {
           locationId: locID,
           timeStamp: new Date(hour.time_epoch * 1000),
           lastUpdated: new Date(),
@@ -382,9 +386,12 @@ const parseWAPrecipitationCategory = (code: number): number => {
 };
 
 // Parse OWM request to OWMTimeSeries object
-const parseOWMToTS = (data: IOWMResponse, locID: string): tsType[] => {
-  const parsed: tsType[] = data.list.map((ts) => {
-    const parsedTS: tsType = {
+const parseOWMToTS = (
+  data: IOWMResponse,
+  locID: Types.ObjectId
+): ITimeSeries[] => {
+  const parsed: ITimeSeries[] = data.list.map((ts) => {
+    const parsedTS: ITimeSeries = {
       locationId: locID,
       timeStamp: new Date(ts.dt_txt),
       lastUpdated: new Date(),
@@ -436,11 +443,14 @@ const parseSmhiWeatherSymbol = (code: number): number => {
 };
 
 // Parse SMHI request to SMHITimeSeries object
-const parseSMHIToTS = (data: ISMHIResponse, locID: string): tsType[] => {
+const parseSMHIToTS = (
+  data: ISMHIResponse,
+  locID: Types.ObjectId
+): ITimeSeries[] => {
   // For each timeSeries in data.timeSeries, create a new smhiType object
-  const parsed: tsType[] = data.timeSeries.map((ts) => {
+  const parsed: ITimeSeries[] = data.timeSeries.map((ts) => {
     // Create a new smhiType object
-    const parsedTS: tsType = {
+    const parsedTS: ITimeSeries = {
       locationId: locID,
       timeStamp: new Date(ts.validTime),
       lastUpdated: new Date(data.referenceTime),
