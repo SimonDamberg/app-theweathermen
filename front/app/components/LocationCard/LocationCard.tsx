@@ -5,6 +5,7 @@ import AirHumidityComponent from "./CardComponents/AirHumidityComponent";
 import CurrentPrecipitationCardComponent from "./CardComponents/CurrentPrecipitationCardComponent";
 import CurrentVisibilityCardComponent from "./CardComponents/CurrentVisibilityCardComponent";
 import CurrentAirPressureCardComponent from "./CardComponents/CurrentAirPressureCardComponent"
+import CurrentCloudCoverageCardComponent from "./CardComponents/CurrentCloudCoverageCardComponent";
 import WindCardComponent from "./CardComponents/WindCardComponent";
 import XDaysForecastComponent from "./CardComponents/XDaysForecastComponent/XDaysForecastComponent";
 import { useTranslation } from "react-i18next";
@@ -222,6 +223,25 @@ const LocationCard = (props: ILocationCardProps) => {
                             data[providerToTS[provider]][0].relativeHumidity
                           }
                           provider={provider}
+                        />
+                      ))}
+                    </div>
+                  );
+                } else if (row.data === 6) {
+
+                  return (
+                    <div
+                      key={row.component + String(row.data ?? "") + index}
+                      className="flex flex-row p-4 justify-center">
+                      {enabledProviders.map((provider) => (
+
+                        <CurrentCloudCoverageCardComponent
+                          key={provider}
+                          coverage={
+                            data[providerToTS[provider]][0]?.totalCloudCover
+                          }
+                          provider={provider}
+                          symbol={3}
                         />
                       ))}
                     </div>
