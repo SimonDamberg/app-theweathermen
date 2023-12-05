@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { onAuthStateChanged, getAuth, User } from "firebase/auth";
 import firebase_app from "@/firebase/config";
 import { useTranslation } from "react-i18next";
@@ -27,6 +27,31 @@ export const AuthContext = React.createContext<AuthContextType>({
   setTrackedCards: () => {},
 });
 
+export const possibleThemes = [
+  "slate",
+  "gray",
+  "zinc",
+  "neutral",
+  "stone",
+  //"red",
+  "orange",
+  "amber",
+  //"yellow",
+  "lime",
+  "green",
+  "emerald",
+  "teal",
+  "cyan",
+  "sky",
+  //"blue",
+  "indigo",
+  "violet",
+  "purple",
+  "fuchsia",
+  "pink",
+  "rose",
+];
+
 export const useAuthContext = () => React.useContext(AuthContext);
 
 export const AuthContextProvider = ({
@@ -38,6 +63,16 @@ export const AuthContextProvider = ({
   const [theme, setTheme] = React.useState<string>("slate");
   const [trackedCards, setTrackedCards] = React.useState<ITrackedCard[]>([]);
   const [loading, setLoading] = React.useState(true);
+
+  useEffect(() => {
+    console.log("Theme changed to", theme);
+    // Remove all bg classes
+    document
+      .querySelector("body")
+      ?.classList.remove(...possibleThemes.map((theme) => `bg-${theme}-950`));
+    // Add new bg class
+    document.querySelector("body")?.classList.add(`bg-${theme}-950`);
+  }, [theme]);
 
   const getBackendUser = async (user: User) => {
     apiGET(`/user/${user.uid}`)
