@@ -48,5 +48,7 @@
   "day": "dag",
   "days": "dagar",
   "googleLogin": "Logga in med Google",
-  "or": "eller"
+  "or": "eller",
+  "invalidCredentials": "Ogiltiga inloggningsuppgifter",
+  "loginSuccess": "Inloggning lyckades"
 }

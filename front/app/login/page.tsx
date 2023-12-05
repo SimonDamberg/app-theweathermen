@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import { renderRain } from "../../utils/rain";
 import { anonymousLogin, googleLogin, logIn } from "@/firebase/auth/login";
+import { alertFailure, alertInfo, alertSuccess } from "@/utils/notify";
 
 function Page() {
   const [email, setEmail] = React.useState("");
@@ -25,9 +26,36 @@ function Page() {
   const handleForm = async (event: any) => {
     event.preventDefault();
 
-    logIn(email, password).then((res) => {
-      router.push("/");
-    });
+    logIn(email, password)
+      .then((res) => {
+        alertSuccess(t("loginSuccess"));
+        router.push("/");
+      })
+      .catch((err) => {
+        alertFailure(t("invalidCredentials"));
+      });
+  };
+
+  const handleAnonymousLogin = async () => {
+    anonymousLogin()
+      .then((res) => {
+        alertSuccess(t("loginSuccess"));
+        router.push("/");
+      })
+      .catch((err) => {
+        alertFailure(t("somethingWentWrong"));
+      });
+  };
+
+  const handleGoogleLogin = async () => {
+    googleLogin()
+      .then((res) => {
+        alertSuccess(t("loginSuccess"));
+        router.push("/");
+      })
+      .catch((err) => {
+        alertFailure(t("somethingWentWrong"));
+      });
   };
 
   useEffect(() => {
@@ -93,7 +121,7 @@ function Page() {
             <button
               type="button"
               onClick={() => {
-                anonymousLogin();
+                handleAnonymousLogin();
               }}
               className="ml-2 rounded-lg p-2 text-slate-100 bg-slate-500 hover:bg-slate-700 transition-all ease-in-out duration-200">
               {t("continueWithoutAccount")}
@@ -110,7 +138,7 @@ function Page() {
         <div className="flex justify-center gap-4">
           <button
             className="w-full select-none flex rounded-lg bg-slate-300 hover:bg-slate-500 transition-all ease-in-out duration-200"
-            onClick={() => googleLogin()}>
+            onClick={() => handleGoogleLogin()}>
             <Image
               height={36}
               width={36}

@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { renderRain } from "../../utils/rain";
 import { useAuthContext } from "@/context/AuthContext";
 import { googleLogin } from "@/firebase/auth/login";
+import { alertFailure } from "@/utils/notify";
 
 const Register = () => {
   const [name, setName] = React.useState("");
@@ -26,9 +27,13 @@ const Register = () => {
 
   const handleForm = async (event: any) => {
     event.preventDefault();
-    registerPasswordEmail(name, email, password).then((res) => {
-      router.push("/");
-    });
+    registerPasswordEmail(name, email, password)
+      .then((res) => {
+        router.push("/");
+      })
+      .catch((err) => {
+        alertFailure(t("somethingWentWrong"));
+      });
   };
 
   useEffect(() => {

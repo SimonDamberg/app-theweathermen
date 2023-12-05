@@ -48,5 +48,7 @@
   "day": "day",
   "days": "days",
   "googleLogin": "Log in with Google",
-  "or": "or"
+  "or": "or",
+  "loginSuccess": "Login successful",
+  "invalidCredentials": "Invalid credentials"
 }
