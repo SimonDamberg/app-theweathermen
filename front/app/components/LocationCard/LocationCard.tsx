@@ -3,6 +3,7 @@ import CurrentWeatherCardComponent from "./CardComponents/CurrentWeatherCardComp
 import ForecastGraphCardComponent from "./CardComponents/ForecastGraphCardComponent";
 import AirHumidityComponent from "./CardComponents/AirHumidityComponent";
 import CurrentPrecipitationCardComponent from "./CardComponents/CurrentPrecipitationCardComponent";
+import CurrentVisibilityCardComponent from "./CardComponents/CurrentVisibilityCardComponent";
 import CurrentAirPressureCardComponent from "./CardComponents/CurrentAirPressureCardComponent"
 import WindCardComponent from "./CardComponents/WindCardComponent";
 import XDaysForecastComponent from "./CardComponents/XDaysForecastComponent/XDaysForecastComponent";
@@ -190,8 +191,26 @@ const LocationCard = (props: ILocationCardProps) => {
                       ))}
                     </div>
                   );
-                }
-                else if (row.data === 5) {
+                } else if (row.data === 4) {
+
+                  return (
+                    <div
+                      key={row.component + String(row.data ?? "") + index}
+                      className="flex flex-row p-4 justify-center">
+                      {enabledProviders.map((provider) => (
+
+                        <CurrentVisibilityCardComponent
+                          key={provider}
+                          visibility={
+                            data[providerToTS[provider]][0]?.horizontalVisibility
+                          }
+                          provider={provider}
+                          symbol={99}
+                        />
+                      ))}
+                    </div>
+                  );
+                } else if (row.data === 5) {
                   return (
                     <div
                       key={row.component + String(row.data ?? "") + index}
