@@ -1,7 +1,7 @@
-import { Schema, model, InferSchemaType } from "mongoose";
+import { Schema, model, InferSchemaType, Types } from "mongoose";
 
 export interface ITrackedCard {
-  location_id: string;
+  location_id: Types.ObjectId;
   card_components: Array<ICardComponent>;
 }
 
