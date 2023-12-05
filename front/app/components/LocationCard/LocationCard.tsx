@@ -152,34 +152,44 @@ const LocationCard = (props: ILocationCardProps) => {
                       }`}>
                       <div className="flex flex-row justify-center p-4">
                         {row.data === 0 &&
-                          enabledProviders.map((provider) => (
-                            <CurrentWeatherCardComponent
-                              key={provider}
-                              airTemperature={
-                                data[providerToTS[provider]][0].airTemperature
-                              }
-                              symbol={
-                                data[providerToTS[provider]][0].weatherSymbol
-                              }
-                              provider={provider}
-                            />
-                          ))}
+                          enabledProviders.map(
+                            (provider) =>
+                              data[providerToTS[provider]].length > 0 && (
+                                <CurrentWeatherCardComponent
+                                  key={provider}
+                                  airTemperature={
+                                    data[providerToTS[provider]][0]
+                                      .airTemperature
+                                  }
+                                  symbol={
+                                    data[providerToTS[provider]][0]
+                                      .weatherSymbol
+                                  }
+                                  provider={provider}
+                                />
+                              )
+                          )}
                         {row.data === 1 &&
-                          enabledProviders.map((provider) => (
-                            <WindCardComponent
-                              key={provider}
-                              windDirection={
-                                data[providerToTS[provider]][0].windDirection
-                              }
-                              windSpeed={
-                                data[providerToTS[provider]][0].windSpeed
-                              }
-                              windGustSpeed={
-                                data[providerToTS[provider]][0].windGustSpeed
-                              }
-                              provider={provider}
-                            />
-                          ))}
+                          enabledProviders.map(
+                            (provider) =>
+                              data[providerToTS[provider]].length > 0 && (
+                                <WindCardComponent
+                                  key={provider}
+                                  windDirection={
+                                    data[providerToTS[provider]][0]
+                                      .windDirection
+                                  }
+                                  windSpeed={
+                                    data[providerToTS[provider]][0].windSpeed
+                                  }
+                                  windGustSpeed={
+                                    data[providerToTS[provider]][0]
+                                      .windGustSpeed
+                                  }
+                                  provider={provider}
+                                />
+                              )
+                          )}
                         {row.data! >= 2 && (
                           <p className={`text-${theme}-100`}>
                             Not implemented yet
