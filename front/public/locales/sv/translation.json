@@ -46,5 +46,7 @@
   "name": "Namn",
   "continueWithoutAccount": "Fortsätt utan konto",
   "day": "dag",
-  "days": "dagar"
+  "days": "dagar",
+  "googleLogin": "Logga in med Google",
+  "or": "eller"
 }

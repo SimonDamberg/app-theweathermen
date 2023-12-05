@@ -46,5 +46,7 @@
   "name": "Name",
   "continueWithoutAccount": "Continue without an account",
   "day": "day",
-  "days": "days"
+  "days": "days",
+  "googleLogin": "Log in with Google",
+  "or": "or"
 }

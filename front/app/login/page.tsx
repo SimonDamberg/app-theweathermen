@@ -6,7 +6,7 @@ import "../i18n";
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import { renderRain } from "../../utils/rain";
-import { anonymousLogin, logIn } from "@/firebase/auth/login";
+import { anonymousLogin, googleLogin, logIn } from "@/firebase/auth/login";
 
 function Page() {
   const [email, setEmail] = React.useState("");
@@ -100,6 +100,27 @@ function Page() {
             </button>
           </div>
         </form>
+        <div className=" select-none flex my-4">
+          <div className=" select-none h-0.5 flex-1 bg-gray-200 self-center rounded-full"></div>
+          <div className=" select-none flex-1 text-center text-gray-300">
+            {t("or")}
+          </div>
+          <div className=" select-none h-0.5 flex-1 bg-slate-200 self-center rounded-full"></div>
+        </div>
+        <div className="flex justify-center gap-4">
+          <button
+            className="w-full select-none flex rounded-lg bg-slate-300 hover:bg-slate-500 transition-all ease-in-out duration-200"
+            onClick={() => googleLogin()}>
+            <img
+              alt="google logo"
+              className=" select-none h-12 ml-3"
+              src="/images/providers/google.png"></img>
+
+            <span className="select-none self-center text-sm flex-1 text-left text-slate-700">
+              {t("googleLogin")}
+            </span>
+          </button>
+        </div>
       </div>
       <div className="h-64"></div>
     </div>
