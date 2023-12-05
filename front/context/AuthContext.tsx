@@ -78,6 +78,7 @@ export const AuthContextProvider = ({
     apiGET(`/user/${user.uid}`)
       .then((res) => {
         console.log("User found in db");
+        console.log(user);
         setTheme(res.theme);
         setTrackedCards(res.tracked_cards);
       })
