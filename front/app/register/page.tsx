@@ -117,10 +117,12 @@ const Register = () => {
           <button
             className="w-full select-none flex rounded-lg bg-slate-300 hover:bg-slate-500 transition-all ease-in-out duration-200"
             onClick={() => googleLogin()}>
-            <img
+            <Image
+              height={36}
+              width={36}
               alt="google logo"
-              className=" select-none h-12 ml-3"
-              src="/images/providers/google.png"></img>
+              className=" select-none ml-3"
+              src="/images/providers/google.png"></Image>
 
             <span className="select-none self-center text-sm flex-1 text-left text-slate-700">
               {t("googleLogin")}
