@@ -9,43 +9,21 @@ import {
 const auth = getAuth(firebase_app);
 
 export const logIn = async (email: string, password: string) => {
-  let result = null,
-    error = null;
-  try {
-    result = await signInWithEmailAndPassword(auth, email, password);
-  } catch (e) {
-    error = e;
-  }
-
-  return { result, error };
+  return signInWithEmailAndPassword(auth, email, password)
+    .then((res) => {
+      return Promise.resolve(res.user);
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
 };
 
 export const anonymousLogin = async () => {
-  let result = null,
-    error = null;
-  try {
-    result = await signInAnonymously(auth);
-    if (result.user) {
-      apiPOST("/user", {
-        fb_id: result.user.uid,
-        theme: "slate",
-      })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-
-          // delete user in firebase
-          result!.user?.delete();
-
-          // log out user
-          auth.signOut();
-        });
-    }
-  } catch (e) {
-    error = e;
-  }
-
-  return { result, error };
+  return signInAnonymously(auth)
+    .then((res) => {
+      return Promise.resolve(res.user);
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
 };

@@ -5,7 +5,7 @@ import firebase_app from "@/firebase/config";
 import { useTranslation } from "react-i18next";
 import { Lexend } from "next/font/google";
 import SpinnerComponent from "@/app/components/SpinnerComponent";
-import { apiGET } from "@/utils/requestWrapper";
+import { apiGET, apiPOST } from "@/utils/requestWrapper";
 import { ITrackedCard } from "@/utils/location";
 
 const auth = getAuth(firebase_app);
@@ -39,18 +39,39 @@ export const AuthContextProvider = ({
   const [trackedCards, setTrackedCards] = React.useState<ITrackedCard[]>([]);
   const [loading, setLoading] = React.useState(true);
 
+  const getBackendUser = async (user: User) => {
+    apiGET(`/user/${user.uid}`)
+      .then((res) => {
+        console.log("User found in db");
+        setTheme(res.theme);
+        setTrackedCards(res.tracked_cards);
+      })
+      .catch((err) => {
+        // User missing, create new user in db
+        console.log("User missing, creating new user in db");
+        apiPOST("/user", {
+          fb_id: user.uid,
+          theme: "slate",
+        })
+          .then((res) => {
+            console.log(res);
+            getBackendUser(user);
+          })
+          .catch((err) => {
+            console.log(
+              "Error creating user in db, deleting user in firebase and logging out"
+            );
+            user.delete();
+            auth.signOut();
+          });
+      });
+  };
+
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
-        console.log(user);
-        apiGET(`/user/${user.uid}`).then((res) => {
-          console.log(res.tracked_cards);
-          if (res) {
-            setTheme(res.theme);
-            setTrackedCards(res.tracked_cards);
-          }
-        });
+        getBackendUser(user);
       } else {
         setUser(null);
       }

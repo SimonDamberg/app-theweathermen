@@ -25,15 +25,9 @@ function Page() {
   const handleForm = async (event: any) => {
     event.preventDefault();
 
-    const { result, error } = await logIn(email, password);
-
-    if (error) {
-      return console.log(error);
-    }
-
-    // else successful
-    console.log(result);
-    return router.push("/");
+    logIn(email, password).then((res) => {
+      router.push("/");
+    });
   };
 
   useEffect(() => {
@@ -98,7 +92,9 @@ function Page() {
             </button>
             <button
               type="button"
-              onClick={() => anonymousLogin()}
+              onClick={() => {
+                anonymousLogin();
+              }}
               className="ml-2 rounded-lg p-2 text-slate-100 bg-slate-500 hover:bg-slate-700 transition-all ease-in-out duration-200">
               {t("continueWithoutAccount")}
             </button>

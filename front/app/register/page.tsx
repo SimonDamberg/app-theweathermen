@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { renderRain } from "../../utils/rain";
+import { useAuthContext } from "@/context/AuthContext";
 
 const Register = () => {
   const [name, setName] = React.useState("");
@@ -13,22 +14,20 @@ const Register = () => {
   const [password, setPassword] = React.useState("");
   const router = useRouter();
 
+  const { user } = useAuthContext();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user, router]);
+
   const handleForm = async (event: any) => {
     event.preventDefault();
-
-    const { result, error } = await registerPasswordEmail(
-      name,
-      email,
-      password
-    );
-
-    if (error) {
-      return console.log(error);
-    }
-
-    // else successful
-    return router.push("/");
+    registerPasswordEmail(name, email, password).then((res) => {
+      router.push("/");
+    });
   };
 
   useEffect(() => {
