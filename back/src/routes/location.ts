@@ -212,12 +212,12 @@ locRouter.post(
       );
       if (userHasLoc) {
         return res.status(409).send("Location already exists");
-      }
-      else (!userHasLoc) {
+      } else {
         user.tracked_cards.push({
           location_id: loc._id,
           card_components: [],
         });
+        user.save();
         return res.send({ status: "OK" });
       }
     }
