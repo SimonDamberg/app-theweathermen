@@ -17,7 +17,7 @@ const CurrentWeatherCard = (props: ICurrentWeatherCardProps) => {
 
   return (
     <div
-      className={`flex flex-col bg-${theme}-800 rounded-xl p-4 mx-2 border-2 ${
+      className={`flex bg-${theme}-800 rounded-xl p-4 mx-2 border-2 ${
         providerToBorderColor[provider.toLowerCase()]
       }`}>
       <div className="flex flex-row justify-center">
@@ -28,7 +28,7 @@ const CurrentWeatherCard = (props: ICurrentWeatherCardProps) => {
           })}
           °C
         </p>
-        <div className="flex flex-col justify-center">
+        <div className="flex justify-center">
           <Image
             src={`/images/weatherSymbols/${symbol}.png`}
             width={32}

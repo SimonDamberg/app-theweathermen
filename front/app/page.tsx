@@ -76,7 +76,7 @@ export default function Home() {
   return (
     <div className={`bg-${theme}-950 ${lexend.className} h-full`}>
       <NavbarComponent />
-      <div className="grid grid-rows-1 grid-flow-col gap-16 mx-16">
+      <div className="grid grid-cols-2 grid-flow-cols gap-16 mx-16 my-16">
         {trackedCards.map((card) => (
           <div key={card.location_id}>
             <LocationCard
