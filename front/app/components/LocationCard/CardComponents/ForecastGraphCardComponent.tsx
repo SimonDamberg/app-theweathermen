@@ -1,28 +1,13 @@
 import React from "react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { Chart as ChartJS, registerables } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { apiToColor } from "@/utils/colors";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "@/context/AuthContext";
+import ListBoxSelectComponent from "../EditDialog/ListBoxSelectComponent";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(...registerables);
+
 interface IForecastGraphCardComponentProps {
   data: any;
   numForecastDays: number;
@@ -31,6 +16,12 @@ interface IForecastGraphCardComponentProps {
   suffix?: string;
   prefix?: string;
   enabledProviders: string[];
+  editing: boolean;
+  enabledCards: { component: number; data: number | null }[];
+  setEnabledCards: (
+    cards: { component: number; data: number | null }[]
+  ) => void;
+  index: number;
 }
 
 const ForecastGraphCardComponent = (
@@ -44,6 +35,10 @@ const ForecastGraphCardComponent = (
     suffix,
     prefix,
     enabledProviders,
+    editing,
+    enabledCards,
+    setEnabledCards,
+    index,
   } = props;
   const { theme } = useAuthContext();
 
@@ -197,11 +192,32 @@ const ForecastGraphCardComponent = (
 
   return (
     <div
-      className={`bg-${theme}-800 w-10/12 h-full rounded-xl p-4 content-center`}>
+      className={`bg-${theme}-800 w-[40rem] ml-16 h-full rounded-xl p-4 content-center flex flex-col my-4 justify-center`}>
       <div className="flex justify-between content-center">
-        <p className={`text-${theme}-100 text-2xl self-center`}>
-          {t(dataField)}
-        </p>
+        {editing ? (
+          <>
+            <div className="flex flex-col mx-2 self-center">
+              <ListBoxSelectComponent
+                rowIdx={index}
+                setEnabledCards={setEnabledCards}
+                isData={true}
+                enabledCards={enabledCards}
+              />
+            </div>
+            <div className="flex flex-col mx-2 self-center">
+              <ListBoxSelectComponent
+                rowIdx={index}
+                setEnabledCards={setEnabledCards}
+                isData={false}
+                enabledCards={enabledCards}
+              />
+            </div>
+          </>
+        ) : (
+          <p className={`text-${theme}-100 text-2xl self-center`}>
+            {t(dataField)}
+          </p>
+        )}
         <div className="flex flex-col w-1/4 m-2">
           <p className={`text-center text-md mb-2 text-${theme}-100`}>
             {t("horizon")}
@@ -220,11 +236,11 @@ const ForecastGraphCardComponent = (
             />
             <span
               className={`text-xs text-${theme}-100 absolute start-0 -bottom-6`}>
-              1
+              1 {t("day")}
             </span>
             <span
               className={`text-xs text-${theme}-100 absolute end-0 -bottom-6`}>
-              14
+              14 {t("days")}
             </span>
           </div>
         </div>

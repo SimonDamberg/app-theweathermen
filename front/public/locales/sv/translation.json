@@ -44,5 +44,11 @@
   "haveAccount": "Har du ett konto?",
   "register": "Registrera",
   "name": "Namn",
-  "continueWithoutAccount": "Fortsätt utan konto"
+  "continueWithoutAccount": "Fortsätt utan konto",
+  "day": "dag",
+  "days": "dagar",
+  "googleLogin": "Logga in med Google",
+  "or": "eller",
+  "invalidCredentials": "Ogiltiga inloggningsuppgifter",
+  "loginSuccess": "Inloggning lyckades"
 }
