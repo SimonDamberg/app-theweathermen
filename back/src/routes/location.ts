@@ -1,6 +1,11 @@
 import express, { Router, Request, Response, NextFunction } from "express";
 import { ILocation, Location } from "../schemas/location";
-import { parseSMHIToTS, parseOWMToTS, parseWAToTS } from "../utils/parsing";
+import {
+  parseSMHIToTS,
+  parseOWMToTS,
+  parseWAToTS,
+  parseAvgToTS,
+} from "../utils/parsing";
 import { ITimeSeries, tsModel } from "../schemas/timeSeries";
 import { getDailyStats, IDailyStats } from "../utils/stats";
 
@@ -10,6 +15,7 @@ interface ILocationWeather extends ILocation {
   smhiTS: ITimeSeries[];
   owmTS: ITimeSeries[];
   waTS: ITimeSeries[];
+  avgTS: ITimeSeries[];
 }
 
 interface IDailyLocationStats {
@@ -17,6 +23,7 @@ interface IDailyLocationStats {
   smhi: IDailyStats | null;
   owm: IDailyStats | null;
   wa: IDailyStats | null;
+  avg: IDailyStats | null;
 }
 
 // ======= serve data from database =======
@@ -44,6 +51,7 @@ locRouter.get(
       const smhi = await tsModel.find({ locationId: loc._id, source: "smhi" });
       const owm = await tsModel.find({ locationId: loc._id, source: "owm" });
       const wa = await tsModel.find({ locationId: loc._id, source: "wa" });
+      const avg = await tsModel.find({ locationId: loc._id, source: "avg" });
       const locationWeather: ILocationWeather = loc.toObject();
 
       locationWeather.name =
@@ -55,6 +63,9 @@ locRouter.get(
         return a.timeStamp.getTime() - b.timeStamp.getTime();
       });
       locationWeather.waTS = wa.sort((a, b) => {
+        return a.timeStamp.getTime() - b.timeStamp.getTime();
+      });
+      locationWeather.avgTS = avg.sort((a, b) => {
         return a.timeStamp.getTime() - b.timeStamp.getTime();
       });
       locsWeather.push(locationWeather);
@@ -89,6 +100,7 @@ locRouter.get(
     const smhi = await tsModel.find({ locationId: loc._id, source: "smhi" });
     const owm = await tsModel.find({ locationId: loc._id, source: "owm" });
     const wa = await tsModel.find({ locationId: loc._id, source: "wa" });
+    const avg = await tsModel.find({ locationId: loc._id, source: "avg" });
 
     const waDateDict: any[][] = [];
     wa.forEach((element: any) => {
@@ -117,6 +129,15 @@ locRouter.get(
         owmDateDict[date] = [element];
       }
     });
+    const avgDateDict: any[][] = [];
+    avg.forEach((element: any) => {
+      const date = new Date(element.timeStamp).getDate();
+      if (date in avgDateDict) {
+        avgDateDict[date].push(element);
+      } else {
+        avgDateDict[date] = [element];
+      }
+    });
 
     const firstDate = new Date(wa[0].timeStamp).getDate();
     for (
@@ -136,6 +157,10 @@ locRouter.get(
       if (i in owmDateDict) {
         owmStats = getDailyStats(owmDateDict[i]);
       }
+      let avgStats: IDailyStats | null = null;
+      if (i in avgDateDict) {
+        avgStats = getDailyStats(avgDateDict[i]);
+      }
       const dailyDate = new Date(wa[0].timeStamp);
       dailyDate.setDate(i + 1);
       dailyDate.setHours(0);
@@ -147,6 +172,7 @@ locRouter.get(
         smhi: smhiStats,
         owm: owmStats,
         wa: waStats,
+        avg: avgStats,
       };
       dailyStatsList.push(dailyStats);
     }
@@ -171,6 +197,7 @@ locRouter.get(
     const smhi = await tsModel.find({ locationId: loc._id, source: "smhi" });
     const owm = await tsModel.find({ locationId: loc._id, source: "owm" });
     const wa = await tsModel.find({ locationId: loc._id, source: "wa" });
+    const avg = await tsModel.find({ locationId: loc._id, source: "avg" });
 
     const locationWeather: ILocationWeather = loc.toObject();
     // Update name to capitalized
@@ -178,6 +205,7 @@ locRouter.get(
     locationWeather.smhiTS = smhi;
     locationWeather.owmTS = owm;
     locationWeather.waTS = wa;
+    locationWeather.avgTS = avg;
     res.send(locationWeather);
   }
 );
@@ -238,6 +266,18 @@ locRouter.get(
     // Parse data from WeatherAPI
     const parsedWA: ITimeSeries[] = parseWAToTS(waData, loc._id);
     parsedWA.forEach(async (data) => {
+      const ts = new tsModel(data);
+      await ts.save();
+    });
+
+    console.log("Average data");
+    const parsedAvg: ITimeSeries[] = parseAvgToTS(
+      parsedSMHI,
+      parsedOWM,
+      parsedWA,
+      loc._id
+    );
+    parsedAvg.forEach(async (data) => {
       const ts = new tsModel(data);
       await ts.save();
     });

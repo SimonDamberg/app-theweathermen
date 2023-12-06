@@ -527,4 +527,251 @@ const parseSMHIToTS = (
   return parsed;
 };
 
-export { parseSMHIToTS, parseOWMToTS, parseWAToTS };
+const avgWeatherSymbol = (symbs: number[]): number => {
+  if (symbs.length === 1) return symbs[0];
+  if (symbs.length === 2) {
+    /* 
+      1. Clear sky
+      2. Partly cloudy
+      3. Cloudy sky
+      4. Overcast
+      5. Fog
+      6. Light rain showers
+      7. Light snow showers
+      8. Light sleet showers
+      9. Thunderstorm
+      10. Light or moderate rain
+      11. Moderate rain showers
+      12. Heavy rain
+      13. Sleet
+      14. Light or moderate snowfall
+      15. Moderate or heavy snow showers
+      16. Heavy snowfall
+      17. Hail
+      18. Heavy rain showers
+      19. Moderate or heavy sleet showers
+     */
+    // In severity order, they are 17, 16, 15, 13, 14, 19, 18, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+    if (symbs.includes(17)) return 17;
+    if (symbs.includes(16)) return 16;
+    if (symbs.includes(15)) return 15;
+    if (symbs.includes(13)) return 13;
+    if (symbs.includes(14)) return 14;
+    if (symbs.includes(19)) return 19;
+    if (symbs.includes(18)) return 18;
+    if (symbs.includes(12)) return 12;
+    if (symbs.includes(11)) return 11;
+    if (symbs.includes(10)) return 10;
+    if (symbs.includes(9)) return 9;
+    if (symbs.includes(8)) return 8;
+    if (symbs.includes(7)) return 7;
+    if (symbs.includes(6)) return 6;
+    if (symbs.includes(5)) return 5;
+    if (symbs.includes(4)) return 4;
+    if (symbs.includes(3)) return 3;
+    if (symbs.includes(2)) return 2;
+    if (symbs.includes(1)) return 1;
+  }
+  if (symbs.length === 3) {
+    // Return the most common one
+    let count = 0;
+    let mostCommon = 0;
+    for (let i = 0; i < symbs.length; i++) {
+      let currCount = 0;
+      for (let j = 0; j < symbs.length; j++) {
+        if (symbs[i] === symbs[j]) currCount++;
+      }
+      if (currCount > count) {
+        count = currCount;
+        mostCommon = symbs[i];
+      }
+    }
+    return mostCommon;
+  }
+  return 1;
+};
+
+const avgPrecipitationCategory = (cats: number[]): number => {
+  /* 
+Value	Meaning
+0	    No precipitation
+1	    Snow
+2	Snow and rain
+3	Rain
+4	Drizzle
+5	Freezing rain
+6	Freezing drizzle */
+  // In severity order, they are 5, 1, 2, 3, 6, 4
+  if (cats.includes(5)) return 5;
+  if (cats.includes(1)) return 1;
+  if (cats.includes(2)) return 2;
+  if (cats.includes(3)) return 3;
+  if (cats.includes(6)) return 6;
+  if (cats.includes(4)) return 4;
+  return 0;
+};
+
+const parseAvgToTS = (
+  parsedSMHI: ITimeSeries[],
+  parsedOWM: ITimeSeries[],
+  parsedWA: ITimeSeries[],
+  locID: Types.ObjectId
+): ITimeSeries[] => {
+  // Should always be done hourly for 14 days
+  const parsed: ITimeSeries[] = [];
+  for (let i = 0; i < 14; i++) {
+    for (let j = 0; j < 24; j++) {
+      const timeStamp = new Date();
+      timeStamp.setDate(timeStamp.getDate() + i);
+      timeStamp.setHours(j);
+      timeStamp.setMinutes(0);
+      timeStamp.setSeconds(0);
+      timeStamp.setMilliseconds(0);
+      // Find the corresponding timestamps in the parsed data
+      const smhiTS = parsedSMHI.find(
+        (ts) => ts.timeStamp.getTime() === timeStamp.getTime()
+      );
+      const owmTS = parsedOWM.find(
+        (ts) => ts.timeStamp.getTime() === timeStamp.getTime()
+      );
+      const waTS = parsedWA.find(
+        (ts) => ts.timeStamp.getTime() === timeStamp.getTime()
+      );
+      // Calculate the average of the ones that exist. remeber that it is possible that none of them exist and that it should only be added if at least one exists
+      // Only divide by the number of existing ones per timestamp and property
+      let airPressure = 0;
+      let airTemperature = 0;
+      let horizontalVisibility = 0;
+      let windDirection = 0;
+      let windSpeed = 0;
+      let windGustSpeed = 0;
+      let relativeHumidity = 0;
+      let thunderProbability = 0;
+      let totalCloudCover = 0;
+      let minPrecipitationIntensity = 0;
+      let meanPrecipitationIntensity = 0;
+      let maxPrecipitationIntensity = 0;
+      let precipitationCategory = 0;
+      let precArr: number[] = [];
+      let frozenPrecipitationFraction = 0;
+      let weatherSymbol = 0;
+      let symbArr: number[] = [];
+      let sunrise = undefined;
+      let sunset = undefined;
+      let sunriseArr: Date[] = [];
+      let sunsetArr: Date[] = [];
+      let count = 0;
+      let sunCount = 0;
+      if (smhiTS) {
+        airPressure += smhiTS.airPressure;
+        airTemperature += smhiTS.airTemperature;
+        horizontalVisibility += smhiTS.horizontalVisibility;
+        windDirection += smhiTS.windDirection;
+        windSpeed += smhiTS.windSpeed;
+        windGustSpeed += smhiTS.windGustSpeed;
+        relativeHumidity += smhiTS.relativeHumidity;
+        thunderProbability += smhiTS.thunderProbability!;
+        totalCloudCover += smhiTS.totalCloudCover;
+        minPrecipitationIntensity += smhiTS.minPrecipitationIntensity!;
+        meanPrecipitationIntensity += smhiTS.meanPrecipitationIntensity;
+        maxPrecipitationIntensity += smhiTS.maxPrecipitationIntensity!;
+        precArr.push(smhiTS.precipitationCategory);
+        frozenPrecipitationFraction += smhiTS.frozenPrecipitationFraction!;
+        symbArr.push(smhiTS.weatherSymbol);
+        count++;
+      }
+      if (owmTS) {
+        airPressure += owmTS.airPressure;
+        airTemperature += owmTS.airTemperature;
+        horizontalVisibility += owmTS.horizontalVisibility;
+        windDirection += owmTS.windDirection;
+        windSpeed += owmTS.windSpeed;
+        windGustSpeed += owmTS.windGustSpeed;
+        relativeHumidity += owmTS.relativeHumidity;
+        totalCloudCover += owmTS.totalCloudCover;
+        meanPrecipitationIntensity += owmTS.meanPrecipitationIntensity;
+        precArr.push(owmTS.precipitationCategory);
+        sunriseArr.push(owmTS.sunrise!);
+        sunsetArr.push(owmTS.sunset!);
+        symbArr.push(owmTS.weatherSymbol);
+        count++;
+        sunCount++;
+      }
+      if (waTS) {
+        airPressure += waTS.airPressure;
+        airTemperature += waTS.airTemperature;
+        horizontalVisibility += waTS.horizontalVisibility;
+        windDirection += waTS.windDirection;
+        windSpeed += waTS.windSpeed;
+        windGustSpeed += waTS.windGustSpeed;
+        relativeHumidity += waTS.relativeHumidity;
+        totalCloudCover += waTS.totalCloudCover;
+        meanPrecipitationIntensity += waTS.meanPrecipitationIntensity;
+        precArr.push(waTS.precipitationCategory);
+        sunriseArr.push(waTS.sunrise!);
+        sunsetArr.push(waTS.sunset!);
+        symbArr.push(waTS.weatherSymbol);
+        count++;
+        sunCount++;
+      }
+      if (count > 0) {
+        airPressure /= count;
+        airTemperature /= count;
+        horizontalVisibility /= count;
+        windDirection /= count;
+        windSpeed /= count;
+        windGustSpeed /= count;
+        relativeHumidity /= count;
+        thunderProbability /= count;
+        totalCloudCover /= count;
+        meanPrecipitationIntensity /= count;
+        precipitationCategory = avgPrecipitationCategory(precArr);
+        weatherSymbol = avgWeatherSymbol(symbArr);
+        if (sunCount > 0) {
+          let rise = 0;
+          sunriseArr.map((date) => {
+            rise += date.getTime();
+          });
+          rise /= sunCount;
+          let set = 0;
+          sunsetArr.map((date) => {
+            set += date.getTime();
+          });
+          set /= sunCount;
+          sunrise = new Date(rise);
+          sunset = new Date(set);
+        }
+      }
+      const parsedTS: ITimeSeries = {
+        locationId: locID,
+        timeStamp: timeStamp,
+        lastUpdated: new Date(),
+        airPressure: airPressure,
+        airTemperature: airTemperature,
+        horizontalVisibility: horizontalVisibility,
+        windDirection: windDirection,
+        windSpeed: windSpeed,
+        windGustSpeed: windGustSpeed,
+        relativeHumidity: relativeHumidity,
+        thunderProbability: thunderProbability,
+        totalCloudCover: totalCloudCover,
+        minPrecipitationIntensity: minPrecipitationIntensity,
+        meanPrecipitationIntensity: meanPrecipitationIntensity,
+        maxPrecipitationIntensity: maxPrecipitationIntensity,
+        precipitationCategory: precipitationCategory,
+        frozenPrecipitationFraction: frozenPrecipitationFraction,
+        weatherSymbol: weatherSymbol,
+        sunrise: sunrise,
+        sunset: sunset,
+        source: "avg",
+      };
+      // Add the parsedTS to the parsed array if there is at least one value
+      if (count > 0) {
+        parsed.push(parsedTS);
+      }
+    }
+  }
+  return parsed;
+};
+
+export { parseSMHIToTS, parseOWMToTS, parseWAToTS, parseAvgToTS };

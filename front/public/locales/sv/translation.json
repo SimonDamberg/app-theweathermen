@@ -51,5 +51,6 @@
   "or": "eller",
   "invalidCredentials": "Ogiltiga inloggningsuppgifter",
   "loginSuccess": "Inloggning lyckades",
-  "somethingWentWrong": "Oj, något gick fel"
+  "somethingWentWrong": "Oj, något gick fel",
+  "average": "Medel"
 }

@@ -35,6 +35,7 @@ const LocationCard = (props: ILocationCardProps) => {
     "SMHI",
     "WeatherAPI",
     "OpenWeatherMap",
+    "Average",
   ]);
 
   const [editing, setEditing] = useState(false);
@@ -74,7 +75,7 @@ const LocationCard = (props: ILocationCardProps) => {
                       enabledProviders.includes(provider)
                         ? "opacity-100"
                         : "opacity-40"
-                    } p-4 m-2 cursor-pointer justify-center text-center text-${theme}-100 border-2 ${
+                    } p-3 m-2 cursor-pointer justify-center text-center text-${theme}-100 border-2 ${
                       providerToBorderColor[provider.toLowerCase()]
                     } ${
                       providerToBgColor[provider.toLowerCase()]

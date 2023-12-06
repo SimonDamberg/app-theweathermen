@@ -51,5 +51,6 @@
   "or": "or",
   "loginSuccess": "Login successful",
   "invalidCredentials": "Invalid credentials",
-  "somethingWentWrong": "Something went wrong"
+  "somethingWentWrong": "Something went wrong",
+  "average": "Average"
 }
