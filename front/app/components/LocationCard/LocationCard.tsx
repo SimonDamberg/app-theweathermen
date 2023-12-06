@@ -5,7 +5,7 @@ import WindCardComponent from "./CardComponents/WindCardComponent";
 import XDaysForecastComponent from "./CardComponents/XDaysForecastComponent/XDaysForecastComponent";
 import { useTranslation } from "react-i18next";
 import CircleButtonComponent from "../CircleButtonComponent";
-import { faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useAuthContext } from "@/context/AuthContext";
 import { providerToBgColor, providerToBorderColor } from "@/utils/colors";
 import {
@@ -56,7 +56,7 @@ const LocationCard = (props: ILocationCardProps) => {
 
   return (
     <div
-      className={`w-[54rem] h-auto my-14 p-10 rounded-xl bg-${theme}-700 shadow-sm hover:shadow-lg shadow-${theme}-600 hover:shadow-${theme}-600 transition-all ease-in-out duration-300`}>
+      className={`w-[54rem] h-auto p-10 rounded-xl bg-${theme}-700 shadow-sm hover:shadow-lg shadow-${theme}-600 hover:shadow-${theme}-600 transition-all ease-in-out duration-300`}>
       {data && (
         <>
           <div className="flex flex-row justify-between content-center">
@@ -97,8 +97,10 @@ const LocationCard = (props: ILocationCardProps) => {
               {enabledComponents.length > 0 && (
                 <CircleButtonComponent
                   className={`bg-${theme}-600 p-4 rounded-xl mr-2`}
-                  iconClassName={`text-lg text-${theme}-100`}
-                  icon={faPen}
+                  iconClassName={`text-lg ${
+                    editing ? "text-green-500" : `text-${theme}-100`
+                  }`}
+                  icon={editing ? faCheck : faPen}
                   onClick={() => setEditing(!editing)}
                 />
               )}
