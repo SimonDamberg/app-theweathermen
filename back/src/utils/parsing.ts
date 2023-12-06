@@ -397,7 +397,7 @@ const parseOWMToTS = (
       lastUpdated: new Date(),
       airPressure: ts.main.pressure,
       airTemperature: ts.main.temp,
-      horizontalVisibility: ts.visibility,
+      horizontalVisibility: ts.visibility / 1000,
       windDirection: ts.wind.deg,
       windSpeed: ts.wind.speed,
       windGustSpeed: ts.wind.gust,
