@@ -771,6 +771,83 @@ const parseAvgToTS = (
       }
     }
   }
+  // SMA the data for 3 hours
+  for (let i = 0; i < parsed.length; i++) {
+    if (i < 3) {
+      parsed[i].airPressure = parsed[i].airPressure;
+      parsed[i].airTemperature = parsed[i].airTemperature;
+      parsed[i].horizontalVisibility = parsed[i].horizontalVisibility;
+      parsed[i].windDirection = parsed[i].windDirection;
+      parsed[i].windSpeed = parsed[i].windSpeed;
+      parsed[i].windGustSpeed = parsed[i].windGustSpeed;
+      parsed[i].relativeHumidity = parsed[i].relativeHumidity;
+      parsed[i].thunderProbability = parsed[i].thunderProbability;
+      parsed[i].totalCloudCover = parsed[i].totalCloudCover;
+      parsed[i].minPrecipitationIntensity = parsed[i].minPrecipitationIntensity;
+      parsed[i].meanPrecipitationIntensity =
+        parsed[i].meanPrecipitationIntensity;
+      parsed[i].maxPrecipitationIntensity = parsed[i].maxPrecipitationIntensity;
+      parsed[i].precipitationCategory = parsed[i].precipitationCategory;
+      parsed[i].frozenPrecipitationFraction =
+        parsed[i].frozenPrecipitationFraction;
+      parsed[i].weatherSymbol = parsed[i].weatherSymbol;
+    } else {
+      parsed[i].airPressure =
+        (parsed[i - 3].airPressure +
+          parsed[i - 2].airPressure +
+          parsed[i - 1].airPressure +
+          parsed[i].airPressure) /
+        4;
+      parsed[i].airTemperature =
+        (parsed[i - 3].airTemperature +
+          parsed[i - 2].airTemperature +
+          parsed[i - 1].airTemperature +
+          parsed[i].airTemperature) /
+        4;
+      parsed[i].horizontalVisibility =
+        (parsed[i - 3].horizontalVisibility +
+          parsed[i - 2].horizontalVisibility +
+          parsed[i - 1].horizontalVisibility +
+          parsed[i].horizontalVisibility) /
+        4;
+      parsed[i].windDirection =
+        (parsed[i - 3].windDirection +
+          parsed[i - 2].windDirection +
+          parsed[i - 1].windDirection +
+          parsed[i].windDirection) /
+        4;
+      parsed[i].windSpeed =
+        (parsed[i - 3].windSpeed +
+          parsed[i - 2].windSpeed +
+          parsed[i - 1].windSpeed +
+          parsed[i].windSpeed) /
+        4;
+      parsed[i].windGustSpeed =
+        (parsed[i - 3].windGustSpeed +
+          parsed[i - 2].windGustSpeed +
+          parsed[i - 1].windGustSpeed +
+          parsed[i].windGustSpeed) /
+        4;
+      parsed[i].relativeHumidity =
+        (parsed[i - 3].relativeHumidity +
+          parsed[i - 2].relativeHumidity +
+          parsed[i - 1].relativeHumidity +
+          parsed[i].relativeHumidity) /
+        4;
+      parsed[i].totalCloudCover =
+        (parsed[i - 3].totalCloudCover +
+          parsed[i - 2].totalCloudCover +
+          parsed[i - 1].totalCloudCover +
+          parsed[i].totalCloudCover) /
+        4;
+      parsed[i].meanPrecipitationIntensity =
+        (parsed[i - 3].meanPrecipitationIntensity +
+          parsed[i - 2].meanPrecipitationIntensity +
+          parsed[i - 1].meanPrecipitationIntensity +
+          parsed[i].meanPrecipitationIntensity) /
+        4;
+    }
+  }
   return parsed;
 };
 
