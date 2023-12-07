@@ -38,4 +38,5 @@ export const providerToTS: { [key: string]: string } = {
   SMHI: "smhiTS",
   WeatherAPI: "waTS",
   OpenWeatherMap: "owmTS",
+  Average: "avgTS",
 };

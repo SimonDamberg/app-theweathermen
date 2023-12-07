@@ -17,6 +17,7 @@ import {
 import { apiGET } from "@/utils/requestWrapper";
 import MoveCardComponent from "./MoveCardComponent";
 import ListBoxSelectComponent from "./EditDialog/ListBoxSelectComponent";
+import { getAverageRightNowData } from "@/utils/weather";
 
 interface ILocationCardProps {
   locationID: string;
@@ -35,6 +36,7 @@ const LocationCard = (props: ILocationCardProps) => {
     "SMHI",
     "WeatherAPI",
     "OpenWeatherMap",
+    "Average",
   ]);
 
   const [editing, setEditing] = useState(false);
@@ -74,7 +76,7 @@ const LocationCard = (props: ILocationCardProps) => {
                       enabledProviders.includes(provider)
                         ? "opacity-100"
                         : "opacity-40"
-                    } p-4 m-2 cursor-pointer justify-center text-center text-${theme}-100 border-2 ${
+                    } p-3 m-2 cursor-pointer justify-center text-center text-${theme}-100 border-2 ${
                       providerToBorderColor[provider.toLowerCase()]
                     } ${
                       providerToBgColor[provider.toLowerCase()]
@@ -152,7 +154,7 @@ const LocationCard = (props: ILocationCardProps) => {
                       className={`flex flex-col justify-center w-[40rem] my-4 ml-16 rounded-xl transition-all ease-in-out duration-500 ${
                         editing ? `bg-${theme}-800 p-4` : "p-0"
                       }`}>
-                      <div className="flex flex-row justify-center p-4">
+                      <div className="grid grid-cols-2 justify-center gap-4">
                         {row.data === 0 &&
                           enabledProviders.map(
                             (provider) =>
@@ -160,12 +162,24 @@ const LocationCard = (props: ILocationCardProps) => {
                                 <CurrentWeatherCardComponent
                                   key={provider}
                                   airTemperature={
-                                    data[providerToTS[provider]][0]
-                                      .airTemperature
+                                    provider === "Average"
+                                      ? getAverageRightNowData(
+                                          data,
+                                          "airTemperature",
+                                          enabledProviders
+                                        )
+                                      : data[providerToTS[provider]][0]
+                                          .airTemperature
                                   }
                                   symbol={
-                                    data[providerToTS[provider]][0]
-                                      .weatherSymbol
+                                    provider === "Average"
+                                      ? getAverageRightNowData(
+                                          data,
+                                          "weatherSymbol",
+                                          enabledProviders
+                                        )
+                                      : data[providerToTS[provider]][0]
+                                          .weatherSymbol
                                   }
                                   provider={provider}
                                 />
@@ -178,15 +192,34 @@ const LocationCard = (props: ILocationCardProps) => {
                                 <WindCardComponent
                                   key={provider}
                                   windDirection={
-                                    data[providerToTS[provider]][0]
-                                      .windDirection
+                                    provider === "Average"
+                                      ? getAverageRightNowData(
+                                          data,
+                                          "windDirection",
+                                          enabledProviders
+                                        )
+                                      : data[providerToTS[provider]][0]
+                                          .windDirection
                                   }
                                   windSpeed={
-                                    data[providerToTS[provider]][0].windSpeed
+                                    provider === "Average"
+                                      ? getAverageRightNowData(
+                                          data,
+                                          "windSpeed",
+                                          enabledProviders
+                                        )
+                                      : data[providerToTS[provider]][0]
+                                          .windSpeed
                                   }
                                   windGustSpeed={
-                                    data[providerToTS[provider]][0]
-                                      .windGustSpeed
+                                    provider === "Average"
+                                      ? getAverageRightNowData(
+                                          data,
+                                          "windGustSpeed",
+                                          enabledProviders
+                                        )
+                                      : data[providerToTS[provider]][0]
+                                          .windGustSpeed
                                   }
                                   provider={provider}
                                 />

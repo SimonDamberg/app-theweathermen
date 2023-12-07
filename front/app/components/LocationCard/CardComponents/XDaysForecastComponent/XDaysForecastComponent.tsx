@@ -22,6 +22,7 @@ interface IDailyLocationStats {
   smhi: IDailyStats | null;
   owm: IDailyStats | null;
   wa: IDailyStats | null;
+  avg: IDailyStats | null;
 }
 
 const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
@@ -114,11 +115,12 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
               {enabledProviders.includes("OpenWeatherMap") && (
                 <th>OpenWeatherMap</th>
               )}
+              {enabledProviders.includes("Average") && <th>{t("average")}</th>}
             </tr>
           </thead>
           <tbody>
             {dailyStats.map((row, idx) => {
-              if (row.smhi || row.wa || row.owm) {
+              if (row.smhi || row.wa || row.owm || row.avg) {
                 return (
                   <tr className={`bg-${theme}-900`} key={idx}>
                     <td>
@@ -148,6 +150,14 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
                         <ApiCellComponent
                           stats={row.owm}
                           provider={"openweathermap"}
+                        />
+                      </td>
+                    )}
+                    {enabledProviders.includes("Average") && (
+                      <td>
+                        <ApiCellComponent
+                          stats={row.avg}
+                          provider={"average"}
                         />
                       </td>
                     )}

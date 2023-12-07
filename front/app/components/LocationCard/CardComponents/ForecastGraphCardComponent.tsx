@@ -130,6 +130,10 @@ const ForecastGraphCardComponent = (
       (a: any, b: any) =>
         new Date(a.timeStamp).getTime() - new Date(b.timeStamp).getTime()
     );
+    const avgTS = data.avgTS.sort(
+      (a: any, b: any) =>
+        new Date(a.timeStamp).getTime() - new Date(b.timeStamp).getTime()
+    );
 
     // Loop through labels and add data to each label
 
@@ -143,11 +147,15 @@ const ForecastGraphCardComponent = (
       const wa = waTS.find((forecast: any) => {
         return new Date(forecast.timeStamp).getTime() === label.getTime();
       });
+      const avg = avgTS.find((forecast: any) => {
+        return new Date(forecast.timeStamp).getTime() === label.getTime();
+      });
       return {
         label: label,
         smhi: smhi ? smhi[dataField] : null,
         owm: owm ? owm[dataField] : null,
         wa: wa ? wa[dataField] : null,
+        avg: avg ? avg[dataField] : null,
       };
     });
 
@@ -185,6 +193,16 @@ const ForecastGraphCardComponent = (
             : [],
           borderColor: apiToColor["owm"],
           backgroundColor: apiToColor["owm"],
+        },
+        {
+          label: "Average",
+          data: enabledProviders.includes("Average")
+            ? chartData.map((forecast: any) => {
+                return forecast.avg;
+              })
+            : [],
+          borderColor: apiToColor["avg"],
+          backgroundColor: apiToColor["avg"],
         },
       ],
     };

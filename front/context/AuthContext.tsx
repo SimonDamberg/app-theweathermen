@@ -77,7 +77,7 @@ export const AuthContextProvider = ({
       .querySelector("body")
       ?.classList.remove(...possibleThemes.map((theme) => `bg-${theme}-950`));
     document.querySelector("body")?.classList.add(`bg-${theme}-950`);
-  });
+  }, [user, theme]);
 
   const getBackendUser = async (user: User) => {
     apiGET(`/user/${user.uid}`)
