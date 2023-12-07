@@ -17,6 +17,7 @@ type AuthContextType = {
   setTheme: (theme: string) => void;
   trackedCards: ITrackedCard[];
   setTrackedCards: (trackedCards: ITrackedCard[]) => void;
+  updateLocationsCallback: () => void;
 };
 
 export const AuthContext = React.createContext<AuthContextType>({
@@ -25,6 +26,7 @@ export const AuthContext = React.createContext<AuthContextType>({
   setTheme: () => {},
   trackedCards: [],
   setTrackedCards: () => {},
+  updateLocationsCallback: () => {},
 });
 
 export const possibleThemes = [
@@ -63,16 +65,19 @@ export const AuthContextProvider = ({
   const [theme, setTheme] = React.useState<string>("slate");
   const [trackedCards, setTrackedCards] = React.useState<ITrackedCard[]>([]);
   const [loading, setLoading] = React.useState(true);
+  const updateLocationsCallback = () => {
+    getBackendUser(user!);
+  };
 
   useEffect(() => {
     console.log("Theme changed to", theme);
-    // Remove all bg classes
+
+    // Remove all bg-<theme>-950 classes and add the new one
     document
       .querySelector("body")
       ?.classList.remove(...possibleThemes.map((theme) => `bg-${theme}-950`));
-    // Add new bg class
     document.querySelector("body")?.classList.add(`bg-${theme}-950`);
-  }, [theme]);
+  });
 
   const getBackendUser = async (user: User) => {
     apiGET(`/user/${user.uid}`)
@@ -119,7 +124,14 @@ export const AuthContextProvider = ({
 
   return (
     <AuthContext.Provider
-      value={{ user, theme, setTheme, trackedCards, setTrackedCards }}>
+      value={{
+        user,
+        theme,
+        setTheme,
+        trackedCards,
+        setTrackedCards,
+        updateLocationsCallback,
+      }}>
       {loading ? (
         <body className={`bg-${theme}-950 ${lexend.className}`}>
           <div className="h-screen flex items-center justify-center">
