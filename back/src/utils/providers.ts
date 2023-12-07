@@ -1,7 +1,12 @@
 import { Types } from "mongoose";
 import { ILocation } from "../schemas/location";
 import { ITimeSeries, tsModel } from "../schemas/timeSeries";
-import { parseOWMToTS, parseSMHIToTS, parseWAToTS } from "./parsing";
+import {
+  parseAvgToTS,
+  parseOWMToTS,
+  parseSMHIToTS,
+  parseWAToTS,
+} from "./parsing";
 
 export const updateWeatherData = async (
   locationID: Types.ObjectId,
@@ -32,6 +37,18 @@ export const updateWeatherData = async (
   // Parse data from WeatherAPI
   const parsedWA: ITimeSeries[] = parseWAToTS(waData, locationID);
   parsedWA.forEach(async (data) => {
+    const ts = new tsModel(data);
+    await ts.save();
+  });
+
+  console.log("Average data");
+  const parsedAvg: ITimeSeries[] = parseAvgToTS(
+    parsedSMHI,
+    parsedOWM,
+    parsedWA,
+    locationID
+  );
+  parsedAvg.forEach(async (data) => {
     const ts = new tsModel(data);
     await ts.save();
   });
