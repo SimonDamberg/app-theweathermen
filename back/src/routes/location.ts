@@ -8,6 +8,13 @@ import {
 } from "../utils/parsing";
 import { ITimeSeries, tsModel } from "../schemas/timeSeries";
 import { getDailyStats, IDailyStats } from "../utils/stats";
+import { User } from "../schemas/user";
+import {
+  getOWMData,
+  getSMHIData,
+  getWAData,
+  updateWeatherData,
+} from "../utils/providers";
 
 const locRouter: Router = express.Router();
 
@@ -211,11 +218,73 @@ locRouter.get(
 );
 
 locRouter.post(
-  "/new",
+  "/add",
   async (req: Request, res: Response, next: NextFunction) => {
-    const loc = new Location(req.body);
-    await loc.save();
-    res.send(loc);
+    const name = req.body.name.toLowerCase();
+    const fb_id = req.body.fb_id;
+
+    // Check if location already exists
+    const loc = await Location.findOne({
+      name: name.toLowerCase(),
+    });
+
+    // Check if user exists
+    const user = await User.findOne({ fb_id: fb_id });
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    if (loc) {
+      const userHasLoc = user.tracked_cards.find(
+        (card) => card.location_id == loc._id
+      );
+      if (userHasLoc) {
+        return res.status(409).send("Location already exists");
+      } else {
+        user.tracked_cards.push({
+          location_id: loc._id,
+          card_components: [],
+        });
+        user.save();
+        return res.send({ status: "OK" });
+      }
+    }
+
+    // Fetch coords from Geocode API
+    const geocodeURL = `https://geocode.maps.co/search?q=${name.toLowerCase()}`;
+    const geocodeResp = await fetch(geocodeURL);
+    const geocodeData = await geocodeResp.json();
+
+    if (geocodeData.length == 0) {
+      return res.status(404).send("Location not found");
+    }
+
+    const lat = parseFloat(geocodeData[0].lat);
+    const lon = parseFloat(geocodeData[0].lon);
+
+    // Create new Location object
+    const newLoc = new Location({
+      name: name.toLowerCase(),
+      lat: lat.toFixed(5),
+      lon: lon.toFixed(5),
+    });
+    await newLoc.save();
+
+    // Add location to user
+    user.tracked_cards.push({
+      location_id: newLoc._id,
+      card_components: [],
+    });
+    await user.save();
+
+    // Update new location with weather data
+    updateWeatherData(newLoc._id, newLoc.lat, newLoc.lon)
+      .then(() => {
+        return res.send({ status: "OK" });
+      })
+      .catch((err) => {
+        return res.status(500).send({ status: "ERROR", error: err });
+      });
   }
 );
 
@@ -232,57 +301,14 @@ locRouter.get(
       return res.status(404).send("Location not found");
     }
 
-    await tsModel.deleteMany({ locationId: loc._id });
-
-    // Fetch data from SMHI API
-    console.log("Fetching data from SMHI API");
-    const smhiURL = `https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/${loc.lon}/lat/${loc.lat}/data.json`;
-    const smhiResp = await fetch(smhiURL);
-    const smhiData = await smhiResp.json();
-    // Parse data from SMHI API
-    const parsedSMHI: ITimeSeries[] = parseSMHIToTS(smhiData, loc._id);
-    parsedSMHI.forEach(async (data) => {
-      const ts = new tsModel(data);
-      await ts.save();
-    });
-
-    // Fetch data from OpenWeatherMapAPI
-    console.log("Fetching data from OpenWeatherMap API");
-    const owmURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${loc.lat}&lon=${loc.lon}&&units=metric&appid=${process.env.OPENWEATHERMAP_API_KEY}`;
-    const owmResp = await fetch(owmURL);
-    const owmData = await owmResp.json();
-    // Parse data from OpenWeatherMap API
-    const parsedOWM: ITimeSeries[] = parseOWMToTS(owmData, loc._id);
-    parsedOWM.forEach(async (data) => {
-      const ts = new tsModel(data);
-      await ts.save();
-    });
-
-    // Fetch data from WeatherAPI
-    console.log("Fetching data from WeatherAPI");
-    const waURL = `https://api.weatherapi.com/v1/forecast.json?q=${loc.lat},${loc.lon}&days=14&key=${process.env.WEATHERAPI_API_KEY}`;
-    const waResp = await fetch(waURL);
-    const waData = await waResp.json();
-    // Parse data from WeatherAPI
-    const parsedWA: ITimeSeries[] = parseWAToTS(waData, loc._id);
-    parsedWA.forEach(async (data) => {
-      const ts = new tsModel(data);
-      await ts.save();
-    });
-
-    console.log("Average data");
-    const parsedAvg: ITimeSeries[] = parseAvgToTS(
-      parsedSMHI,
-      parsedOWM,
-      parsedWA,
-      loc._id
-    );
-    parsedAvg.forEach(async (data) => {
-      const ts = new tsModel(data);
-      await ts.save();
-    });
-
-    return res.send({ status: "OK" });
+    // Update weather data
+    updateWeatherData(loc._id, loc.lat, loc.lon)
+      .then(() => {
+        return res.send({ status: "OK" });
+      })
+      .catch((err) => {
+        return res.status(500).send({ status: "ERROR", error: err });
+      });
   }
 );
 

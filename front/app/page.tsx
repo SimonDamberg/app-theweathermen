@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import SpinnerComponent from "./components/SpinnerComponent";
 import { ITrackedCard } from "@/utils/location";
 import { apiPOST } from "@/utils/requestWrapper";
+import AddLocationDialog from "./components/AddLocationDialog";
 
 const lexend = Lexend({ subsets: ["latin"] });
 
@@ -51,6 +52,7 @@ interface ILocationData {
 export default function Home() {
   const { user, theme, trackedCards, setTrackedCards } = useAuthContext();
   const router = useRouter();
+  const [showAddLocationDialog, setShowAddLocationDialog] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -75,8 +77,12 @@ export default function Home() {
 
   return (
     <div className={`bg-${theme}-950 ${lexend.className} h-full`}>
+      <AddLocationDialog
+        open={showAddLocationDialog}
+        setOpen={setShowAddLocationDialog}
+      />
       <NavbarComponent />
-      <div className="grid grid-rows-1 grid-flow-col gap-16 mx-16">
+      <div className="grid grid-cols-2 grid-flow-cols gap-16 mx-16 my-16">
         {trackedCards.map((card) => (
           <div key={card.location_id}>
             <LocationCard
@@ -105,7 +111,7 @@ export default function Home() {
         <CircleButtonComponent
           className={`bg-${theme}-600 w-16 h-16 m-6 text-${theme}-100`}
           icon={faPlus}
-          onClick={() => null}
+          onClick={() => setShowAddLocationDialog(true)}
         />
       </div>
     </div>
