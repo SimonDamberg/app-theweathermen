@@ -10,20 +10,6 @@ interface IAddLocationDialogProps {
   setOpen: (open: boolean) => void;
 }
 
-const opacities = [
-  "50",
-  "100",
-  "200",
-  "300",
-  "400",
-  "500",
-  "600",
-  "700",
-  "800",
-  "900",
-  "950",
-];
-
 const AddLocationDialog = (props: IAddLocationDialogProps) => {
   const { open, setOpen } = props;
   const { t, i18n } = useTranslation();

@@ -23,10 +23,10 @@ type AuthContextType = {
 export const AuthContext = React.createContext<AuthContextType>({
   user: null,
   theme: "slate",
-  setTheme: () => {},
+  setTheme: () => { },
   trackedCards: [],
-  setTrackedCards: () => {},
-  updateLocationsCallback: () => {},
+  setTrackedCards: () => { },
+  updateLocationsCallback: () => { },
 });
 
 export const possibleThemes = [
@@ -40,7 +40,7 @@ export const possibleThemes = [
   "amber",
   //"yellow",
   "lime",
-  "green",
+  //"green",
   "emerald",
   "teal",
   "cyan",
