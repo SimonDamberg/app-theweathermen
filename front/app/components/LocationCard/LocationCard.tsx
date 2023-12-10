@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import CurrentWeatherCardComponent from "./CardComponents/CurrentWeatherCardComponent";
 import ForecastGraphCardComponent from "./CardComponents/ForecastGraphCardComponent";
+import AirHumidityComponent from "./CardComponents/AirHumidityComponent";
+import CurrentPrecipitationCardComponent from "./CardComponents/CurrentPrecipitationCardComponent";
+import CurrentVisibilityCardComponent from "./CardComponents/CurrentVisibilityCardComponent";
+import CurrentAirPressureCardComponent from "./CardComponents/CurrentAirPressureCardComponent"
+import CurrentCloudCoverageCardComponent from "./CardComponents/CurrentCloudCoverageCardComponent";
 import WindCardComponent from "./CardComponents/WindCardComponent";
 import XDaysForecastComponent from "./CardComponents/XDaysForecastComponent/XDaysForecastComponent";
 import { useTranslation } from "react-i18next";
@@ -72,6 +77,7 @@ const LocationCard = (props: ILocationCardProps) => {
                 {Object.keys(providerToTS).map((provider) => (
                   <div
                     key={provider}
+
                     className={`rounded-xl ${
                       enabledProviders.includes(provider)
                         ? "opacity-100"
@@ -81,6 +87,7 @@ const LocationCard = (props: ILocationCardProps) => {
                     } ${
                       providerToBgColor[provider.toLowerCase()]
                     } hover:opacity-70 transition-all ease-in-out duration-200`}
+                    
                     onClick={() => {
                       if (enabledProviders.includes(provider)) {
                         setEnabledProviders(
@@ -225,7 +232,74 @@ const LocationCard = (props: ILocationCardProps) => {
                                 />
                               )
                           )}
-                        {row.data! >= 2 && (
+                        {row.data === 2 &&
+                          enabledProviders.map(
+                            (provider) =>
+                              data[providerToTS[provider]].length > 0 && (
+                                <CurrentPrecipitationCardComponent
+                                  key={provider}
+                                  precipitation={
+                                    data[providerToTS[provider]][0].meanPrecipitationIntensity
+                                  }
+                                  provider={provider}
+                                />
+                              )
+                          )}
+                        {row.data === 3 &&
+                          enabledProviders.map(
+                            (provider) =>
+                              data[providerToTS[provider]].length > 0 && (
+                                <CurrentAirPressureCardComponent
+                                  key={provider}
+                                  airPressure={
+                                    data[providerToTS[provider]][0].airPressure
+                                  }
+                                  provider={provider}
+                                />
+                              )
+                          )}
+                        {row.data === 4 &&
+                          enabledProviders.map(
+                            (provider) =>
+                              data[providerToTS[provider]].length > 0 && (
+                                <CurrentVisibilityCardComponent
+                                  key={provider}
+                                  visibility={
+                                    data[providerToTS[provider]][0]?.horizontalVisibility
+                                  }
+                                  provider={provider}
+                                  symbol={99}
+                                />
+                              )
+                          )}
+                        {row.data === 5 &&
+                          enabledProviders.map(
+                            (provider) =>
+                              data[providerToTS[provider]].length > 0 && (
+                                <AirHumidityComponent
+                                  key={provider}
+                                  airHumidity={
+                                    data[providerToTS[provider]][0].relativeHumidity
+                                  }
+                                  provider={provider}
+                                />
+                              )
+                          )}
+                        {row.data === 6 &&
+                          enabledProviders.map(
+                            (provider) =>
+                              data[providerToTS[provider]].length > 0 && (
+                                <CurrentCloudCoverageCardComponent
+                                  key={provider}
+                                  coverage={
+                                    data[providerToTS[provider]][0]?.totalCloudCover
+                                  }
+                                  provider={provider}
+                                  symbol={3}
+                                />
+                              )
+                          )}
+                        {row.data! >= 7 && (
                           <p className={`text-${theme}-100`}>
                             Not implemented yet
                           </p>
