@@ -50,5 +50,10 @@
   "googleLogin": "Logga in med Google",
   "or": "eller",
   "invalidCredentials": "Ogiltiga inloggningsuppgifter",
-  "loginSuccess": "Inloggning lyckades"
+  "loginSuccess": "Inloggning lyckades",
+  "somethingWentWrong": "Oj, något gick fel",
+  "addLocation": "Lägg till plats",
+  "location": "Plats",
+  "locationAdded": "Plats tillagd!",
+  "average": "Medel"
 }

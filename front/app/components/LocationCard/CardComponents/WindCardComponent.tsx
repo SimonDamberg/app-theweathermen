@@ -1,10 +1,10 @@
-import windDirectionFromDegrees from "@/utils/weather";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { providerToBorderColor } from "@/utils/colors";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "@/context/AuthContext";
+import { windDirectionFromDegrees } from "@/utils/weather";
 
 interface IWindCardComponentProps {
   windDirection: number;
@@ -20,7 +20,7 @@ const WindCardComponent = (props: IWindCardComponentProps) => {
 
   return (
     <div
-      className={`flex flex-col bg-${theme}-800 rounded-xl p-4 mx-4 border-2 ${
+      className={`flex flex-col bg-${theme}-800 rounded-xl p-4 border-2 ${
         providerToBorderColor[provider.toLowerCase()]
       }`}>
       <div className="flex flex-row justify-center content-center">

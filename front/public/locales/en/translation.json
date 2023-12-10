@@ -50,5 +50,10 @@
   "googleLogin": "Log in with Google",
   "or": "or",
   "loginSuccess": "Login successful",
-  "invalidCredentials": "Invalid credentials"
+  "invalidCredentials": "Invalid credentials",
+  "somethingWentWrong": "Something went wrong",
+  "addLocation": "Add Location",
+  "location": "Location",
+  "locationAdded": "Location added!",
+  "average": "Average"
 }

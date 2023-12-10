@@ -10,7 +10,7 @@ import WindCardComponent from "./CardComponents/WindCardComponent";
 import XDaysForecastComponent from "./CardComponents/XDaysForecastComponent/XDaysForecastComponent";
 import { useTranslation } from "react-i18next";
 import CircleButtonComponent from "../CircleButtonComponent";
-import { faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useAuthContext } from "@/context/AuthContext";
 import { providerToBgColor, providerToBorderColor } from "@/utils/colors";
 import {
@@ -22,6 +22,7 @@ import {
 import { apiGET } from "@/utils/requestWrapper";
 import MoveCardComponent from "./MoveCardComponent";
 import ListBoxSelectComponent from "./EditDialog/ListBoxSelectComponent";
+import { getAverageRightNowData } from "@/utils/weather";
 
 interface ILocationCardProps {
   locationID: string;
@@ -40,6 +41,7 @@ const LocationCard = (props: ILocationCardProps) => {
     "SMHI",
     "WeatherAPI",
     "OpenWeatherMap",
+    "Average",
   ]);
 
   const [editing, setEditing] = useState(false);
@@ -61,7 +63,7 @@ const LocationCard = (props: ILocationCardProps) => {
 
   return (
     <div
-      className={`w-[54rem] h-auto my-14 p-10 rounded-xl bg-${theme}-700 shadow-sm hover:shadow-lg shadow-${theme}-600 hover:shadow-${theme}-600 transition-all ease-in-out duration-300`}>
+      className={`w-[54rem] h-auto p-10 rounded-xl bg-${theme}-700 shadow-sm hover:shadow-lg shadow-${theme}-600 hover:shadow-${theme}-600 transition-all ease-in-out duration-300`}>
       {data && (
         <>
           <div className="flex flex-row justify-between content-center">
@@ -75,12 +77,17 @@ const LocationCard = (props: ILocationCardProps) => {
                 {Object.keys(providerToTS).map((provider) => (
                   <div
                     key={provider}
-                    className={`rounded-xl ${enabledProviders.includes(provider)
-                      ? "opacity-100"
-                      : "opacity-40"
-                      } p-4 m-2 cursor-pointer justify-center text-center text-${theme}-100 border-2 ${providerToBorderColor[provider.toLowerCase()]
-                      } ${providerToBgColor[provider.toLowerCase()]
-                      } hover:opacity-70 transition-all ease-in-out duration-200`}
+
+                    className={`rounded-xl ${
+                      enabledProviders.includes(provider)
+                        ? "opacity-100"
+                        : "opacity-40"
+                    } p-3 m-2 cursor-pointer justify-center text-center text-${theme}-100 border-2 ${
+                      providerToBorderColor[provider.toLowerCase()]
+                    } ${
+                      providerToBgColor[provider.toLowerCase()]
+                    } hover:opacity-70 transition-all ease-in-out duration-200`}
+                    
                     onClick={() => {
                       if (enabledProviders.includes(provider)) {
                         setEnabledProviders(
@@ -99,8 +106,10 @@ const LocationCard = (props: ILocationCardProps) => {
               {enabledComponents.length > 0 && (
                 <CircleButtonComponent
                   className={`bg-${theme}-600 p-4 rounded-xl mr-2`}
-                  iconClassName={`text-lg text-${theme}-100`}
-                  icon={faPen}
+                  iconClassName={`text-lg ${
+                    editing ? "text-green-500" : `text-${theme}-100`
+                  }`}
+                  icon={editing ? faCheck : faPen}
                   onClick={() => setEditing(!editing)}
                 />
               )}
@@ -152,7 +161,7 @@ const LocationCard = (props: ILocationCardProps) => {
                       className={`flex flex-col justify-center w-[40rem] my-4 ml-16 rounded-xl transition-all ease-in-out duration-500 ${
                         editing ? `bg-${theme}-800 p-4` : "p-0"
                       }`}>
-                      <div className="flex flex-row justify-center p-4">
+                      <div className="grid grid-cols-2 justify-center gap-4">
                         {row.data === 0 &&
                           enabledProviders.map(
                             (provider) =>
@@ -160,12 +169,24 @@ const LocationCard = (props: ILocationCardProps) => {
                                 <CurrentWeatherCardComponent
                                   key={provider}
                                   airTemperature={
-                                    data[providerToTS[provider]][0]
-                                      .airTemperature
+                                    provider === "Average"
+                                      ? getAverageRightNowData(
+                                          data,
+                                          "airTemperature",
+                                          enabledProviders
+                                        )
+                                      : data[providerToTS[provider]][0]
+                                          .airTemperature
                                   }
                                   symbol={
-                                    data[providerToTS[provider]][0]
-                                      .weatherSymbol
+                                    provider === "Average"
+                                      ? getAverageRightNowData(
+                                          data,
+                                          "weatherSymbol",
+                                          enabledProviders
+                                        )
+                                      : data[providerToTS[provider]][0]
+                                          .weatherSymbol
                                   }
                                   provider={provider}
                                 />
@@ -178,15 +199,34 @@ const LocationCard = (props: ILocationCardProps) => {
                                 <WindCardComponent
                                   key={provider}
                                   windDirection={
-                                    data[providerToTS[provider]][0]
-                                      .windDirection
+                                    provider === "Average"
+                                      ? getAverageRightNowData(
+                                          data,
+                                          "windDirection",
+                                          enabledProviders
+                                        )
+                                      : data[providerToTS[provider]][0]
+                                          .windDirection
                                   }
                                   windSpeed={
-                                    data[providerToTS[provider]][0].windSpeed
+                                    provider === "Average"
+                                      ? getAverageRightNowData(
+                                          data,
+                                          "windSpeed",
+                                          enabledProviders
+                                        )
+                                      : data[providerToTS[provider]][0]
+                                          .windSpeed
                                   }
                                   windGustSpeed={
-                                    data[providerToTS[provider]][0]
-                                      .windGustSpeed
+                                    provider === "Average"
+                                      ? getAverageRightNowData(
+                                          data,
+                                          "windGustSpeed",
+                                          enabledProviders
+                                        )
+                                      : data[providerToTS[provider]][0]
+                                          .windGustSpeed
                                   }
                                   provider={provider}
                                 />
