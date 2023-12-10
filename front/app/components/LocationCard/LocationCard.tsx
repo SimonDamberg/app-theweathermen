@@ -10,8 +10,7 @@ import WindCardComponent from "./CardComponents/WindCardComponent";
 import XDaysForecastComponent from "./CardComponents/XDaysForecastComponent/XDaysForecastComponent";
 import { useTranslation } from "react-i18next";
 import CircleButtonComponent from "../CircleButtonComponent";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
-import LocationEditDialog from "./EditDialog/LocationEditDialog";
+import { faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useAuthContext } from "@/context/AuthContext";
 import { providerToBgColor, providerToBorderColor } from "@/utils/colors";
 import {
@@ -21,6 +20,8 @@ import {
   providerToTS,
 } from "@/utils/location";
 import { apiGET } from "@/utils/requestWrapper";
+import MoveCardComponent from "./MoveCardComponent";
+import ListBoxSelectComponent from "./EditDialog/ListBoxSelectComponent";
 
 interface ILocationCardProps {
   locationID: string;
@@ -35,14 +36,21 @@ const LocationCard = (props: ILocationCardProps) => {
 
   const [data, setData] = useState<any>(null);
 
-  const [showEditDialog, setShowEditDialog] = useState(false);
   const [enabledProviders, setEnabledProviders] = useState([
     "SMHI",
     "WeatherAPI",
     "OpenWeatherMap",
   ]);
 
+  const [editing, setEditing] = useState(false);
+
   const [numForecastDays, setNumForecastDays] = useState(5);
+
+  const handleAdd = () => {
+    const newData = [...enabledComponents];
+    newData.push({ component: 0, data: 0 });
+    setEnabledComponents(newData);
+  };
 
   useEffect(() => {
     // fetch data from API for locationID
@@ -53,7 +61,7 @@ const LocationCard = (props: ILocationCardProps) => {
 
   return (
     <div
-      className={`w-300 h-auto my-14 p-10 rounded-xl bg-${theme}-700 shadow-sm hover:shadow-lg shadow-${theme}-600 hover:shadow-${theme}-600 transition-all ease-in-out duration-300`}>
+      className={`w-[54rem] h-auto my-14 p-10 rounded-xl bg-${theme}-700 shadow-sm hover:shadow-lg shadow-${theme}-600 hover:shadow-${theme}-600 transition-all ease-in-out duration-300`}>
       {data && (
         <>
           <div className="flex flex-row justify-between content-center">
@@ -87,19 +95,26 @@ const LocationCard = (props: ILocationCardProps) => {
                 ))}
               </div>
             </div>
-            <CircleButtonComponent
-              className={`bg-${theme}-600 p-4 rounded-xl m-6`}
-              iconClassName={`text-lg text-${theme}-100`}
-              icon={faPen}
-              onClick={() => setShowEditDialog(true)}
-            />
-            <LocationEditDialog
-              open={showEditDialog}
-              setOpen={setShowEditDialog}
-              locationName={data.name}
-              enabledCards={enabledComponents}
-              setEnabledCards={setEnabledComponents}
-            />
+            <div className="w-20 flex flex-row self-center justify-center">
+              {enabledComponents.length > 0 && (
+                <CircleButtonComponent
+                  className={`bg-${theme}-600 p-4 rounded-xl mr-2`}
+                  iconClassName={`text-lg text-${theme}-100`}
+                  icon={faPen}
+                  onClick={() => setEditing(!editing)}
+                />
+              )}
+              {(editing || enabledComponents.length == 0) && (
+                <CircleButtonComponent
+                  className={`bg-${theme}-600 p-4 rounded-xl ${
+                    enabledComponents.length == 0 ? "animate-bounce" : ""
+                  }`}
+                  iconClassName={`text-lg text-${theme}-100`}
+                  icon={faPlus}
+                  onClick={handleAdd}
+                />
+              )}
+            </div>
           </div>
           <div className="flex flex-col">
             {enabledComponents.map((row, index) => {
@@ -107,7 +122,7 @@ const LocationCard = (props: ILocationCardProps) => {
                 return (
                   <div
                     key={row.component + String(row.data ?? "") + index}
-                    className="flex justify-center my-4">
+                    className="flex flex-row ">
                     <ForecastGraphCardComponent
                       setNumForecastDays={setNumForecastDays}
                       data={data}
@@ -115,148 +130,194 @@ const LocationCard = (props: ILocationCardProps) => {
                       enabledProviders={enabledProviders}
                       dataField={dataTypes[row.data ?? 0].name}
                       suffix={dataToSuffix[dataTypes[row.data ?? 0].name]}
+                      editing={editing}
+                      enabledCards={enabledComponents}
+                      setEnabledCards={setEnabledComponents}
+                      index={index}
+                    />
+                    <MoveCardComponent
+                      editing={editing}
+                      enabledCards={enabledComponents}
+                      setEnabledCards={setEnabledComponents}
+                      index={index}
                     />
                   </div>
                 );
               } else if (row.component === 1) {
-                if (row.data === 0) {
-                  return (
+                return (
+                  <div
+                    key={row.component + String(row.data ?? "") + index}
+                    className={`flex flex-row`}>
                     <div
-                      key={row.component + String(row.data ?? "") + index}
-                      className="flex flex-row p-4 justify-center">
-                      {enabledProviders.map((provider) => (
-                        <CurrentWeatherCardComponent
-                          key={provider}
-                          airTemperature={
-                            data[providerToTS[provider]][0].airTemperature
-                          }
-                          symbol={data[providerToTS[provider]][0].weatherSymbol}
-                          provider={provider}
-                        />
-                      ))}
+                      className={`flex flex-col justify-center w-[40rem] my-4 ml-16 rounded-xl transition-all ease-in-out duration-500 ${
+                        editing ? `bg-${theme}-800 p-4` : "p-0"
+                      }`}>
+                      <div className="flex flex-row justify-center p-4">
+                        {row.data === 0 &&
+                          enabledProviders.map(
+                            (provider) =>
+                              data[providerToTS[provider]].length > 0 && (
+                                <CurrentWeatherCardComponent
+                                  key={provider}
+                                  airTemperature={
+                                    data[providerToTS[provider]][0]
+                                      .airTemperature
+                                  }
+                                  symbol={
+                                    data[providerToTS[provider]][0]
+                                      .weatherSymbol
+                                  }
+                                  provider={provider}
+                                />
+                              )
+                          )}
+                        {row.data === 1 &&
+                          enabledProviders.map(
+                            (provider) =>
+                              data[providerToTS[provider]].length > 0 && (
+                                <WindCardComponent
+                                  key={provider}
+                                  windDirection={
+                                    data[providerToTS[provider]][0]
+                                      .windDirection
+                                  }
+                                  windSpeed={
+                                    data[providerToTS[provider]][0].windSpeed
+                                  }
+                                  windGustSpeed={
+                                    data[providerToTS[provider]][0]
+                                      .windGustSpeed
+                                  }
+                                  provider={provider}
+                                />
+                              )
+                          )}
+                        {row.data === 2 &&
+                          enabledProviders.map(
+                            (provider) =>
+                              data[providerToTS[provider]].length > 0 && (
+                                <CurrentPrecipitationCardComponent
+                                  key={provider}
+                                  precipitation={
+                                    data[providerToTS[provider]][0].meanPrecipitationIntensity
+                                  }
+                                  provider={provider}
+                                />
+                              )
+                          )}
+                        {row.data === 3 &&
+                          enabledProviders.map(
+                            (provider) =>
+                              data[providerToTS[provider]].length > 0 && (
+                                <CurrentAirPressureCardComponent
+                                  key={provider}
+                                  airPressure={
+                                    data[providerToTS[provider]][0].airPressure
+                                  }
+                                  provider={provider}
+                                />
+                              )
+                          )}
+                        {row.data === 4 &&
+                          enabledProviders.map(
+                            (provider) =>
+                              data[providerToTS[provider]].length > 0 && (
+                                <CurrentVisibilityCardComponent
+                                  key={provider}
+                                  visibility={
+                                    data[providerToTS[provider]][0]?.horizontalVisibility
+                                  }
+                                  provider={provider}
+                                  symbol={99}
+                                />
+                              )
+                          )}
+                        {row.data === 5 &&
+                          enabledProviders.map(
+                            (provider) =>
+                              data[providerToTS[provider]].length > 0 && (
+                                <AirHumidityComponent
+                                  key={provider}
+                                  airHumidity={
+                                    data[providerToTS[provider]][0].relativeHumidity
+                                  }
+                                  provider={provider}
+                                />
+                              )
+                          )}
+                        {row.data === 6 &&
+                          enabledProviders.map(
+                            (provider) =>
+                              data[providerToTS[provider]].length > 0 && (
+                                <CurrentCloudCoverageCardComponent
+                                  key={provider}
+                                  coverage={
+                                    data[providerToTS[provider]][0]?.totalCloudCover
+                                  }
+                                  provider={provider}
+                                  symbol={3}
+                                />
+                              )
+                          )}
+                        {row.data! >= 7 && (
+                          <p className={`text-${theme}-100`}>
+                            Not implemented yet
+                          </p>
+                        )}
+                      </div>
+
+                      <div
+                        className={`rounded-xl flex flex-row justify-center transition-all ease-in-out duration-500 ${
+                          editing ? "opacity-100 p-4" : "opacity-0 p-0 h-0"
+                        }`}>
+                        <div className="mx-2 self-center">
+                          <ListBoxSelectComponent
+                            rowIdx={index}
+                            setEnabledCards={setEnabledComponents}
+                            isData={true}
+                            enabledCards={enabledComponents}
+                          />
+                        </div>
+                        <div className="mx-2 self-center">
+                          <ListBoxSelectComponent
+                            rowIdx={index}
+                            setEnabledCards={setEnabledComponents}
+                            isData={false}
+                            enabledCards={enabledComponents}
+                          />
+                        </div>
+                      </div>
                     </div>
-                  );
-                } else if (row.data === 1) {
-                  return (
-                    <div
-                      key={row.component + String(row.data ?? "") + index}
-                      className="flex flex-row p-4 justify-center">
-                      {enabledProviders.map((provider) => (
-                        <WindCardComponent
-                          key={provider}
-                          windDirection={
-                            data[providerToTS[provider]][0].windDirection
-                          }
-                          windSpeed={data[providerToTS[provider]][0].windSpeed}
-                          windGustSpeed={
-                            data[providerToTS[provider]][0].windGustSpeed
-                          }
-                          provider={provider}
-                        />
-                      ))}
-                    </div>
-                  );
-                } else if (row.data === 2) {
-
-                  return (
-                    <div
-                      key={row.component + String(row.data ?? "") + index}
-                      className="flex flex-row p-4 justify-center">
-                      {enabledProviders.map((provider) => (
-
-                        <CurrentPrecipitationCardComponent
-                          key={provider}
-                          precipitation={
-                            data[providerToTS[provider]][0].meanPrecipitationIntensity
-                          }
-                          provider={provider}
-                        />
-                      ))}
-                    </div>
-                  );
-                } else if (row.data === 3) {
-
-                  return (
-                    <div
-                      key={row.component + String(row.data ?? "") + index}
-                      className="flex flex-row p-4 justify-center">
-                      {enabledProviders.map((provider) => (
-
-                        <CurrentAirPressureCardComponent
-                          key={provider}
-                          airPressure={
-                            data[providerToTS[provider]][0].airPressure
-                          }
-                          provider={provider}
-                        />
-                      ))}
-                    </div>
-                  );
-                } else if (row.data === 4) {
-
-                  return (
-                    <div
-                      key={row.component + String(row.data ?? "") + index}
-                      className="flex flex-row p-4 justify-center">
-                      {enabledProviders.map((provider) => (
-
-                        <CurrentVisibilityCardComponent
-                          key={provider}
-                          visibility={
-                            data[providerToTS[provider]][0]?.horizontalVisibility
-                          }
-                          provider={provider}
-                          symbol={99}
-                        />
-                      ))}
-                    </div>
-                  );
-                } else if (row.data === 5) {
-                  return (
-                    <div
-                      key={row.component + String(row.data ?? "") + index}
-                      className="flex flex-row p-4 justify-center">
-                      {enabledProviders.map((provider) => (
-                        <AirHumidityComponent
-                          key={provider}
-                          airHumidity={
-                            data[providerToTS[provider]][0].relativeHumidity
-                          }
-                          provider={provider}
-                        />
-                      ))}
-                    </div>
-                  );
-                } else if (row.data === 6) {
-
-                  return (
-                    <div
-                      key={row.component + String(row.data ?? "") + index}
-                      className="flex flex-row p-4 justify-center">
-                      {enabledProviders.map((provider) => (
-
-                        <CurrentCloudCoverageCardComponent
-                          key={provider}
-                          coverage={
-                            data[providerToTS[provider]][0]?.totalCloudCover
-                          }
-                          provider={provider}
-                          symbol={3}
-                        />
-                      ))}
-                    </div>
-                  );
-                }
+                    <MoveCardComponent
+                      editing={editing}
+                      enabledCards={enabledComponents}
+                      setEnabledCards={setEnabledComponents}
+                      index={index}
+                    />
+                  </div>
+                );
               } else if (row.component === 2) {
                 return (
                   <div
                     key={row.component + String(row.data ?? "") + index}
-                    className="flex justify-center my-4">
-                    <XDaysForecastComponent
-                      name={data.name}
-                      enabledProviders={enabledProviders}
-                      numForecastDays={numForecastDays}
-                      setNumForecastDays={setNumForecastDays}
+                    className="flex flex-row">
+                    <div className="flex justify-center my-4">
+                      <XDaysForecastComponent
+                        name={data.name}
+                        enabledProviders={enabledProviders}
+                        numForecastDays={numForecastDays}
+                        setNumForecastDays={setNumForecastDays}
+                        editing={editing}
+                        enabledCards={enabledComponents}
+                        setEnabledCards={setEnabledComponents}
+                        index={index}
+                      />
+                    </div>
+                    <MoveCardComponent
+                      editing={editing}
+                      enabledCards={enabledComponents}
+                      setEnabledCards={setEnabledComponents}
+                      index={index}
                     />
                   </div>
                 );

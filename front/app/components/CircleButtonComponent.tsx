@@ -14,20 +14,18 @@ const CircleButtonComponent = (props: ICircleButtonProps) => {
   return (
     <div
       className={[
-        "rounded-full flex justify-center",
+        "rounded-full flex justify-center relative",
         props.className,
         props.disabled
           ? "opacity-50"
           : "hover:opacity-70 cursor-pointer transition-all ease-in-out duration-300",
       ].join(" ")}
       onClick={props.disabled ? () => {} : props.onClick}>
+      {" "}
       {props.icon ? (
         <FontAwesomeIcon
           icon={props.icon}
-          className={[
-
-            "text-2xl self-center",            props.iconClassName,
-          ].join(" ")}
+          className={["text-2xl self-center", props.iconClassName].join(" ")}
         />
       ) : (
         <></>

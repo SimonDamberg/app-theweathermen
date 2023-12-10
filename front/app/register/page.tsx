@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { renderRain } from "../../utils/rain";
+import { useAuthContext } from "@/context/AuthContext";
+import { googleLogin } from "@/firebase/auth/login";
+import { alertFailure } from "@/utils/notify";
 
 const Register = () => {
   const [name, setName] = React.useState("");
@@ -13,22 +16,24 @@ const Register = () => {
   const [password, setPassword] = React.useState("");
   const router = useRouter();
 
+  const { user } = useAuthContext();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user, router]);
+
   const handleForm = async (event: any) => {
     event.preventDefault();
-
-    const { result, error } = await registerPasswordEmail(
-      name,
-      email,
-      password
-    );
-
-    if (error) {
-      return console.log(error);
-    }
-
-    // else successful
-    return router.push("/");
+    registerPasswordEmail(name, email, password)
+      .then((res) => {
+        router.push("/");
+      })
+      .catch((err) => {
+        alertFailure(t("somethingWentWrong"));
+      });
   };
 
   useEffect(() => {
@@ -106,6 +111,29 @@ const Register = () => {
             {t("login")}
           </a>
         </p>
+        <div className=" select-none flex my-4">
+          <div className=" select-none h-0.5 flex-1 bg-gray-200 self-center rounded-full"></div>
+          <div className=" select-none flex-1 text-center text-gray-300">
+            {t("or")}
+          </div>
+          <div className=" select-none h-0.5 flex-1 bg-slate-200 self-center rounded-full"></div>
+        </div>
+        <div className="flex justify-center gap-4">
+          <button
+            className="w-full select-none flex rounded-lg bg-slate-300 hover:bg-slate-500 transition-all ease-in-out duration-200"
+            onClick={() => googleLogin()}>
+            <Image
+              height={36}
+              width={36}
+              alt="google logo"
+              className=" select-none ml-3"
+              src="/images/providers/google.png"></Image>
+
+            <span className="select-none self-center text-sm flex-1 text-left text-slate-700">
+              {t("googleLogin")}
+            </span>
+          </button>
+        </div>
       </div>
       <div className="h-64"></div>
     </div>

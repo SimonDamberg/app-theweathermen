@@ -44,5 +44,11 @@
   "haveAccount": "Do you have an account?",
   "register": "Register",
   "name": "Name",
-  "continueWithoutAccount": "Continue without an account"
+  "continueWithoutAccount": "Continue without an account",
+  "day": "day",
+  "days": "days",
+  "googleLogin": "Log in with Google",
+  "or": "or",
+  "loginSuccess": "Login successful",
+  "invalidCredentials": "Invalid credentials"
 }

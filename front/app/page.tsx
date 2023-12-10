@@ -49,18 +49,12 @@ interface ILocationData {
 }
 
 export default function Home() {
-  const [locationData, setLocationData] = useState<ILocationData[]>([]);
-  const [loading, setLoading] = useState<Boolean>(true);
-  const { t, i18n } = useTranslation();
-
   const { user, theme, trackedCards, setTrackedCards } = useAuthContext();
   const router = useRouter();
 
   useEffect(() => {
     if (!user) {
       router.push("/login");
-    } else {
-      console.log(user);
     }
   }, [user, router]);
 
@@ -78,8 +72,6 @@ export default function Home() {
         console.log(err);
       });
   };
-
-  console.log(trackedCards);
 
   return (
     <div className={`bg-${theme}-950 ${lexend.className} h-full`}>

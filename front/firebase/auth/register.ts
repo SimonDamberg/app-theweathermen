@@ -13,37 +13,23 @@ const registerPasswordEmail = async (
   email: string,
   password: string
 ) => {
-  let result = null,
-    error = null;
-  try {
-    result = await createUserWithEmailAndPassword(auth, email, password);
-    if (result.user) {
-      updateProfile(result.user, {
-        displayName: name,
-      });
-
-      apiPOST("/user", {
-        fb_id: result.user.uid,
-        theme: "slate",
-      })
-        .then((res) => {
-          console.log(res);
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((res) => {
+      if (res.user) {
+        return updateProfile(res.user, {
+          displayName: name,
         })
-        .catch((err) => {
-          console.log(err);
-
-          // delete user in firebase
-          result!.user?.delete();
-
-          // log out user
-          auth.signOut();
-        });
-    }
-  } catch (e) {
-    error = e;
-  }
-
-  return { result, error };
+          .then(() => {
+            return Promise.resolve(res.user);
+          })
+          .catch((err) => {
+            return Promise.reject(err);
+          });
+      }
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
 };
 
 export default registerPasswordEmail;

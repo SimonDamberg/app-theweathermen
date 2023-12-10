@@ -1,4 +1,4 @@
-import { useAuthContext } from "@/context/AuthContext";
+import { possibleThemes, useAuthContext } from "@/context/AuthContext";
 import { apiPOST } from "@/utils/requestWrapper";
 import { Dialog, RadioGroup, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
@@ -8,31 +8,6 @@ interface IColourSelectorComponentProps {
   open: boolean;
   setOpen: (open: boolean) => void;
 }
-
-const colours = [
-  "slate",
-  "gray",
-  "zinc",
-  "neutral",
-  "stone",
-  //"red",
-  "orange",
-  "amber",
-  //"yellow",
-  "lime",
-  "green",
-  "emerald",
-  "teal",
-  "cyan",
-  "sky",
-  //"blue",
-  "indigo",
-  "violet",
-  "purple",
-  "fuchsia",
-  "pink",
-  "rose",
-];
 
 const opacities = [
   "50",
@@ -101,7 +76,7 @@ export default function ColourSelector(props: IColourSelectorComponentProps) {
                   <div className="mx-auto w-full mt-4">
                     <RadioGroup value={theme} onChange={saveNewTheme}>
                       <div className="grid grid-cols-3 auto-rows-min gap-4">
-                        {colours.map((ind) => (
+                        {possibleThemes.map((ind) => (
                           <RadioGroup.Option
                             key={ind}
                             value={ind}
