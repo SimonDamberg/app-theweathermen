@@ -67,7 +67,7 @@ const MoveCardComponent = (props: IMoveCardComponentProps) => {
         />
       </div>
     );
-  else return <div className="w-16 h-8" />;
+  else return <></>;
 };
 
 export default MoveCardComponent;

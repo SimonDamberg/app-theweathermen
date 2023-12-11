@@ -2,8 +2,10 @@ import { possibleThemes, useAuthContext } from "@/context/AuthContext";
 import { alertFailure, alertSuccess } from "@/utils/notify";
 import { apiPOST } from "@/utils/requestWrapper";
 import { Dialog, RadioGroup, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import dynamic from "next/dynamic";
+import { Fragment, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import MapComponent from "./MapComponent";
 
 interface IAddLocationDialogProps {
   open: boolean;
@@ -15,11 +17,13 @@ const AddLocationDialog = (props: IAddLocationDialogProps) => {
   const { t, i18n } = useTranslation();
   const { user, theme, updateLocationsCallback } = useAuthContext();
   const [locationName, setLocationName] = useState("");
+  const [locationAdress, setLocationAdress] = useState("");
 
   const handleForm = async (event: any) => {
     event.preventDefault();
     apiPOST("/location/add", {
       name: locationName,
+      adress: locationAdress,
       fb_id: user?.uid,
     })
       .then((res) => {
@@ -68,39 +72,26 @@ const AddLocationDialog = (props: IAddLocationDialogProps) => {
                     className={`text-xl font-medium leading-6 text-${theme}-100`}>
                     {t("addLocation")}
                   </Dialog.Title>
-                  <form>
-                    <div className="mx-auto w-full mt-4">
-                      <div className="flex flex-col">
-                        <label
-                          htmlFor="locationName"
-                          className={`text-md font-medium text-${theme}-100`}>
-                          {t("location")}
-                        </label>
-                        <input
-                          value={locationName}
-                          onChange={(e) => setLocationName(e.target.value)}
-                          type="text"
-                          name="locationName"
-                          id="locationName"
-                          className={`mt-2 p-1 block w-full border-${theme}-300 rounded-md bg-${theme}-500 text-${theme}-100 focus:outline-none`}
-                        />
-                      </div>
-                    </div>
-                    <div className="mt-4 flex justify-end">
-                      <button
-                        type="submit"
-                        onClick={handleForm}
-                        className={`mr-2 inline-flex justify-center rounded-lg p-2 text-${theme}-100 bg-${theme}-500 hover:bg-${theme}-700`}>
-                        {t("addLocation")}
-                      </button>
-                      <button
-                        type="button"
-                        className={`inline-flex justify-center rounded-lg p-2 text-${theme}-700 bg-${theme}-300 hover:bg-${theme}-500`}
-                        onClick={() => setOpen(false)}>
-                        {t("closeModal")}
-                      </button>
-                    </div>
-                  </form>
+                  <div className="w-full flex justify-center rounded-xl">
+                    <MapComponent
+                      setLocationName={setLocationName}
+                      setLocationAdress={setLocationAdress}
+                    />
+                  </div>
+                  <div className="mt-4 flex justify-end">
+                    <button
+                      type="button"
+                      onClick={handleForm}
+                      className={`mr-2 inline-flex justify-center rounded-lg p-2 text-${theme}-100 bg-${theme}-500 hover:bg-${theme}-700`}>
+                      {t("addLocation")}
+                    </button>
+                    <button
+                      type="button"
+                      className={`inline-flex justify-center rounded-lg p-2 text-${theme}-700 bg-${theme}-300 hover:bg-${theme}-500`}
+                      onClick={() => setOpen(false)}>
+                      {t("closeModal")}
+                    </button>
+                  </div>
                 </div>
               </Dialog.Panel>
             </Transition.Child>

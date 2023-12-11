@@ -82,4 +82,23 @@ userRouter.post(
   }
 );
 
+/**
+ * POST /user/deleteLocation
+ */
+userRouter.post("/deleteLocation", async (req: Request, res: Response) => {
+  const fb_id = req.body.fb_id;
+  const location_id = req.body.location_id;
+  const user = await User.findOne({ fb_id: fb_id });
+  if (!user) {
+    return res.status(404).send("User not found");
+  }
+
+  user.tracked_cards = user.tracked_cards.filter(
+    (card) => card.location_id != location_id
+  );
+  user.save();
+
+  res.send({ message: "Location deleted" });
+});
+
 export default userRouter;

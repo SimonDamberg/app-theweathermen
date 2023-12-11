@@ -10,7 +10,14 @@ import WindCardComponent from "./CardComponents/WindCardComponent";
 import XDaysForecastComponent from "./CardComponents/XDaysForecastComponent/XDaysForecastComponent";
 import { useTranslation } from "react-i18next";
 import CircleButtonComponent from "../CircleButtonComponent";
-import { faCheck, faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheck,
+  faCross,
+  faPen,
+  faPlus,
+  faTrash,
+  faX,
+} from "@fortawesome/free-solid-svg-icons";
 import { useAuthContext } from "@/context/AuthContext";
 import { providerToBgColor, providerToBorderColor } from "@/utils/colors";
 import {
@@ -19,10 +26,11 @@ import {
   dataTypes,
   providerToTS,
 } from "@/utils/location";
-import { apiGET } from "@/utils/requestWrapper";
+import { apiGET, apiPOST } from "@/utils/requestWrapper";
 import MoveCardComponent from "./MoveCardComponent";
 import ListBoxSelectComponent from "./EditDialog/ListBoxSelectComponent";
 import { getAverageRightNowData } from "@/utils/weather";
+import { alertFailure, alertSuccess } from "@/utils/notify";
 
 interface ILocationCardProps {
   locationID: string;
@@ -32,7 +40,7 @@ interface ILocationCardProps {
 
 const LocationCard = (props: ILocationCardProps) => {
   const { locationID, enabledComponents, setEnabledComponents } = props;
-  const { theme } = useAuthContext();
+  const { theme, user, updateLocationsCallback } = useAuthContext();
   const { t } = useTranslation();
 
   const [data, setData] = useState<any>(null);
@@ -58,6 +66,24 @@ const LocationCard = (props: ILocationCardProps) => {
     setEnabledComponents(newData);
   };
 
+  const handleDelete = () => {
+    apiPOST(`/user/deleteLocation`, {
+      fb_id: user?.uid,
+      location_id: locationID,
+    })
+      .then((res) => {
+        console.log(res);
+        if (res) {
+          updateLocationsCallback();
+          alertSuccess(t("locationDeleted"));
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        alertFailure(t("somethingWentWrong"));
+      });
+  };
+
   useEffect(() => {
     // fetch data from API for locationID
     apiGET(`/location/${locationID}`).then((res) => {
@@ -67,17 +93,18 @@ const LocationCard = (props: ILocationCardProps) => {
 
   return (
     <div
-      className={`w-[54rem] h-auto p-10 rounded-xl bg-${theme}-700 shadow-sm hover:shadow-lg shadow-${theme}-600 hover:shadow-${theme}-600 transition-all ease-in-out duration-300`}>
+      className={`w-full h-auto p-10 rounded-xl bg-${theme}-700 shadow-sm hover:shadow-lg shadow-${theme}-600 hover:shadow-${theme}-600 transition-all ease-in-out duration-300`}>
       {data && (
         <>
-          <div className="flex flex-row justify-between content-center">
+          <div className="flex flex-row justify-between pb-4">
             {/* HEADER */}
-            <p className={`text-4xl text-${theme}-100 self-center`}>
-              {data.name}
+            <p
+              className={`text-4xl text-${theme}-100 self-center justify-center`}>
+              {data.name.split(",")[0]}
             </p>
-            <div className="flex flex-col self-center">
+            <div className="flex flex-col self-center justify-center">
               {/* PROVIDER TOGGLE */}
-              <div className="flex flex-row justify-center self-center">
+              <div className="grid grid-cols-2 justify-center self-center">
                 {Object.keys(providerToTS).map((provider) => (
                   <div
                     key={provider}
@@ -104,20 +131,24 @@ const LocationCard = (props: ILocationCardProps) => {
                 ))}
               </div>
             </div>
-            <div className="w-20 flex flex-row self-center justify-center">
-              {enabledComponents.length > 0 && (
-                <CircleButtonComponent
-                  className={`bg-${theme}-600 p-4 rounded-xl mr-2`}
-                  iconClassName={`text-lg ${
-                    editing ? "text-green-500" : `text-${theme}-100`
-                  }`}
-                  icon={editing ? faCheck : faPen}
-                  onClick={() => setEditing(!editing)}
-                />
-              )}
+            <div className="grid grid-cols-2 self-center gap-2">
+              <CircleButtonComponent
+                className={`bg-${theme}-600 p-4 rounded-xl transition-all ease-in-out`}
+                iconClassName={`text-lg ${
+                  editing ? "text-green-500" : `text-${theme}-100`
+                }`}
+                icon={editing ? faCheck : faPen}
+                onClick={() => setEditing(!editing)}
+              />
+              <CircleButtonComponent
+                className={`bg-${theme}-600 p-4 rounded-xl transition-all ease-in-out`}
+                iconClassName={`text-lg text-red-500`}
+                icon={faTrash}
+                onClick={handleDelete}
+              />
               {(editing || enabledComponents.length == 0) && (
                 <CircleButtonComponent
-                  className={`bg-${theme}-600 p-4 rounded-xl ${
+                  className={`bg-${theme}-600 col-span-2 p-4 rounded-xl transition-all ease-in-out ${
                     enabledComponents.length == 0 ? "animate-bounce" : ""
                   }`}
                   iconClassName={`text-lg text-${theme}-100`}
@@ -127,13 +158,13 @@ const LocationCard = (props: ILocationCardProps) => {
               )}
             </div>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col justify-center">
             {enabledComponents.map((row, index) => {
               if (row.component === 0) {
                 return (
                   <div
                     key={row.component + String(row.data ?? "") + index}
-                    className="flex flex-row ">
+                    className="flex flex-row justify-center">
                     <ForecastGraphCardComponent
                       setNumForecastDays={setNumForecastDays}
                       data={data}
@@ -158,9 +189,9 @@ const LocationCard = (props: ILocationCardProps) => {
                 return (
                   <div
                     key={row.component + String(row.data ?? "") + index}
-                    className={`flex flex-row`}>
+                    className={`flex flex-row justify-center`}>
                     <div
-                      className={`flex flex-col justify-center w-[40rem] my-4 ml-16 rounded-xl transition-all ease-in-out duration-500 ${
+                      className={`flex flex-col justify-center w-full my-4 rounded-xl transition-all ease-in-out duration-500 ${
                         editing ? `bg-${theme}-800 p-4` : "p-0"
                       }`}>
                       <div className="grid grid-cols-2 justify-center gap-4">
@@ -382,7 +413,7 @@ const LocationCard = (props: ILocationCardProps) => {
                 return (
                   <div
                     key={row.component + String(row.data ?? "") + index}
-                    className="flex flex-row">
+                    className="flex flex-row justify-center">
                     <div className="flex justify-center my-4">
                       <XDaysForecastComponent
                         name={data.name}

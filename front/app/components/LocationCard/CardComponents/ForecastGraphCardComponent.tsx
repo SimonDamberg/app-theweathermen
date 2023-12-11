@@ -210,8 +210,8 @@ const ForecastGraphCardComponent = (
 
   return (
     <div
-      className={`bg-${theme}-800 w-[40rem] ml-16 h-full rounded-xl p-4 content-center flex flex-col my-4 justify-center`}>
-      <div className="flex justify-between content-center">
+      className={`bg-${theme}-800 w-5/6 mx-4 rounded-xl p-4 content-center flex flex-col my-4 justify-center`}>
+      <div className="flex justify-between content-center pb-2">
         {editing ? (
           <>
             <div className="flex flex-col mx-2 self-center">
@@ -246,19 +246,19 @@ const ForecastGraphCardComponent = (
               id="numForecastDays"
               type="range"
               min="1"
-              max="14"
+              max="10"
               value={numForecastDays}
               step="1"
               onChange={(e) => setNumForecastDays(parseInt(e.target.value))}
               className={`h-2 bg-${theme}-500 rounded-lg appearance-none cursor-pointer `}
             />
             <span
-              className={`text-xs text-${theme}-100 absolute start-0 -bottom-6`}>
+              className={`text-xs text-${theme}-100 absolute start-0 -bottom-4`}>
               1 {t("day")}
             </span>
             <span
-              className={`text-xs text-${theme}-100 absolute end-0 -bottom-6`}>
-              14 {t("days")}
+              className={`text-xs text-${theme}-100 absolute end-0 -bottom-4`}>
+              10 {t("days")}
             </span>
           </div>
         </div>

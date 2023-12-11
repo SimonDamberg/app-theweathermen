@@ -15,6 +15,7 @@ import SpinnerComponent from "./components/SpinnerComponent";
 import { ITrackedCard } from "@/utils/location";
 import { apiPOST } from "@/utils/requestWrapper";
 import AddLocationDialog from "./components/AddLocationDialog";
+import MapComponent from "./components/MapComponent";
 
 const lexend = Lexend({ subsets: ["latin"] });
 
@@ -82,7 +83,8 @@ export default function Home() {
         setOpen={setShowAddLocationDialog}
       />
       <NavbarComponent />
-      <div className="grid grid-cols-2 grid-flow-cols gap-16 mx-16 my-16">
+
+      <div className="grid grid-cols-1 2xl:grid-cols-2 grid-flow-cols gap-16 mx-16 my-16">
         {trackedCards.map((card) => (
           <div className="flex justify-center" key={card.location_id}>
             <LocationCard
@@ -101,13 +103,6 @@ export default function Home() {
         ))}
       </div>
       <div className="fixed right-0 bottom-0 flex flex-row">
-        <div className="-mr-8">
-          <CircleButtonComponent
-            className={`bg-${theme}-600 w-16 h-16 m-6 text-${theme}-100`}
-            icon={faPen}
-            onClick={() => null}
-          />
-        </div>
         <CircleButtonComponent
           className={`bg-${theme}-600 w-16 h-16 m-6 text-${theme}-100`}
           icon={faPlus}

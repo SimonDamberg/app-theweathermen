@@ -221,6 +221,7 @@ locRouter.post(
   "/add",
   async (req: Request, res: Response, next: NextFunction) => {
     const name = req.body.name.toLowerCase();
+    const adress = req.body.adress;
     const fb_id = req.body.fb_id;
 
     // Check if location already exists
@@ -251,7 +252,7 @@ locRouter.post(
     }
 
     // Fetch coords from Geocode API
-    const geocodeURL = `https://geocode.maps.co/search?q=${name.toLowerCase()}`;
+    const geocodeURL = `https://geocode.maps.co/search?q=${adress.toLowerCase()}`;
     const geocodeResp = await fetch(geocodeURL);
     const geocodeData = await geocodeResp.json();
 
@@ -265,6 +266,7 @@ locRouter.post(
     // Create new Location object
     const newLoc = new Location({
       name: name.toLowerCase(),
+      adress: adress,
       lat: lat.toFixed(5),
       lon: lon.toFixed(5),
     });
