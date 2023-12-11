@@ -19,7 +19,7 @@ const MapComponent = (props: IMapComponentProps) => {
   const { theme } = useAuthContext();
   const [searchBox, setSearchbox] = React.useState<any>(null);
 
-  const onLoad = (ref) => setSearchbox(ref);
+  const onLoad = (ref: any) => setSearchbox(ref);
 
   const onPlacesChanged = () => {
     console.log(searchBox.getPlaces());
