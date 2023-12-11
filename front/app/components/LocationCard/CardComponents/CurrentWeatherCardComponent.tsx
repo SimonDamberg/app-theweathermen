@@ -17,17 +17,10 @@ const CurrentWeatherCard = (props: ICurrentWeatherCardProps) => {
 
   return (
     <div
-      className={`flex bg-${theme}-800 rounded-xl p-4 mx-2 border-2 ${
+      className={`flex bg-${theme}-800 rounded-xl p-4 mx-4 border-2 justify-center ${
         providerToBorderColor[provider.toLowerCase()]
       }`}>
       <div className="flex flex-row justify-center">
-        <p className={`text-${theme}-100 text-2xl mx-2`}>
-          {airTemperature.toLocaleString(i18n.language, {
-            minimumFractionDigits: 1,
-            maximumFractionDigits: 1,
-          })}
-          °C
-        </p>
         <div className="flex justify-center">
           <Image
             src={`/images/weatherSymbols/${symbol}.png`}
@@ -36,6 +29,13 @@ const CurrentWeatherCard = (props: ICurrentWeatherCardProps) => {
             alt=""
           />
         </div>
+        <p className={`text-${theme}-100 text-2xl mx-2`}>
+          {airTemperature.toLocaleString(i18n.language, {
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1,
+          })}
+          °C
+        </p>
       </div>
     </div>
   );

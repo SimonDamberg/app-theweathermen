@@ -23,9 +23,14 @@ const AirHumidityComponent = (props: IAirHumidityComponentProps) => {
         <div className="self-center text-white text-3xl">
           <WiHumidity />
         </div>
-        <p className={`text-${theme}-100 text-lg mx-2 self-center`}>
-          <span className="font-bold">{airHumidity}</span>
-          <span className="text-xs">{t("%")}</span>
+        <p className={`text-${theme}-100 text-2xl mx-2 self-center`}>
+          <span>
+            {airHumidity.toLocaleString(i18n.language, {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            })}
+          </span>
+          <span className="text-lg">{t("%")}</span>
         </p>
       </div>
     </div>

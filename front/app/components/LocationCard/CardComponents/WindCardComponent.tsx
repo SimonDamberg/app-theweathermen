@@ -20,26 +20,28 @@ const WindCardComponent = (props: IWindCardComponentProps) => {
 
   return (
     <div
-      className={`flex flex-col bg-${theme}-800 rounded-xl p-4 border-2 ${
+      className={`flex flex-col bg-${theme}-800 rounded-xl p-4 mx-4 border-2 ${
         providerToBorderColor[provider.toLowerCase()]
       }`}>
-      <div className="flex flex-row justify-center content-center">
-        <p className={`text-${theme}-100 text-lg mx-2 self-center`}>
-          {t(windDirectionFromDegrees(windDirection))}
-        </p>
-        <FontAwesomeIcon
-          className="self-center"
-          icon={faArrowUp}
-          size={"lg"}
-          style={{
-            transform: `rotate(${180 + windDirection}deg)`,
-            color: "#e0f2fe",
-          }}
-        />
-        <p className={`text-${theme}-100 text-lg mx-2 self-center`}>
+      <div className="flex flex-col justify-center content-center">
+        <div className="flex flex-row justify-center">
+          <p className={`text-${theme}-100 text-2xl mx-2 self-center`}>
+            {t(windDirectionFromDegrees(windDirection))}
+          </p>
+          <FontAwesomeIcon
+            className="self-center"
+            icon={faArrowUp}
+            size={"xl"}
+            style={{
+              transform: `rotate(${180 + windDirection}deg)`,
+              color: "#e0f2fe",
+            }}
+          />
+        </div>
+        <p className={`text-${theme}-100 text-2xl mx-2 self-center`}>
           <span className="font-bold">{windSpeed.toFixed(0)}</span> (
           {windGustSpeed.toFixed(0)}){" "}
-          <span className="text-xs">{t("meterPerSecond")}</span>
+          <span className="text-lg">{t("meterPerSecond")}</span>
         </p>
       </div>
     </div>

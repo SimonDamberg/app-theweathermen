@@ -4,7 +4,7 @@ import ForecastGraphCardComponent from "./CardComponents/ForecastGraphCardCompon
 import AirHumidityComponent from "./CardComponents/AirHumidityComponent";
 import CurrentPrecipitationCardComponent from "./CardComponents/CurrentPrecipitationCardComponent";
 import CurrentVisibilityCardComponent from "./CardComponents/CurrentVisibilityCardComponent";
-import CurrentAirPressureCardComponent from "./CardComponents/CurrentAirPressureCardComponent"
+import CurrentAirPressureCardComponent from "./CardComponents/CurrentAirPressureCardComponent";
 import CurrentCloudCoverageCardComponent from "./CardComponents/CurrentCloudCoverageCardComponent";
 import WindCardComponent from "./CardComponents/WindCardComponent";
 import XDaysForecastComponent from "./CardComponents/XDaysForecastComponent/XDaysForecastComponent";
@@ -48,6 +48,10 @@ const LocationCard = (props: ILocationCardProps) => {
 
   const [numForecastDays, setNumForecastDays] = useState(5);
 
+  const onlyAvgProvider = () => {
+    return enabledProviders.length == 1 && enabledProviders.includes("Average");
+  };
+
   const handleAdd = () => {
     const newData = [...enabledComponents];
     newData.push({ component: 0, data: 0 });
@@ -77,7 +81,6 @@ const LocationCard = (props: ILocationCardProps) => {
                 {Object.keys(providerToTS).map((provider) => (
                   <div
                     key={provider}
-
                     className={`rounded-xl ${
                       enabledProviders.includes(provider)
                         ? "opacity-100"
@@ -87,7 +90,6 @@ const LocationCard = (props: ILocationCardProps) => {
                     } ${
                       providerToBgColor[provider.toLowerCase()]
                     } hover:opacity-70 transition-all ease-in-out duration-200`}
-                    
                     onClick={() => {
                       if (enabledProviders.includes(provider)) {
                         setEnabledProviders(
@@ -163,6 +165,7 @@ const LocationCard = (props: ILocationCardProps) => {
                       }`}>
                       <div className="grid grid-cols-2 justify-center gap-4">
                         {row.data === 0 &&
+                          !onlyAvgProvider() &&
                           enabledProviders.map(
                             (provider) =>
                               data[providerToTS[provider]].length > 0 && (
@@ -193,6 +196,7 @@ const LocationCard = (props: ILocationCardProps) => {
                               )
                           )}
                         {row.data === 1 &&
+                          !onlyAvgProvider() &&
                           enabledProviders.map(
                             (provider) =>
                               data[providerToTS[provider]].length > 0 && (
@@ -233,69 +237,107 @@ const LocationCard = (props: ILocationCardProps) => {
                               )
                           )}
                         {row.data === 2 &&
+                          !onlyAvgProvider() &&
                           enabledProviders.map(
                             (provider) =>
                               data[providerToTS[provider]].length > 0 && (
                                 <CurrentPrecipitationCardComponent
                                   key={provider}
                                   precipitation={
-                                    data[providerToTS[provider]][0].meanPrecipitationIntensity
+                                    provider === "Average"
+                                      ? getAverageRightNowData(
+                                          data,
+                                          "meanPrecipitationIntensity",
+                                          enabledProviders
+                                        )
+                                      : data[providerToTS[provider]][0]
+                                          .meanPrecipitationIntensity
                                   }
                                   provider={provider}
                                 />
                               )
                           )}
                         {row.data === 3 &&
+                          !onlyAvgProvider() &&
                           enabledProviders.map(
                             (provider) =>
                               data[providerToTS[provider]].length > 0 && (
                                 <CurrentAirPressureCardComponent
                                   key={provider}
                                   airPressure={
-                                    data[providerToTS[provider]][0].airPressure
+                                    provider === "Average"
+                                      ? getAverageRightNowData(
+                                          data,
+                                          "airPressure",
+                                          enabledProviders
+                                        )
+                                      : data[providerToTS[provider]][0]
+                                          .airPressure
                                   }
                                   provider={provider}
                                 />
                               )
                           )}
                         {row.data === 4 &&
+                          !onlyAvgProvider() &&
                           enabledProviders.map(
                             (provider) =>
                               data[providerToTS[provider]].length > 0 && (
                                 <CurrentVisibilityCardComponent
                                   key={provider}
                                   visibility={
-                                    data[providerToTS[provider]][0]?.horizontalVisibility
+                                    provider === "Average"
+                                      ? getAverageRightNowData(
+                                          data,
+                                          "horizontalVisibility",
+                                          enabledProviders
+                                        )
+                                      : data[providerToTS[provider]][0]
+                                          .horizontalVisibility
                                   }
                                   provider={provider}
-                                  symbol={99}
                                 />
                               )
                           )}
                         {row.data === 5 &&
+                          !onlyAvgProvider() &&
                           enabledProviders.map(
                             (provider) =>
                               data[providerToTS[provider]].length > 0 && (
                                 <AirHumidityComponent
                                   key={provider}
                                   airHumidity={
-                                    data[providerToTS[provider]][0].relativeHumidity
+                                    provider === "Average"
+                                      ? getAverageRightNowData(
+                                          data,
+                                          "relativeHumidity",
+                                          enabledProviders
+                                        )
+                                      : data[providerToTS[provider]][0]
+                                          .relativeHumidity
                                   }
                                   provider={provider}
                                 />
                               )
                           )}
                         {row.data === 6 &&
+                          !onlyAvgProvider() &&
                           enabledProviders.map(
                             (provider) =>
                               data[providerToTS[provider]].length > 0 && (
                                 <CurrentCloudCoverageCardComponent
                                   key={provider}
                                   coverage={
-                                    data[providerToTS[provider]][0]?.totalCloudCover
+                                    provider === "Average"
+                                      ? getAverageRightNowData(
+                                          data,
+                                          "totalCloudCover",
+                                          enabledProviders
+                                        )
+                                      : data[providerToTS[provider]][0]
+                                          .totalCloudCover
                                   }
                                   provider={provider}
-                                  symbol={3}
                                 />
                               )
                           )}
