@@ -292,7 +292,7 @@ locRouter.post(
 
 // ======= fetch new data from APIs =======
 locRouter.get(
-  "/update/:name",
+  "/update/one/:name",
   async (req: Request, res: Response, next: NextFunction) => {
     // Get relevant Location object from DB
     const loc = await Location.findOne({
@@ -312,6 +312,48 @@ locRouter.get(
         return res.status(500).send({ status: "ERROR", error: err });
       });
   }
+);
+
+/**
+ * GET /location/update
+ *
+ * Update all locations
+ */
+locRouter.get(
+  "/update/all",
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Get all locations from DB
+    const locs = await Location.find({});
+
+    // Update weather data
+    let errors: any[] = [];
+    let numFetchedLocs = 0;
+    locs
+      .forEach((loc) => {
+        console.log(loc);
+        updateWeatherData(loc._id, loc.lat, loc.lon)
+          .then(() => {
+            numFetchedLocs++;
+            if (numFetchedLocs == locs.length) {
+              if (errors.length == 0) {
+                return res.send({ status: "OK" });
+              } else {
+                return res.status(500).send({ status: "ERROR", error: errors });
+              }
+            }
+          })
+          .catch((err) => {
+            errors.push(`Error updating ${loc.name}: ${err}`);
+            numFetchedLocs++;
+            if (numFetchedLocs == locs.length) {
+              if (errors.length == 0) {
+                return res.send({ status: "OK" });
+              } else {
+                return res.status(500).send({ status: "ERROR", error: errors });
+              }
+            }
+          });
+      })
 );
 
 export default locRouter;
