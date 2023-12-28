@@ -1,12 +1,15 @@
 import { Types } from "mongoose";
-import { ILocation } from "../schemas/location";
 import { ITimeSeries, tsModel } from "../schemas/timeSeries";
 import {
+  IOWMResponse,
+  ISMHIResponse,
+  IWAResponse,
   parseAvgToTS,
   parseOWMToTS,
   parseSMHIToTS,
   parseWAToTS,
 } from "./parsing";
+import axios from "axios";
 
 export const updateWeatherData = async (
   locationID: Types.ObjectId,
@@ -58,23 +61,23 @@ export const getSMHIData = async (lat: number, lon: number) => {
   console.log("Fetching data from SMHI API");
   const smhiURL = `https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/${lon}/lat/${lat}/data.json`;
   console.log(smhiURL);
-  const smhiResp = await fetch(smhiURL);
-  const smhiData = await smhiResp.json();
+  const smhiResp = await axios.get(smhiURL);
+  const smhiData: ISMHIResponse = smhiResp.data;
   return smhiData;
 };
 
 export const getOWMData = async (lat: number, lon: number) => {
   console.log("Fetching data from OpenWeatherMap API");
   const owmURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&&units=metric&appid=${process.env.OPENWEATHERMAP_API_KEY}`;
-  const owmResp = await fetch(owmURL);
-  const owmData = await owmResp.json();
+  const owmResp = await axios.get(owmURL);
+  const owmData: IOWMResponse = owmResp.data;
   return owmData;
 };
 
 export const getWAData = async (lat: number, lon: number) => {
   console.log("Fetching data from WeatherAPI");
   const waURL = `https://api.weatherapi.com/v1/forecast.json?q=${lat},${lon}&days=14&key=${process.env.WEATHERAPI_API_KEY}`;
-  const waResp = await fetch(waURL);
-  const waData = await waResp.json();
+  const waResp = await axios.get(waURL);
+  const waData: IWAResponse = waResp.data;
   return waData;
 };
