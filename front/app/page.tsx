@@ -84,7 +84,7 @@ export default function Home() {
       />
       <NavbarComponent />
 
-      <div className="grid grid-cols-1 2xl:grid-cols-2 grid-flow-cols gap-16 mx-16 my-16">
+      <div className="grid grid-cols-1 2xl:grid-cols-2 grid-flow-cols gap-16 mx-2 md:mx-16 my-16">
         {trackedCards.map((card) => (
           <div className="flex justify-center" key={card.location_id}>
             <LocationCard
