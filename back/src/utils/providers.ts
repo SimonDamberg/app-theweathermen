@@ -18,31 +18,47 @@ export const updateWeatherData = async (
 ) => {
   await tsModel.deleteMany({ locationId: locationID });
 
+  let parsedSMHI: ITimeSeries[] = [];
+  let parsedOWM: ITimeSeries[] = [];
+  let parsedWA: ITimeSeries[] = [];
+
   // Fetch and parse data from SMHI API
-  const smhiData = await getSMHIData(lat, lon);
-  const parsedSMHI: ITimeSeries[] = parseSMHIToTS(smhiData, locationID);
-  parsedSMHI.forEach(async (data) => {
-    const ts = new tsModel(data);
-    await ts.save();
-  });
+  try {
+    const smhiData = await getSMHIData(lat, lon);
+    parsedSMHI = parseSMHIToTS(smhiData, locationID);
+    parsedSMHI.forEach(async (data) => {
+      const ts = new tsModel(data);
+      await ts.save();
+    });
+  } catch (err) {
+    console.log(`Error fetching data from SMHI API: ${err}`);
+  }
 
   // Fetch data from OpenWeatherMapAPI
-  const owmData = await getOWMData(lat, lon);
-  // Parse data from OpenWeatherMap API
-  const parsedOWM: ITimeSeries[] = parseOWMToTS(owmData, locationID);
-  parsedOWM.forEach(async (data) => {
-    const ts = new tsModel(data);
-    await ts.save();
-  });
+  try {
+    const owmData = await getOWMData(lat, lon);
+    // Parse data from OpenWeatherMap API
+    parsedOWM = parseOWMToTS(owmData, locationID);
+    parsedOWM.forEach(async (data) => {
+      const ts = new tsModel(data);
+      await ts.save();
+    });
+  } catch (err) {
+    console.log(`Error fetching data from OpenWeatherMap API: ${err}`);
+  }
 
   // Fetch data from WeatherAPI
-  const waData = await getWAData(lat, lon);
-  // Parse data from WeatherAPI
-  const parsedWA: ITimeSeries[] = parseWAToTS(waData, locationID);
-  parsedWA.forEach(async (data) => {
-    const ts = new tsModel(data);
-    await ts.save();
-  });
+  try {
+    const waData = await getWAData(lat, lon);
+    // Parse data from WeatherAPI
+    parsedWA = parseWAToTS(waData, locationID);
+    parsedWA.forEach(async (data) => {
+      const ts = new tsModel(data);
+      await ts.save();
+    });
+  } catch (err) {
+    console.log(`Error fetching data from WeatherAPI: ${err}`);
+  }
 
   console.log("Average data");
   const parsedAvg: ITimeSeries[] = parseAvgToTS(
