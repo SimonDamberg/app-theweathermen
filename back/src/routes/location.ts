@@ -354,6 +354,7 @@ locRouter.get(
             }
           });
       })
-);
+  });
+
 
 export default locRouter;
