@@ -44,7 +44,7 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
   const [dailyStats, setDailyStats] = useState<IDailyLocationStats[]>([]);
   const [loading, setLoading] = useState<Boolean>(true);
   useEffect(() => {
-    apiGET(`location/daily/${callString}`)
+    apiGET(`/location/daily/${callString}`)
       .then((data) => {
         setDailyStats(data);
       })
