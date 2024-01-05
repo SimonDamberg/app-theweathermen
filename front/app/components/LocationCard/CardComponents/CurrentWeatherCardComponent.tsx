@@ -17,7 +17,7 @@ const CurrentWeatherCard = (props: ICurrentWeatherCardProps) => {
 
   return (
     <div
-      className={`flex bg-${theme}-800 rounded-xl p-4 mx-4 border-2 justify-center ${
+      className={`flex bg-${theme}-800 rounded-xl p-4 mx-2 md:mx-4 border-2 justify-center ${
         providerToBorderColor[provider.toLowerCase()]
       }`}>
       <div className="flex flex-row justify-center">
@@ -29,7 +29,7 @@ const CurrentWeatherCard = (props: ICurrentWeatherCardProps) => {
             alt=""
           />
         </div>
-        <p className={`text-${theme}-100 text-2xl mx-2`}>
+        <p className={`text-${theme}-100 text-xl md:text-2xl mx-2`}>
           {airTemperature.toLocaleString(i18n.language, {
             minimumFractionDigits: 1,
             maximumFractionDigits: 1,

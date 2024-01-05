@@ -58,11 +58,13 @@ const ForecastGraphCardComponent = (
 
   const options = {
     responsive: true,
+    //maintainAspectRatio:false, test for mobile
     plugins: {
       legend: {
         position: "top" as const,
         labels: {
           color: "#f0f9ff",
+          boxWidth: 20
         },
       },
     },
@@ -210,11 +212,11 @@ const ForecastGraphCardComponent = (
 
   return (
     <div
-      className={`bg-${theme}-800 w-5/6 mx-4 rounded-xl p-4 content-center flex flex-col my-4 justify-center`}>
-      <div className="flex justify-between content-center pb-2">
+      className={`bg-${theme}-800 w-full md:w-5/6 my-2 md:mx-2 rounded-xl p-4 content-center flex flex-col my-4 justify-center`}>
+      <div className="flex flex-col md:flex-row align-center md:align-between justify-center my-2 md:my-0 content-center pb-2">
         {editing ? (
           <>
-            <div className="flex flex-col mx-2 self-center">
+            <div className="flex flex-col my-2 md:mx-2 self-center">
               <ListBoxSelectComponent
                 rowIdx={index}
                 setEnabledCards={setEnabledCards}
@@ -222,7 +224,7 @@ const ForecastGraphCardComponent = (
                 enabledCards={enabledCards}
               />
             </div>
-            <div className="flex flex-col mx-2 self-center">
+            <div className="flex flex-col my-2 md:mx-2 self-center">
               <ListBoxSelectComponent
                 rowIdx={index}
                 setEnabledCards={setEnabledCards}
@@ -236,7 +238,7 @@ const ForecastGraphCardComponent = (
             {t(dataField)}
           </p>
         )}
-        <div className="flex flex-col w-1/4 m-2">
+        <div className="flex flex-col w-full md:w-1/4 m-2">
           <p className={`text-center text-md mb-2 text-${theme}-100`}>
             {t("horizon")}
           </p>

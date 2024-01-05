@@ -164,7 +164,7 @@ const LocationCard = (props: ILocationCardProps) => {
                 return (
                   <div
                     key={row.component + String(row.data ?? "") + index}
-                    className="flex flex-row justify-center">
+                    className="flex flex-col align-center md:flex-row justify-center">
                     <ForecastGraphCardComponent
                       setNumForecastDays={setNumForecastDays}
                       data={data}
@@ -189,7 +189,7 @@ const LocationCard = (props: ILocationCardProps) => {
                 return (
                   <div
                     key={row.component + String(row.data ?? "") + index}
-                    className={`flex flex-row justify-center`}>
+                    className={`flex flex-col justify-center`}>
                     <div
                       className={`flex flex-col justify-center w-full my-4 rounded-xl transition-all ease-in-out duration-500 ${
                         editing ? `bg-${theme}-800 p-4` : "p-0"
@@ -380,10 +380,10 @@ const LocationCard = (props: ILocationCardProps) => {
                       </div>
 
                       <div
-                        className={`rounded-xl flex flex-row justify-center transition-all ease-in-out duration-500 ${
+                        className={`rounded-xl flex flex-col md:flex-row justify-center transition-all ease-in-out duration-500 ${
                           editing ? "opacity-100 p-4" : "opacity-0 p-0 h-0"
                         }`}>
-                        <div className="mx-2 self-center">
+                        <div className="my-2 md:mx-2 self-center">
                           <ListBoxSelectComponent
                             rowIdx={index}
                             setEnabledCards={setEnabledComponents}
@@ -391,7 +391,7 @@ const LocationCard = (props: ILocationCardProps) => {
                             enabledCards={enabledComponents}
                           />
                         </div>
-                        <div className="mx-2 self-center">
+                        <div className="my-2 md:mx-2 self-center">
                           <ListBoxSelectComponent
                             rowIdx={index}
                             setEnabledCards={setEnabledComponents}
@@ -413,7 +413,7 @@ const LocationCard = (props: ILocationCardProps) => {
                 return (
                   <div
                     key={row.component + String(row.data ?? "") + index}
-                    className="flex flex-row justify-center">
+                    className="flex flex-col md:flex-row justify-center">
                     <div className="flex justify-center my-4">
                       <XDaysForecastComponent
                         name={data.name}
