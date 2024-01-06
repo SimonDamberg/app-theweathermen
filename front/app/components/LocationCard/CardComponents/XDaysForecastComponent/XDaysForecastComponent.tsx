@@ -62,7 +62,7 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
   } else if (enabledProviders.length > 0) {
     return (
       <div
-        className={`bg-${theme}-800 w-full md:ml-16 rounded-xl p-4 text-${theme}-100 max-h-[49rem] overflow-y-auto flex flex-col`}>
+        className={`bg-${theme}-800 w-[40rem] md:ml-16 rounded-xl p-4 text-${theme}-100 max-h-[49rem] overflow-y-auto overflow-x-hidden flex flex-col`}>
         <div className="flex justify-between content-center m-4">
           {editing ? (
             <div className="flex flex-col mx-2 self-center">
@@ -89,7 +89,7 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
                 id="numForecastDays"
                 type="range"
                 min="1"
-                max="14"
+                max="10"
                 value={numForecastDays}
                 step="1"
                 onChange={(e) => setNumForecastDays(parseInt(e.target.value))}
@@ -101,21 +101,18 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
               </span>
               <span
                 className={`text-xs text-${theme}-100  absolute end-0 -bottom-6`}>
-                14 {t("days")}
+                10 {t("days")}
               </span>
             </div>
           </div>
         </div>
-        <table className="table-auto border-separate border-spacing-y-4 self-center">
+        <table className="table-auto text-sm md:text-base border-separate border-spacing-y-4 self-center">
           <thead>
             <tr>
               <th>{t("date")}</th>
               {enabledProviders.includes("SMHI") && <th>SMHI</th>}
               {enabledProviders.includes("WeatherAPI") && <th>WeatherAPI</th>}
-              {enabledProviders.includes("OpenWeatherMap") && (
-                <th>OpenWeatherMap</th>
-              )}
-              {enabledProviders.includes("Average") && <th>{t("average")}</th>}
+              {enabledProviders.includes("OpenWeatherMap") && <th>OWM</th>}
             </tr>
           </thead>
           <tbody>
@@ -150,14 +147,6 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
                         <ApiCellComponent
                           stats={row.owm}
                           provider={"openweathermap"}
-                        />
-                      </td>
-                    )}
-                    {enabledProviders.includes("Average") && (
-                      <td>
-                        <ApiCellComponent
-                          stats={row.avg}
-                          provider={"average"}
                         />
                       </td>
                     )}
