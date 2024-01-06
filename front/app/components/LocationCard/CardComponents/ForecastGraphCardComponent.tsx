@@ -64,7 +64,7 @@ const ForecastGraphCardComponent = (
         position: "top" as const,
         labels: {
           color: "#f0f9ff",
-          boxWidth: 20
+          boxWidth: 20,
         },
       },
     },
@@ -212,7 +212,7 @@ const ForecastGraphCardComponent = (
 
   return (
     <div
-      className={`bg-${theme}-800 w-full md:w-5/6 my-2 md:mx-2 rounded-xl p-4 content-center flex flex-col my-4 justify-center`}>
+      className={`bg-${theme}-800 w-full md:w-5/6 mx-2 md:mx-4 md:my-4 my-2 rounded-xl p-4 content-center flex flex-col justify-center`}>
       <div className="flex flex-col md:flex-row align-center md:align-between justify-center my-2 md:my-0 content-center pb-2">
         {editing ? (
           <>
