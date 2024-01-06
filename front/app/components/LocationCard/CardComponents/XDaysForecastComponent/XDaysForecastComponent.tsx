@@ -62,7 +62,7 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
   } else if (enabledProviders.length > 0) {
     return (
       <div
-        className={`bg-${theme}-800 w-[40rem] md:ml-16 rounded-xl p-4 text-${theme}-100 max-h-[49rem] overflow-y-auto overflow-x-hidden flex flex-col`}>
+        className={`bg-${theme}-800 w-[40rem] rounded-xl p-4 text-${theme}-100 max-h-[49rem] overflow-y-auto overflow-x-hidden flex flex-col`}>
         <div className="flex justify-between content-center m-4">
           {editing ? (
             <div className="flex flex-col mx-2 self-center">
