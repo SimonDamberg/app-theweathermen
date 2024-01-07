@@ -9,7 +9,7 @@ dotenv.config();
 const cors = require("cors");
 const app: Express = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({ credentials: true, origin: 'https://squid-app-znkgm.ondigitalocean.app' }));
 const port = process.env.PORT;
 
 const mongoString = process.env.PROD_DATABASE_URL; // LOCAL_DATABASE_URL
