@@ -9,12 +9,13 @@ dotenv.config();
 const cors = require("cors");
 const app: Express = express();
 app.use(express.json());
-app.use(cors({ credentials: true, origin: 'https://app-theweathermen.vercel.app' }));
+app.use(cors({ origin: 'https://app-theweathermen.vercel.app' }));
 const port = process.env.PORT;
 
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
