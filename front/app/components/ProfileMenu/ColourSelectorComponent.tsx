@@ -1,7 +1,7 @@
 import { possibleThemes, useAuthContext } from "@/context/AuthContext";
 import { apiPOST } from "@/utils/requestWrapper";
 import { Dialog, RadioGroup, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 interface IColourSelectorComponentProps {
@@ -26,7 +26,7 @@ const opacities = [
 export default function ColourSelector(props: IColourSelectorComponentProps) {
   const { open, setOpen } = props;
   const { t, i18n } = useTranslation();
-
+  const windowSize = useRef([window.innerWidth, window.innerHeight]);
   const { user, theme, setTheme } = useAuthContext();
 
   const saveNewTheme = (newTheme: string) => {
@@ -56,7 +56,7 @@ export default function ColourSelector(props: IColourSelectorComponentProps) {
             <div className="fixed inset-0 bg-black/25" />
           </Transition.Child>
 
-          <div className="fixed inset-0 flex mx-20 items-center justify-center p-4 text-center">
+          <div className="fixed inset-0 flex mx-8 md:mx-20 items-center justify-center p-4 text-center">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -67,7 +67,7 @@ export default function ColourSelector(props: IColourSelectorComponentProps) {
               leaveTo="opacity-0 scale-95">
               <Dialog.Panel>
                 <div
-                  className={`w-fit transform rounded-2xl bg-${theme}-900 p-6 text-left align-middle shadow-xl transition-all`}>
+                  className={`w-fit transform rounded-2xl bg-${theme}-900 p-4 md:p-6 text-left align-middle shadow-xl transition-all`}>
                   <Dialog.Title
                     as="h3"
                     className={`text-xl font-medium leading-6 text-${theme}-100`}>
@@ -93,7 +93,7 @@ export default function ColourSelector(props: IColourSelectorComponentProps) {
                                   {ind[0].toUpperCase() + ind.slice(1)}
                                 </RadioGroup.Label>
                                 <RadioGroup.Description as="span">
-                                  {opacities.map((op, idx) => (
+                                  {windowSize.current[0] > 768 && opacities.map((op, idx) => (
                                     <span
                                       key={idx}
                                       className={`bg-${ind}-${op} w-4 mr-2 mt-1 h-4 rounded-full inline-block`}
