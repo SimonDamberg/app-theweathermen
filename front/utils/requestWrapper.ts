@@ -23,7 +23,11 @@ export const apiGET = async (endpoint: string): Promise<any> => {
   const API = getAPIEndpoint();
   const route = `${API}${endpoint}`;
   return axios
-    .get(route)
+    .get(route, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
     .then((response) => Promise.resolve(response.data))
     .catch((error) => {
       return Promise.reject(error);
@@ -40,7 +44,12 @@ export const apiPOST = async (endpoint: string, payload: any): Promise<any> => {
   const API = getAPIEndpoint();
   const route = `${API}${endpoint}`;
   return axios
-    .post(route, payload)
+    .post(route, payload, {
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
     .then((response) => Promise.resolve(response.data))
     .catch((error) => {
       return Promise.reject(error);
