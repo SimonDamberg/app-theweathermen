@@ -15,7 +15,6 @@ import {
   getWAData,
   updateWeatherData,
 } from "../utils/providers";
-import axios from "axios";
 
 const locRouter: Router = express.Router();
 
@@ -252,10 +251,12 @@ locRouter.post(
       }
     }
 
+    return res.status(200).send("Test");
+
     // Fetch coords from Geocode API
     const geocodeURL = `https://geocode.maps.co/search?q=${adress.toLowerCase()}`;
-    const geocodeResp = await axios.get(geocodeURL);
-    const geocodeData = await geocodeResp.data;
+    const geocodeResp = await fetch(geocodeURL);
+    const geocodeData = await geocodeResp.json();
 
     if (geocodeData.length == 0) {
       return res.status(404).send("Location not found");
