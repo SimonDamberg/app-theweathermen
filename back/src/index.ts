@@ -9,8 +9,14 @@ dotenv.config();
 const cors = require("cors");
 const app: Express = express();
 app.use(express.json());
-app.use(cors({ origin: 'https://app-theweathermen.vercel.app' }));
+app.use(cors({ credentials: true, origin: 'https://app-theweathermen.vercel.app' }));
 const port = process.env.PORT;
+
+
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
 
 const mongoString = process.env.PROD_DATABASE_URL; // LOCAL_DATABASE_URL
 mongoose.set("strictQuery", false);
