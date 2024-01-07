@@ -1,8 +1,9 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ApiCellComponent, { IDailyStats } from "./ApiCellComponent";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "@/context/AuthContext";
 import ListBoxSelectComponent from "../../EditDialog/ListBoxSelectComponent";
+import { apiGET } from "@/utils/requestWrapper";
 
 interface IXDaysForecastComponentProps {
   enabledProviders: string[];
@@ -43,8 +44,7 @@ const XDaysForecastComponent = (props: IXDaysForecastComponentProps) => {
   const [dailyStats, setDailyStats] = useState<IDailyLocationStats[]>([]);
   const [loading, setLoading] = useState<Boolean>(true);
   useEffect(() => {
-    fetch(`http://localhost:8000/location/daily/${callString}`)
-      .then((response) => response.json())
+    apiGET(`/location/daily/${callString}`)
       .then((data) => {
         setDailyStats(data);
       })

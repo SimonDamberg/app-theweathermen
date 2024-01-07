@@ -52,6 +52,13 @@ const LocationCard = (props: ILocationCardProps) => {
     "Average",
   ]);
 
+  const [availableProviders, setAvailableProviders] = useState([
+    "SMHI",
+    "WeatherAPI",
+    "OpenWeatherMap",
+    "Average",
+  ]);
+
   const [editing, setEditing] = useState(false);
 
   const [numForecastDays, setNumForecastDays] = useState(5);
@@ -88,6 +95,29 @@ const LocationCard = (props: ILocationCardProps) => {
     // fetch data from API for locationID
     apiGET(`/location/${locationID}`).then((res) => {
       setData(res);
+      let newAvailableProviders = [
+        "SMHI",
+        "WeatherAPI",
+        "OpenWeatherMap",
+        "Average",
+      ];
+      if (res.smhiTS.length == 0) {
+        newAvailableProviders = newAvailableProviders.filter(
+          (p) => p !== "SMHI"
+        );
+      }
+      if (res.owmTS.length == 0) {
+        newAvailableProviders = newAvailableProviders.filter(
+          (p) => p !== "OpenWeatherMap"
+        );
+      }
+      if (res.waTS.length == 0) {
+        newAvailableProviders = newAvailableProviders.filter(
+          (p) => p !== "WeatherAPI"
+        );
+      }
+      setAvailableProviders(newAvailableProviders);
+      setEnabledProviders(newAvailableProviders);
     });
   }, [locationID]);
 
@@ -105,7 +135,7 @@ const LocationCard = (props: ILocationCardProps) => {
             <div className="flex flex-col self-center justify-center">
               {/* PROVIDER TOGGLE */}
               <div className="grid grid-cols-2 justify-center self-center mx-0 md:mx-3">
-                {Object.keys(providerToTS).map((provider) => (
+                {availableProviders.map((provider) => (
                   <div
                     key={provider}
                     className={`rounded-xl ${
